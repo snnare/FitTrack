@@ -1,0 +1,5 @@
+# Ignorar la carpeta node_modules en Backend
+Backend/node_modules/
+
+# Ignorar la carpeta node_modules en Frontend
+Frontend/node_modules/
