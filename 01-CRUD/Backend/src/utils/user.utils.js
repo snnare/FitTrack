@@ -1,7 +1,6 @@
 import User from '../models/User.js'
 import bcrypt from 'bcrypt';
-import crypto from 'crypto';
-import nodemailer from 'nodemailer';
+import jwt from 'jsonwebtoken';
 
 
 
@@ -21,34 +20,15 @@ export const comparePassword = async (password, hashedPassword) => {
 };
 
 
-export const generateConfirmationToken = () => {
-  return crypto.randomBytes(32).toString('hex');
-}
-
-
-export const sendConfirmationEmail = async (correo, token) => {
-  try {
-    const transporter = nodemailer.createTransport({
-      service: 'Gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    const confirmationLink = `${process.env.BASE_URL}/api/users/confirm/${token}`;
-
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: correo,
-      subject: 'Confirma tu correo - FitTrack',
-      html: `<p>Haz clic en el siguiente enlace para confirmar tu correo:</p>
-             <a href="${confirmationLink}">${confirmationLink}</a>`
-    });
-
-    console.log('📧 Correo de confirmación enviado a:', correo);
-  } catch (error) {
-    console.error('🔴 Error al enviar el correo de confirmación:', error);
-    throw new Error('Error al enviar el correo de confirmación');
-  }
+// Genera un token JWT
+export const generateToken = (userId) => {
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+    expiresIn: '7d', // El token expira en 7 días
+  });
 };
+
+// Verifica un token JWT
+export const verifyToken = (token) => {
+  return jwt.verify(token, process.env.JWT_SECRET);
+};
+
