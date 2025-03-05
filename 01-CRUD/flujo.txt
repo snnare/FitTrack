@@ -1,135 +1,35 @@
-¡Buena pregunta! Veamos cómo sería el flujo completo del usuario en FitTrack:
-📲 1. Registro de Usuario
+-- Registro de Usuario
+Datos iniciales
+    Nombre + apellido
+    correo
+    password (se encripta)
+Datos finales
+    telefono
+    fecha nacimiento
+    genero
+    peso
+    estatura
+    Objetivo
+Nota: Estos datos los puede completar una vez tenga creada su cuenta.
 
-    El usuario se registra con:
-        Nombre, apellidos, correo, contraseña, teléfono (opcional), fecha de nacimiento (opcional) y género.
-    Se encripta la contraseña antes de guardarla.
-    Responde: ¿Quieres implementar confirmación de correo o dejamos el registro simple?
+-- Login de Usuario
+El usuario se puede logear y tendra Acceso
+    Home
+    Su perfil donde llenara los datos faltantes
+    Registro de Logs ()
+    Generacion de Reporte (solo se activara si tiene suficientes datos o pasado 1 mes)
 
-
-
-Flujo de confirmación de correo:
-
-    Registro del usuario:
-        Crear un token de confirmación único.
-        Guardar el token en la base de datos junto al usuario (campo emailVerified: false).
-        Enviar un correo con un enlace de confirmación al usuario.
-
-    Confirmar el correo:
-        El usuario accede al enlace con el token.
-        Validar el token, activar la cuenta (emailVerified: true).
-        Enviar respuesta confirmando la activación.
-
-📌 Plan de implementación:
-
-    Agregar campos a User.js:
-        emailVerified (booleano, false por defecto).
-        confirmationToken (string, token único).
-    Crear funciones en user.utils.js:
-        generateToken: Para generar un token único.
-        sendConfirmationEmail: Para enviar el correo de confirmación.
-    Actualizar createUser en user.controller.js:
-        Generar el token.
-        Enviar el correo con el enlace de confirmación.
-    Crear un nuevo endpoint /confirm/:token:
-        Validar el token y marcar el correo como verificado.
+-- Log Out
+    Usuario se deslogea
 
 
+-- Registro de Logs
+    Cada log esta relacionado a un usuario
+    contiene la fecha
+    ejercicio
+    serie
+    repeteciones
+    peso
+    notas
+Nota: estos Logs son necesarios para crear reportes
 
-👤 2. Completar Perfil
-
-    Una vez registrado, el usuario inicia sesión y completa su perfil:
-        Peso (kg).
-        Estatura (cm).
-        Objetivo (selección: "Ganar peso" o "Perder peso").
-    Idea: Puedes crear un Profile.model o extender el User.model con estos campos.
-
-============================================== OK
-
-🏋️ 3. Registro de Carga Progresiva
-
-Crear un nuevo esquema Log.js en la carpeta models para almacenar los registros de entrenamiento.
-Incluir los campos:
-
-    usuario (referencia al modelo User)
-    fecha (por defecto la fecha actual)
-    ejercicio (String, tipo de ejercicio)
-    series (número de series)
-    repeticiones (número de repeticiones)
-    peso (en kg)
-    notas (comentarios opcionales).
---- OK
-
-2. Crear las Funciones en el Controlador
-
-    createLog: Para registrar un nuevo entrenamiento asociado al usuario.
-    getLogsByUser: Para obtener el historial de entrenamientos de un usuario.
-    updateLog: Para actualizar un registro específico (si el usuario desea corregir algún dato).
-    deleteLog: Para eliminar un registro de entrenamiento.
-
-3. Actualizar las Rutas
-
-    Crear un archivo log.routes.js y definir las rutas para crear, obtener, actualizar y eliminar registros.
-    Asegurarte de que estas rutas estén protegidas (solo el usuario autenticado puede acceder a sus registros).
-
-4. Asociar los Registros al Usuario
-
-    Cuando un usuario cree una bitácora, debes guardar el userId del usuario autenticado como referencia en cada registro.
-    Puedes hacer esto obteniendo el userId desde el token de autenticación (JWT).
-
-5. Autenticación y Validación
-
-    Verificar que el usuario esté autenticado antes de permitir la creación o modificación de registros.
-    Validar los campos (por ejemplo, el número de series, repeticiones y peso deben ser positivos).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-📊 4. Registrar la Carga Progresiva
-
-    Después de cada entrenamiento, el usuario ingresa:
-        Ejercicio.
-        Peso levantado (kg).
-        Repeticiones (reps).
-        Fecha del entrenamiento.
-    Esto se almacena para generar el seguimiento del progreso.
-    Responde: ¿Quieres permitir la edición de registros pasados o solo agregar nuevos?
-
-📄 5. Generar Reportes en PDF
-
-    Mensualmente, el usuario puede descargar un PDF con:
-        Su progreso (pesos levantados, mejoras en repeticiones).
-        Resumen de la rutina actual.
-    Responde: ¿Este PDF se genera automáticamente o bajo demanda del usuario?
-
-🔐 6. Seguridad y Acceso
-
-    JWT para autenticar y proteger las rutas del perfil, rutina y progresos.
-    Validaciones estrictas al crear o modificar datos sensibles.
