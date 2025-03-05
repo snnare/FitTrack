@@ -65,14 +65,6 @@ const userSchema = new mongoose.Schema({
     enum: ["Ganar peso", "Perder peso"],
     default: null,
   },
-  isConfirmed: {
-    type: Boolean,
-    default: false,
-  },
-  confirmationToken: {
-    type: String,
-    default: null,
-  },
 }, {
   timestamps: true,
 });
