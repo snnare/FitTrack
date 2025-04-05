@@ -3,7 +3,6 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 
-
 export const checkIfEmailExists = async (correo) => {
     const user = await User.findOne({ correo });
     return !!user; 

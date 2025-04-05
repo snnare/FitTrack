@@ -1,19 +1,26 @@
 import User from '../models/User.js'
-
 import { checkIfEmailExists, hashPassword, comparePassword, generateToken } from '../utils/user.utils.js';
 
-// Register
+// Registrar
 export const createUser = async (req, res) => {
   try {
-    const { nombre, apellidos, correo, password, telefono, fechaNacimiento, genero } = req.body;
+    const { 
+      nombre, 
+      apellidos, 
+      correo, 
+      password, 
+      fechaNacimiento, 
+      genero,
+      peso,
+      estatura,
+      objetivo,  
+    } = req.body;
 
     //Verificar si el correo ya está registrado
     const emailExists = await checkIfEmailExists(correo);
     if (emailExists) {
       return res.status(400).json({ message: 'El correo ya está registrado' });
     }
-
-    //Encriptar la contraseña
     const hashedPassword = await hashPassword(password);
 
     const newUser = new User({
@@ -21,16 +28,19 @@ export const createUser = async (req, res) => {
       apellidos,
       correo,
       password: hashedPassword,
-      telefono,
       fechaNacimiento,
       genero,
+      peso,
+      estatura,
+      objetivo,
     });
 
     await newUser.save();
-    res.status(201).json({ message: 'Usuario creado con éxito', user: newUser });
+
+    res.status(201).json({ message: 'Usuario Registrado', user: newUser });
 
   } catch (error) {
-    console.error('🔴 Error al crear usuario:', error);
+    console.error('Error al crear usuario:', error);
     res.status(500).json({ message: 'Error al crear usuario', error: error.message });
   }
 };

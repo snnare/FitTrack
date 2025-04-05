@@ -31,14 +31,6 @@ const userSchema = new mongoose.Schema({
     required: [true, 'La contraseña es obligatoria'],
     minlength: [8, 'La contraseña debe tener al menos 8 caracteres'],
   },
-  telefono: {
-    type: String,
-    default: null,
-    validate: {
-      validator: (telefono) => !telefono || /^[0-9]{10}$/.test(telefono),
-      message: 'El teléfono debe tener exactamente 10 dígitos',
-    },
-  },
   fechaNacimiento: {
     type: Date,
     default: null,
@@ -62,7 +54,7 @@ const userSchema = new mongoose.Schema({
   },
   objetivo: {
     type: String,
-    enum: ["Ganar peso", "Perder peso"],
+    enum: ["Ganar peso", "Perder peso", "Definir", "Mantener"],
     default: null,
   },
 }, {
