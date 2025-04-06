@@ -1,19 +1,20 @@
 import User from '../models/User.js'
 import { checkIfEmailExists, hashPassword, comparePassword, generateToken } from '../utils/user.utils.js';
+import moment from 'moment';
 
 // Registrar
 export const createUser = async (req, res) => {
   try {
-    const { 
-      nombre, 
-      apellidos, 
-      correo, 
-      password, 
-      fechaNacimiento, 
+    const {
+      nombre,
+      apellidos,
+      correo,
+      password,
+      fechaNacimiento,
       genero,
       peso,
       estatura,
-      objetivo,  
+      objetivo,
     } = req.body;
 
     //Verificar si el correo ya está registrado
@@ -21,6 +22,14 @@ export const createUser = async (req, res) => {
     if (emailExists) {
       return res.status(400).json({ message: 'El correo ya está registrado' });
     }
+
+    // Convertir la fecha de nacimiento a formato 'YYYY-MM-DD'
+    const formattedFechaNacimiento = moment(fechaNacimiento, 'YYYY-DD-MM').format('YYYY-MM-DD');
+    if (!moment(formattedFechaNacimiento, 'YYYY-MM-DD', true).isValid()) {
+      return res.status(400).json({ message: 'Fecha de nacimiento inválida, debe estar en el formato YYYY-DD-MM' });
+    }
+
+
     const hashedPassword = await hashPassword(password);
 
     const newUser = new User({
@@ -28,7 +37,7 @@ export const createUser = async (req, res) => {
       apellidos,
       correo,
       password: hashedPassword,
-      fechaNacimiento,
+      fechaNacimiento: formattedFechaNacimiento,
       genero,
       peso,
       estatura,
@@ -126,7 +135,7 @@ export const logoutUser = (req, res) => {
     // Se recomienda que el cliente elimine el token almacenado (por ejemplo, en localStorage o cookies).
     // Si usas cookies, aquí podrías limpiar la cookie, por ejemplo:
     // res.clearCookie('token');
-    
+
     res.status(200).json({ message: 'Logout exitoso. Por favor, elimina el token en el cliente.' });
   } catch (error) {
     console.error('Error en logout:', error);
