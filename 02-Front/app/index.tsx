@@ -1,12 +1,9 @@
-import { useEffect } from 'react';
-import { useRouter } from 'expo-router';
+import { Redirect } from 'expo-router';
+import { ActivityIndicator, View } from 'react-native';
 
 export default function IndexScreen() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.replace('/(auth)/register');
-  }, []);
-
-  return null;
+  
+  return(
+    <Redirect href="/(auth)/register-step1" />
+  )
 }

@@ -2,7 +2,7 @@
   "expo": {
     "name": "02-Front",
     "slug": "02-Front",
-    "schema": "02-Front",
+    "schema": "my-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

@@ -1,93 +1,163 @@
 import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Platform, Alert  } from 'react-native';
 import { Formik } from 'formik';
-import * as Yup from 'yup';
-
+import { Picker } from '@react-native-picker/picker';
+import { RegisterSchema } from '../validations/userSchema';
 
 import { registerUser } from '../services/auth';
-import { useRouter } from 'expo-router';
 
-const RegisterSchema = Yup.object().shape({
-  nombre: Yup.string().min(2, 'Muy corto').max(50, 'Muy largo').required('Requerido'),
-  apellidos: Yup.string().required('Requerido'),
-  correo: Yup.string().email('Correo inválido').required('Requerido'),
-  password: Yup.string().min(8, 'Mínimo 8 caracteres').required('Requerido'),
-});
 
 export default function RegisterScreen() {
-  const router = useRouter();
+  const [selectedGenero, setSelectedGenero] = React.useState('');
+
+  const handleRegister = async (values: any) => {
+    try {
+      const response = await registerUser(values); // Llama a registerUser
+      Alert.alert("¡Éxito!", "Usuario registrado correctamente.");
+      console.log(response);
+    } catch (error) {
+      Alert.alert("Error", "Hubo un problema registrando el usuario.");
+      console.error(error);
+    }
+  };
+
+
+
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Registro</Text>
+    <Formik
+      initialValues={{
+        nombre: '',
+        apellidos: '',
+        correo: '',
+        password: '',
+        fechaNacimiento: '',
+        genero: '',
+        peso: '',
+        objetivo: '',
+      }}
+      validationSchema={RegisterSchema}
+      onSubmit={(values) => {
+        console.log(values); // Verifica los valores antes de enviar
+        handleRegister(values); // Llama a la función de registro
+      }}
+    >
+      {({ handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue }) => (
+        <View style={styles.container}>
+          <Text style={styles.title}>Registro</Text>
 
-      <Formik
-        initialValues={{ nombre: '', apellidos: '', correo: '', password: '' }}
-        validationSchema={RegisterSchema}
-        onSubmit={async (values, actions) => {
-          try {
-            await registerUser(values);
-            alert('✅ Usuario creado con éxito');
-            router.replace('/'); // redirige al login o inicio
-          } catch (error: any) {
-            console.error(error);
-            alert('❌ Error al registrar usuario');
-          } finally {
-            actions.setSubmitting(false);
-          }
-        }}
-      >
-        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-          <>
-            <TextInput
-              placeholder="Nombre"
-              style={styles.input}
-              onChangeText={handleChange('nombre')}
-              onBlur={handleBlur('nombre')}
-              value={values.nombre}
-            />
-            {touched.nombre && errors.nombre && <Text style={styles.error}>{errors.nombre}</Text>}
+          <TextInput
+            style={styles.input}
+            placeholder="Nombre"
+            onChangeText={handleChange('nombre')}
+            onBlur={handleBlur('nombre')}
+            value={values.nombre}
+          />
+          {touched.nombre && errors.nombre && <Text style={styles.error}>{errors.nombre}</Text>}
 
-            <TextInput
-              placeholder="Apellidos"
-              style={styles.input}
-              onChangeText={handleChange('apellidos')}
-              onBlur={handleBlur('apellidos')}
-              value={values.apellidos}
-            />
-            {touched.apellidos && errors.apellidos && <Text style={styles.error}>{errors.apellidos}</Text>}
+          <TextInput
+            style={styles.input}
+            placeholder="Apellidos"
+            onChangeText={handleChange('apellidos')}
+            onBlur={handleBlur('apellidos')}
+            value={values.apellidos}
+          />
+          {touched.apellidos && errors.apellidos && <Text style={styles.error}>{errors.apellidos}</Text>}
 
-            <TextInput
-              placeholder="Correo"
-              keyboardType="email-address"
-              style={styles.input}
-              onChangeText={handleChange('correo')}
-              onBlur={handleBlur('correo')}
-              value={values.correo}
-            />
-            {touched.correo && errors.correo && <Text style={styles.error}>{errors.correo}</Text>}
+          <TextInput
+            style={styles.input}
+            placeholder="Correo"
+            onChangeText={handleChange('correo')}
+            onBlur={handleBlur('correo')}
+            value={values.correo}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+          {touched.correo && errors.correo && <Text style={styles.error}>{errors.correo}</Text>}
 
-            <TextInput
-              placeholder="Contraseña"
-              secureTextEntry
-              style={styles.input}
-              onChangeText={handleChange('password')}
-              onBlur={handleBlur('password')}
-              value={values.password}
-            />
-            {touched.password && errors.password && <Text style={styles.error}>{errors.password}</Text>}
+          <TextInput
+            style={styles.input}
+            placeholder="Contraseña"
+            secureTextEntry
+            onChangeText={handleChange('password')}
+            onBlur={handleBlur('password')}
+            value={values.password}
+          />
+          {touched.password && errors.password && <Text style={styles.error}>{errors.password}</Text>}
 
-            <Button title="Registrarse" onPress={handleSubmit as any} />
-          </>
-        )}
-      </Formik>
-    </View>
+          <TextInput
+            style={styles.input}
+            placeholder="Fecha de nacimiento (YYYY-MM-DD)"
+            onChangeText={handleChange('fechaNacimiento')}
+            onBlur={handleBlur('fechaNacimiento')}
+            value={values.fechaNacimiento}
+          />
+          {touched.fechaNacimiento && errors.fechaNacimiento && <Text style={styles.error}>{errors.fechaNacimiento}</Text>}
+
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={values.genero}
+              onValueChange={(itemValue) => {
+                setSelectedGenero(itemValue);
+                setFieldValue('genero', itemValue);
+              }}
+              style={styles.picker}
+            >
+              <Picker.Item label="Selecciona tu género" value="" />
+              <Picker.Item label="Masculino" value="Masculino" />
+              <Picker.Item label="Femenino" value="Femenino" />
+              <Picker.Item label="Otro" value="Otro" />
+            </Picker>
+          </View>
+          {touched.genero && errors.genero && <Text style={styles.error}>{errors.genero}</Text>}
+
+          <TextInput
+            style={styles.input}
+            placeholder="Peso (kg)"
+            onChangeText={handleChange('peso')}
+            onBlur={handleBlur('peso')}
+            value={values.peso}
+            keyboardType="numeric"
+          />
+          {touched.peso && errors.peso && <Text style={styles.error}>{errors.peso}</Text>}
+
+          <TextInput
+            style={styles.input}
+            placeholder="Objetivo (Ej: perder peso, ganar masa)"
+            onChangeText={handleChange('objetivo')}
+            onBlur={handleBlur('objetivo')}
+            value={values.objetivo}
+          />
+          {touched.objetivo && errors.objetivo && <Text style={styles.error}>{errors.objetivo}</Text>}
+
+          <Button onPress={handleSubmit as any} title="Registrar" />
+        </View>
+      )}
+    </Formik>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 20 },
+  container: { flex: 1, justifyContent: 'center', padding: 20, backgroundColor: '#fff' },
   title: { fontSize: 28, fontWeight: 'bold', marginBottom: 20, textAlign: 'center' },
-  input: { borderWidth: 1, borderColor: '#ccc', padding: 10, marginBottom: 10, borderRadius: 8 },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 8,
+    backgroundColor: '#fff',
+  },
   error: { color: 'red', marginBottom: 8 },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    marginBottom: 10,
+    overflow: 'hidden',
+    backgroundColor: '#fff',
+  },
+  picker: {
+    height: Platform.OS === 'android' ? 50 : undefined,
+  },
 });
