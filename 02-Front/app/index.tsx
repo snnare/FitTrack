@@ -4,6 +4,6 @@ import { ActivityIndicator, View } from 'react-native';
 export default function IndexScreen() {
   
   return(
-    <Redirect href="/(auth)/register-step1" />
+    <Redirect href="/(auth)/register" />
   )
 }

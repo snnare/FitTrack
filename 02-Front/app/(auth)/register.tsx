@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Platform, Alert  } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Platform, Alert } from 'react-native';
 import { Formik } from 'formik';
 import { Picker } from '@react-native-picker/picker';
 import { RegisterSchema } from '../validations/userSchema';
@@ -121,14 +121,25 @@ export default function RegisterScreen() {
           />
           {touched.peso && errors.peso && <Text style={styles.error}>{errors.peso}</Text>}
 
-          <TextInput
-            style={styles.input}
-            placeholder="Objetivo (Ej: perder peso, ganar masa)"
-            onChangeText={handleChange('objetivo')}
-            onBlur={handleBlur('objetivo')}
-            value={values.objetivo}
-          />
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={values.objetivo}
+              onValueChange={(itemValue) => {
+                setSelectedGenero(itemValue);
+                setFieldValue('objetivo', itemValue);
+              }}
+              style={styles.picker}
+            >
+              <Picker.Item label="Objetivo" value="" />
+              <Picker.Item label="Ganar peso" value="Ganar peso" />
+              <Picker.Item label="Perder peso" value="Perder peso" />
+              <Picker.Item label="Definir" value="Definir" />
+              <Picker.Item label="Mantener" value="Mantener" />
+            </Picker>
+          </View>
           {touched.objetivo && errors.objetivo && <Text style={styles.error}>{errors.objetivo}</Text>}
+
+
 
           <Button onPress={handleSubmit as any} title="Registrar" />
         </View>
