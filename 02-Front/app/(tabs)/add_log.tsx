@@ -13,9 +13,12 @@ export default function createLogScreen() {
     // Conectar con la api
     const handleSubmitLog = async (values: any) => {
         try {
-
+            const response = await crearLog(values);
+            Alert.alert("Registrado");
+            console.log(values);
         } catch (error) {
-
+            Alert.alert("Registrado");
+            console.log(error)
         }
     };
 
@@ -24,7 +27,7 @@ export default function createLogScreen() {
         <ScrollView contentContainerStyle={styles.container}>
             <Formik
                 initialValues={{
-                    userId: '',
+                    userId: 'roraj77@hotmail.com',
                     fecha: '',
                     ejercicio: '',
                     series: '',
@@ -39,24 +42,7 @@ export default function createLogScreen() {
                     <View>
                         <Text style={styles.title}>Registrar Ejercicio</Text>
 
-                        <TextInput
-                            style={styles.input}
-                            placeholder="ID de Usuario"
-                            onChangeText={handleChange('userId')}
-                            onBlur={handleBlur('userId')}
-                            value={values.userId}
-                        />
-                        {touched.userId && errors.userId && <Text style={styles.error}>{errors.userId}</Text>}
-
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Fecha (YYYY-MM-DD)"
-                            onChangeText={handleChange('fecha')}
-                            onBlur={handleBlur('fecha')}
-                            value={values.fecha}
-                        />
-                        {touched.fecha && errors.fecha && <Text style={styles.error}>{errors.fecha}</Text>}
-
+                        
                         <TextInput
                             style={styles.input}
                             placeholder="Ejercicio"
