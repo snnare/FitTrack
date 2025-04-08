@@ -1,7 +1,10 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Button, Image, Alert } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function ProfileScreen() {
+  const [imageUri, setImageUri] = useState<string | null>(null);
+
   const user = {
     nombre: 'Juan',
     apellidos: 'Pérez',
@@ -10,9 +13,46 @@ export default function ProfileScreen() {
     objetivo: 'Definir',
   };
 
+  const pickImage = async () => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (permissionResult.granted) {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        aspect: [1, 1], // Mantener la imagen cuadrada
+        quality: 1,
+      });
+      if (!result.cancelled) {
+        setImageUri(result.uri);
+      }
+    } else {
+      alert('Se necesitan permisos para acceder a la galería de imágenes');
+    }
+  };
+
+  const handleEditProfile = () => {
+    // Aquí podrías navegar a otra pantalla para editar el perfil
+    alert('Funcionalidad de editar perfil');
+  };
+
+  const handleLogout = () => {
+    // Aquí puedes agregar la lógica para cerrar sesión
+    alert('Funcionalidad de cerrar sesión');
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Perfil del Usuario</Text>
+      
+      {/* Imagen de perfil */}
+      <View style={styles.profileImageContainer}>
+        <Image
+          source={imageUri ? { uri: imageUri } : require('../../assets/default-male-profile.jpg')} // Imagen predeterminada si no hay foto
+          style={styles.profileImage}
+        />
+        <Button title="Subir Foto" onPress={pickImage} />
+      </View>
+
+      {/* Información del usuario */}
       <View style={styles.infoBox}>
         <Text style={styles.label}>Nombre:</Text>
         <Text style={styles.value}>{user.nombre} {user.apellidos}</Text>
@@ -26,6 +66,18 @@ export default function ProfileScreen() {
         <Text style={styles.label}>Objetivo:</Text>
         <Text style={styles.value}>{user.objetivo}</Text>
       </View>
+
+      {/* Botones para editar y cerrar sesión */}
+      <View style={styles.buttonsContainer}>
+        <Button title="Editar Perfil" onPress={handleEditProfile} />
+        <Button title="Cerrar Sesión" onPress={handleLogout} color="red" />
+      </View>
+
+        <View>
+            <Button title='Generar Reporte' onPress={()=> {Alert.alert("Reporte Generado")}}>
+
+            </Button>
+        </View>
     </View>
   );
 }
@@ -42,6 +94,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
+  profileImageContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50, // Para hacerlo circular
+    marginBottom: 10,
+  },
   infoBox: {
     backgroundColor: '#dcfce7',
     padding: 20,
@@ -56,5 +118,8 @@ const styles = StyleSheet.create({
   value: {
     fontSize: 16,
     color: '#374151',
+  },
+  buttonsContainer: {
+    marginTop: 20,
   },
 });
