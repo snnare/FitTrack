@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Platform, Alert } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Platform, Alert, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import { Picker } from '@react-native-picker/picker';
 import { RegisterSchema } from '../validations/userSchema';
@@ -141,34 +141,65 @@ export default function RegisterScreen() {
 
 
 
-          <Button onPress={handleSubmit as any} title="Registrar" />
+          <TouchableOpacity style={styles.button} onPress={handleSubmit as any}>
+            <Text style={styles.buttonText}>REGISTRAR</Text>
+          </TouchableOpacity>
         </View>
       )}
     </Formik>
   );
 }
-
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 20, backgroundColor: '#fff' },
-  title: { fontSize: 28, fontWeight: 'bold', marginBottom: 20, textAlign: 'center' },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 24,
+    backgroundColor: '#f0fdf4', // Verde muy claro
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    marginBottom: 30,
+    textAlign: 'center',
+    color: '#22c55e', // Verde vibrante
+  },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 8,
+    borderColor: '#a7f3d0', // Verde claro
+    padding: 14,
+    marginBottom: 12,
+    borderRadius: 10,
     backgroundColor: '#fff',
+    fontSize: 16,
   },
-  error: { color: 'red', marginBottom: 8 },
+  error: {
+    color: '#dc2626',
+    marginBottom: 8,
+    fontSize: 14,
+  },
   pickerContainer: {
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    marginBottom: 10,
+    borderColor: '#a7f3d0',
+    borderRadius: 10,
+    marginBottom: 12,
     overflow: 'hidden',
     backgroundColor: '#fff',
   },
   picker: {
     height: Platform.OS === 'android' ? 50 : undefined,
   },
+  button: {
+    backgroundColor: '#22c55e', // Verde fuerte
+    paddingVertical: 14,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+  },
+  
 });

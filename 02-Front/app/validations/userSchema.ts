@@ -42,7 +42,7 @@ export const RegisterSchema = Yup.object().shape({
         .max(300, 'Peso máximo 300 kg'),
     objetivo: Yup
         .string()
-        .oneOf(['Perder peso', 'Ganar masa muscular', 'Mantener peso'], 'Objetivo no válido')
+        .oneOf(['Perder peso', 'Ganar peso', 'Definir', 'Mantener'], 'Objetivo no válido')
         .nullable()
         .optional(),
 });
