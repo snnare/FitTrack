@@ -15,7 +15,7 @@ export default function createLogScreen() {
         try {
             const response = await crearLog(values);
             Alert.alert("Registrado");
-            console.log(values);
+            console.log(response);
         } catch (error) {
             Alert.alert("Registrado");
             console.log(error)
