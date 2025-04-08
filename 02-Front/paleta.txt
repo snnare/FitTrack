@@ -1,0 +1,30 @@
+Propósito	Color	Código HEX	Uso sugerido
+Color primario	Verde lima	#22c55e	Botones, títulos, highlights
+Primario claro	Verde menta	#86efac	Fondos suaves, hover, elementos secundarios
+Primario oscuro	Verde oscuro	#15803d	Header, íconos activos, bordes fuertes
+Fondo general	Verde grisáceo	#f0fdf4	Fondo de pantallas, formularios
+Texto principal	Gris oscuro	#1f2937	Títulos, texto normal
+Texto secundario	Gris claro	#6b7280	Descripciones, texto de ayuda
+Error	Rojo coral	#ef4444	Errores, alertas, validaciones
+Éxito	Verde vibrante	#4ade80	Mensajes de éxito, validaciones correctas
+Neutro blanco	Blanco	#ffffff	Formularios, tarjetas, inputs
+Negro soft	Gris muy oscuro	#111827	Headers oscuros, fondo de modales (modo oscuro opc.)
+Accent opcional	Azul claro	#38bdf8	Opcional para acciones secundarias o detalles visuales
+
+
+const colors = StyleSheet.create({
+  primary: { color: '#22c55e' },           // Verde lima
+  primaryLight: { color: '#86efac' },      // Verde menta
+  primaryDark: { color: '#15803d' },       // Verde oscuro
+
+  background: { backgroundColor: '#f0fdf4' }, // Fondo general
+  card: { backgroundColor: '#ffffff' },       // Tarjetas, inputs
+
+  textPrimary: { color: '#1f2937' },       // Texto principal
+  textSecondary: { color: '#6b7280' },     // Texto secundario
+
+  success: { color: '#4ade80' },           // Mensajes de éxito
+  error: { color: '#ef4444' },             // Mensajes de error
+
+  accent: { color: '#38bdf8' },            // Color opcional (azul claro)
+});
