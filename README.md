@@ -33,7 +33,7 @@ Este es un backend desarrollado en Node.js utilizando Docker para la contenedori
    En el directorio raíz del proyecto, ejecuta el siguiente comando para construir la imagen del backend:
 
    ```bash
-   docker build -t nombre-de-tu-imagen .
+   docker build -t fit-back .
    ```
 
    Este comando construirá la imagen de Docker con el `Dockerfile` proporcionado.
@@ -43,7 +43,7 @@ Este es un backend desarrollado en Node.js utilizando Docker para la contenedori
    Ejecuta el siguiente comando para iniciar el contenedor y exponer el puerto 4000:
 
    ```bash
-   docker run -p 4000:4000 nombre-de-tu-imagen
+   docker run --name backend -p 4000:4000 fit-back
    ```
 
    Esto hará que tu API esté disponible en `http://localhost:4000`.
