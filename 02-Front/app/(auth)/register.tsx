@@ -36,6 +36,7 @@ export default function RegisterScreen() {
         peso: '',
         objetivo: '',
       }}
+      
       validationSchema={RegisterSchema}
       onSubmit={(values) => {
         console.log(values); // Verifica los valores antes de enviar
@@ -43,7 +44,7 @@ export default function RegisterScreen() {
       }}
     >
       {({ handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue }) => (
-        <View style={styles.container}>
+        <View style={styles.container} >
           <Text style={styles.title}>Registro</Text>
 
           <TextInput

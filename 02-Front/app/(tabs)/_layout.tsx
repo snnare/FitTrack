@@ -6,7 +6,7 @@ export default function TabsLayout() {
     <Tabs
       initialRouteName="add_log"
       screenOptions={{
-        headerShown: true,
+        headerShown: false,
         tabBarActiveTintColor: '#22c55e',
       }}
     >
