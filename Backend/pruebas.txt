@@ -1,0 +1,42 @@
+http://localhost:3000/
+POST /auth/register
+{
+  "correo": "ade@bedede.com",
+  "password": "1212"
+}
+
+
+POST /auth/login
+Content-Type: application/json
+{
+  "correo": "ade@bedede.com",
+  "password": "1212"
+}
+
+POST /logs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmU5YjVkODFkNmJkYmI5MDU0YzMyMyIsImlhdCI6MTc0NDczOTI2OSwiZXhwIjoxNzQ0NzQ2NDY5fQ.s6xyoS2ULpaY43Z3Co5uS7YDX_4PcINqXinfcsRVyTg
+
+{
+  "ejercicio": "Press de banca",
+  "series": 3,
+  "repeticiones": 10,
+  "peso": 60,
+  "notas": "Buen entrenamiento"
+}
+```
+
+**Explicación:**
+
+* **`POST /auth/register`**: Ruta para registrar un nuevo usuario.
+* **`POST /auth/login`**: Ruta para iniciar sesión y obtener un token JWT.
+* **`POST /logs`**: Ruta para crear un nuevo log de entrenamiento.
+* **`Content-Type: application/json`**: Indica que el cuerpo de la solicitud está en formato JSON.
+* **`Authorization: Bearer <tu_token_jwt>`**: Encabezado de autorización con el token JWT obtenido después del inicio de sesión. Reemplaza `<tu_token_jwt>` con el token real.
+* **Cuerpo JSON**: Datos necesarios para cada solicitud.
+
+**Recomendaciones:**
+
+* Asegúrate de reemplazar `<tu_token_jwt>` con el token JWT real.
+* Verifica que tu backend esté en ejecución y escuchando en el puerto correcto (por defecto, 3000).
+* Verifica que mongoDB este levantado.

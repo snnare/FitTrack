@@ -38,7 +38,6 @@ const userSchema = new mongoose.Schema({
   },
   genero: {
     type: String,
-    required: ['true', 'El género es obligatorio'],
     enum: ['Masculino', 'Femenino'],
     default: null,
   },

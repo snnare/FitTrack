@@ -4,6 +4,6 @@ import { authMiddleware } from '../middleware/auth.middleware.js';
 
 const router = Router();
 
-router.post('/createlog', createLog); // Crear un nuevo log (ejercicio)
+router.post('/createlog',authMiddleware, createLog); // Crear un nuevo log (ejercicio)
 
 export default router;

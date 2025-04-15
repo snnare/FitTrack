@@ -1,6 +1,6 @@
 import express from 'express';
-import { updateStreak, getStreak } from '../controllers/streakController.js';
-import authMiddleware from '../middleware/authMiddleware.js';
+import { updateStreak, getStreak } from '../controller/streak.controller.js';
+import {authMiddleware} from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 

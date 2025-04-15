@@ -14,7 +14,7 @@ export const registerUser = async (req, res) => {
     }
 
     const hashedPassword = await hashPassword(password);
-
+    console.log(hashedPassword);
     const newUser = new User({
       correo,
       password: hashedPassword,
@@ -26,21 +26,30 @@ export const registerUser = async (req, res) => {
   }
 }
 
-export const login = async (req, res) => {
+export const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    const { correo, password } = req.body;
+    const user = await User.findOne({ correo });
+
+    if (!user) {
       return res.status(401).json({ message: 'Credenciales inválidas' });
     }
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    console.log("passIn", password);
+    console.log("bdpass",user.password);
+    const isPasswordMatch = await comparePassword(password, user.password);
+
+    if (!isPasswordMatch) {
+      return res.status(401).json({ message: 'Credenciales inválidas' });
+    }
+
+    const token = generateToken(user._id);
     res.status(200).json({ token });
   } catch (error) {
+    console.error('Error al iniciar sesión:', error);
     res.status(500).json({ message: 'Error al iniciar sesión', error: error.message });
   }
 };
-
-
 
 // Registrar
 export const createUser = async (req, res) => {
