@@ -4,7 +4,7 @@ import moment from 'moment';
 
 
 
-// Registro rapido
+// Registro
 export const registerUser = async (req, res) => {
   try {
     const { correo, password } = req.body;
@@ -51,108 +51,69 @@ export const loginUser = async (req, res) => {
   }
 };
 
-// Registrar
-export const createUser = async (req, res) => {
-  try {
-    const {
-      nombre,
-      apellidos,
-      correo,
-      password,
-      fechaNacimiento,
-      genero,
-      peso,
-      estatura,
-      objetivo,
-    } = req.body;
-
-    //Verificar si el correo ya está registrado
-    const emailExists = await checkIfEmailExists(correo);
-    if (emailExists) {
-      return res.status(400).json({ message: 'El correo ya está registrado' });
-    }
-
-    // Convertir la fecha de nacimiento a formato 'YYYY-MM-DD'
-    const formattedFechaNacimiento = moment(fechaNacimiento, 'YYYY-DD-MM').format('YYYY-MM-DD');
-    if (!moment(formattedFechaNacimiento, 'YYYY-MM-DD', true).isValid()) {
-      return res.status(400).json({ message: 'Fecha de nacimiento inválida, debe estar en el formato YYYY-DD-MM' });
-    }
-
-
-    const hashedPassword = await hashPassword(password);
-
-    const newUser = new User({
-      nombre,
-      apellidos,
-      correo,
-      password: hashedPassword,
-      fechaNacimiento: formattedFechaNacimiento,
-      genero,
-      peso,
-      estatura,
-      objetivo,
-    });
-
-    await newUser.save();
-
-    res.status(201).json({ message: 'Usuario Registrado', user: newUser });
-
-  } catch (error) {
-    console.error('Error al crear usuario:', error);
-    res.status(500).json({ message: 'Error al crear usuario', error: error.message });
-  }
-};
-
-
 export const getUserProfile = async (req, res) => {
-  try {
-    const userId = req.user.id;
+    try {
+        const correo = req.user.email; // Obtiene el correo del usuario del token
 
-    const user = await User.findById(userId).select('-password');
-    if (!user) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
+        const user = await User.findOne({ correo: correo }).select('-password'); // Busca por correo electrónico
+
+        if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+
+        res.status(200).json(user);
+    } catch (error) {
+        console.error('Error al obtener el perfil:', error);
+        res.status(500).json({ message: 'Error al obtener el perfil', error: error.message });
     }
-
-    res.status(200).json(user);
-  } catch (error) {
-    console.error('Error al obtener el perfil:', error);
-    res.status(500).json({ message: 'Error al obtener el perfil', error: error.message });
-  }
 };
 
-export const updateUser = async (req, res) => {
+export const postRegisterUser = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const updates = req.body;
+      const correo = req.user.email; // Ahora usamos el correo electrónico del token
+      const { nombre, apellidos, fechaNacimiento, genero, peso, estatura, objetivo } = req.body;
 
-    // Actualizar el usuario
-    const updatedUser = await User.findByIdAndUpdate(userId, updates, {
-      new: true,
-      runValidators: true,
-    }).select('-password');
+      // Validar y formatear la fecha de nacimiento (si se proporciona)
+      let formattedFechaNacimiento = null;
+      if (fechaNacimiento) {
+          formattedFechaNacimiento = moment(fechaNacimiento, 'YYYY-DD-MM').format('YYYY-MM-DD');
+          if (!moment(formattedFechaNacimiento, 'YYYY-MM-DD', true).isValid()) {
+              return res.status(400).json({ message: 'Fecha de nacimiento inválida, debe estar en el formato YYYY-DD-MM' });
+          }
+      }
 
-    if (!updatedUser) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
-    }
+      const updatedUser = await User.findOneAndUpdate(
+          { correo: correo }, // Buscar por correo electrónico
+          {
+              nombre,
+              apellidos,
+              fechaNacimiento: formattedFechaNacimiento,
+              genero,
+              peso,
+              estatura,
+              objetivo,
+          },
+          { new: true }
+      );
 
-    res.status(200).json({ message: 'Usuario actualizado con éxito', updatedUser });
+      if (!updatedUser) {
+          return res.status(404).json({ message: 'Usuario no encontrado' });
+      }
+
+      res.status(200).json({
+          message: 'Datos del usuario actualizados exitosamente',
+          data: updatedUser,
+      });
   } catch (error) {
-    console.error('Error al actualizar el usuario:', error);
-    res.status(500).json({ message: 'Error al actualizar el usuario', error: error.message });
+      console.error('Error al actualizar datos del usuario:', error);
+      res.status(500).json({
+          message: 'Error al actualizar datos del usuario',
+          error: error.message,
+      });
   }
 };
 
 
-export const logoutUser = (req, res) => {
-  try {
-    // En JWT, la sesión es stateless, por lo que no se invalida el token en el servidor.
-    // Se recomienda que el cliente elimine el token almacenado (por ejemplo, en localStorage o cookies).
-    // Si usas cookies, aquí podrías limpiar la cookie, por ejemplo:
-    // res.clearCookie('token');
 
-    res.status(200).json({ message: 'Logout exitoso. Por favor, elimina el token en el cliente.' });
-  } catch (error) {
-    console.error('Error en logout:', error);
-    res.status(500).json({ message: 'Error al hacer logout', error: error.message });
-  }
-};
+
+

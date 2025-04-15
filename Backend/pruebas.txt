@@ -30,3 +30,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmVhMjAzO
 }
 
 
+PUT http://localhost:3000/logs/id_log
+{
+  "ejercicio": "Press de banca",
+  "series": 3,
+  "repeticiones": 10,
+  "peso": 60,
+  "notas": "Buen entrenamiento"
+}
+
+GET http://localhost:3000/logs/id_log
