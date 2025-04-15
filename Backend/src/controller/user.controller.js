@@ -2,6 +2,46 @@ import User from '../models/User.js'
 import { checkIfEmailExists, hashPassword, comparePassword, generateToken } from '../utils/user.utils.js';
 import moment from 'moment';
 
+
+
+// Registro rapido
+export const registerUser = async (req, res) => {
+  try {
+    const { correo, password } = req.body;
+    const emailExists = await checkIfEmailExists(correo);
+    if (emailExists) {
+      return res.status(400).json({ message: 'El correo ya está registrado' });
+    }
+
+    const hashedPassword = await hashPassword(password);
+
+    const newUser = new User({
+      correo,
+      password: hashedPassword,
+    });
+    await newUser.save();
+    res.status(201).json({ message: 'Usuario Registrado', user: newUser });
+  } catch (error) {
+    res.status(500).json({ message: 'Error al registrar usuario', error: error.message });
+  }
+}
+
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ message: 'Credenciales inválidas' });
+    }
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.status(200).json({ token });
+  } catch (error) {
+    res.status(500).json({ message: 'Error al iniciar sesión', error: error.message });
+  }
+};
+
+
+
 // Registrar
 export const createUser = async (req, res) => {
   try {
@@ -51,41 +91,6 @@ export const createUser = async (req, res) => {
   } catch (error) {
     console.error('Error al crear usuario:', error);
     res.status(500).json({ message: 'Error al crear usuario', error: error.message });
-  }
-};
-
-export const loginUser = async (req, res) => {
-  try {
-    const { correo, password } = req.body;
-
-    // Buscar el usuario y asegurarse de incluir el campo 'password'
-    const user = await User.findOne({ correo }).select('+password');
-    if (!user) {
-      return res.status(401).json({ message: 'Credenciales inválidas' });
-    }
-
-    // Comparar la contraseña recibida con la hasheada en la base de datos
-    const isMatch = await comparePassword(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ message: 'Credenciales inválidas' });
-    }
-
-    // Generar el token JWT
-    const token = generateToken(user._id);
-
-    res.status(200).json({
-      message: 'Bienvenido',
-      token,
-      user: {
-        id: user._id,
-        nombre: user.nombre,
-        apellidos: user.apellidos,
-        correo: user.correo,
-      },
-    });
-  } catch (error) {
-    console.error('Error al iniciar sesión:', error);
-    res.status(500).json({ message: 'Error al iniciar sesión', error: error.message });
   }
 };
 

@@ -1,9 +1,6 @@
-import Log from '../models/Logs.js'; // Importar el modelo de Log
+import Log from '../models/Logs.js'; 
 
 
-
-
-// Crear un nuevo log 
 export const createLog = async (req, res) => {
     try {
         const { 
@@ -14,7 +11,6 @@ export const createLog = async (req, res) => {
             notas } = req.body;
 
 
-        // Por defecto tiene timestamps: true, por lo que no es necesario agregar la fecha
         const nuevoLog = new Log({
             userId: 'demo@demo.com', 
             ejercicio,
@@ -53,7 +49,6 @@ export const updateLogs = async (req, res) => {
 export const deleteAllLogs = async (req, res) => {
    
 };
-
 
 
 export const deleteOneLogs = async (req, res) => {
