@@ -1,0 +1,35 @@
+Claro, aquí tienes un resumen de las mejoras clave que puedes implementar en tu código, enfocándonos en los objetivos y puntos clave de tu proyecto "Fit Track":
+
+**Objetivos principales:**
+
+* Desarrollar una aplicación móvil Android para el seguimiento y análisis del progreso físico en gimnasios.
+* Proporcionar herramientas para optimizar entrenamientos a través de reportes, gráficos y recomendaciones personalizadas.
+
+**Puntos clave y mejoras:**
+
+1.  **Registro y gestión de métricas:**
+    IMC sera calculado dinamicamente en el backeend 
+    GET /auth/imc
+
+2.  **Visualización de datos:**
+    PENDIENTE
+
+
+3.  **Comunicación con entrenadores:**
+    * **Mejora:** Desarrollar funcionalidades que permitan a los entrenadores revisar el historial de los usuarios y enviar recomendaciones.
+    * **Objetivo:** Optimizar la interacción entre usuarios y entrenadores.
+
+5.  **Recomendaciones personalizadas:**
+    * **Mejora:** Integrar lógica para generar recomendaciones de entrenamiento basadas en el análisis de los datos del usuario.
+    * **Objetivo:** Proporcionar valor añadido a los usuarios con orientación personalizada.
+
+    
+6.  **Calidad del código:**
+    * **Mejora:** Agregar pruebas unitarias y de integración, y documentar la API para facilitar el desarrollo y mantenimiento.
+    * **Objetivo:** Asegurar la estabilidad y escalabilidad de la API.
+
+
+7.  **Manejo de errores:**
+    * **Mejora:** Implementar un manejo de errores robusto y consistente.
+    * **Objetivo:** Dar una experiencia de usuario mas amigable.
+

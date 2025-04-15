@@ -53,7 +53,7 @@ export const loginUser = async (req, res) => {
 
 export const getUserProfile = async (req, res) => {
     try {
-        const correo = req.user.email; // Obtiene el correo del usuario del token
+        const correo = req.user.correo; // Obtiene el correo del usuario del token
 
         const user = await User.findOne({ correo: correo }).select('-password'); // Busca por correo electrónico
 
@@ -70,7 +70,7 @@ export const getUserProfile = async (req, res) => {
 
 export const postRegisterUser = async (req, res) => {
   try {
-      const correo = req.user.email; // Ahora usamos el correo electrónico del token
+      const correo = req.user.correo; // Ahora usamos el correo electrónico del token
       const { nombre, apellidos, fechaNacimiento, genero, peso, estatura, objetivo } = req.body;
 
       // Validar y formatear la fecha de nacimiento (si se proporciona)
@@ -113,7 +113,16 @@ export const postRegisterUser = async (req, res) => {
   }
 };
 
+export const getIMC = async (req, res) => {
+  try {
+    const peso = req.user.peso; 
+    const estatura = req.user.estatura;
 
+    const IMC = peso / ((estatura / 100) ** 2); 
 
-
-
+    res.status(200).json({ IMC });
+  } catch (error) {
+    console.error('Error al calcular el IMC:', error);
+    res.status(500).json({ message: 'Error al calcular el IMC', error: error.message });
+  }
+};

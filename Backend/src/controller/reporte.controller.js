@@ -2,78 +2,38 @@ import Reporte from '../models/Reporte.js';
 import Log from '../models/Logs.js';
 
 
-
 export const createReporte = async (req, res) => {
     try {
-        // userID es el correo
-        const { userId } = req.params;
+        const userId = req.user.correo; 
+        const { datos } = req.body;
 
-        // Obtener todos los logs del usuario
-        const logs = await Log.find({ userId });
-
-        if (!logs.length) {
-            return res.status(404).json({ message: 'No hay registros para generar el reporte' });
-        }
-
-        // Calcular estadísticas
-        const totalSeries = logs.reduce((sum, log) => sum + (log.series || 0), 0);
-        const totalRepeticiones = logs.reduce((sum, log) => sum + (log.repeticiones || 0), 0);
-        const totalEjercicios = logs.length;
-
-        const pesos = logs.map(log => log.peso || 0).filter(p => p > 0);
-        const pesoPromedio = pesos.length ? (pesos.reduce((sum, p) => sum + p, 0) / pesos.length).toFixed(2) : 0;
-        const pesoMaximo = pesos.length ? Math.max(...pesos) : 0;
-
-        // Estructurar los datos
-        const datosReporte = {
-            totalEjercicios,
-            totalSeries,
-            totalRepeticiones,
-            pesoPromedio: parseFloat(pesoPromedio),
-            pesoMaximo,
-        };
-
-        // Crear y guardar el reporte
         const nuevoReporte = new Reporte({
             userId,
-            datos: datosReporte,
+            datos,
         });
 
         await nuevoReporte.save();
 
-        res.status(201).json({
-            message: 'Reporte generado con éxito',
-            reporte: nuevoReporte,
-        });
+        res.status(201).json({ message: 'Reporte creado exitosamente', data: nuevoReporte });
     } catch (error) {
-        console.error('Error al generar el reporte:', error);
-        res.status(500).json({
-            message: 'Error interno al generar el reporte',
-            error: error.message,
-        });
+        console.error('Error al crear reporte:', error);
+        res.status(500).json({ message: 'Error al crear reporte', error: error.message });
     }
 };
 
-
 export const getReporte = async (req, res) => {
     try {
-        const { userId } = req.params;
+        const userId = req.user.correo; 
 
-        const reportes = await Reporte.find({ userId }).sort({ createdAt: -1 });
+        const reporte = await Reporte.findOne({ userId });
 
-        if (!reportes.length) {
-            return res.status(404).json({ message: 'No hay reportes disponibles para este usuario' });
+        if (!reporte) {
+            return res.status(404).json({ message: 'Reporte no encontrado' });
         }
 
-        res.status(200).json({
-            message: 'Reportes obtenidos con éxito',
-            reportes,
-        });
+        res.status(200).json(reporte);
     } catch (error) {
-        console.error('Error al obtener los reportes:', error);
-        res.status(500).json({
-            message: 'Error interno al obtener los reportes',
-            error: error.message,
-        });
+        console.error('Error al obtener reporte:', error);
+        res.status(500).json({ message: 'Error al obtener reporte', error: error.message });
     }
 };
