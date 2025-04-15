@@ -58,6 +58,11 @@ const userSchema = new mongoose.Schema({
     enum: ["Ganar peso", "Perder peso", "Definir", "Mantener"],
     default: null,
   },
+  nivelExperiencia: {
+    type: String,
+    enum: ["Principiante", "Intermedio", "Avanzado"],
+    default: "Principiante",
+  },
 }, {
   timestamps: true,
 });

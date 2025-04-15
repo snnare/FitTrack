@@ -40,3 +40,18 @@ PUT http://localhost:3000/logs/id_log
 }
 
 GET http://localhost:3000/logs/id_log
+
+
+
+---------------------- RUTINAS
+POST /auth/login
+{
+  "correo": "ade@bedede.com",
+  "password": "1212"
+}
+
+
+Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmRmMDAzYTk5ZDkzYmE5MDU2Yjk0YSIsImNvcnJlbyI6ImFkZUBiZWRlZGUuY29tIiwiaWF0IjoxNzQ0NzUwNzExLCJleHAiOjE3NDQ3NTc5MTF9.Zjppw5IKxXEj2SeYzd1w3a4YzPoYb7phNhDfo5v0txE
+
+
+
