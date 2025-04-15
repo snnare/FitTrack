@@ -10,9 +10,9 @@ export const createLog = async (req, res) => {
             peso, 
             notas } = req.body;
 
-
+        const userId = req.user.correo;
         const nuevoLog = new Log({
-            userId: 'demo@demo.com', 
+            userId, 
             ejercicio,
             series,
             repeticiones,
@@ -35,22 +35,67 @@ export const createLog = async (req, res) => {
     }
 };
 
-// Obtener todos los logs (rutinas) del usuario
 export const getAllLogs = async (req, res) => {
-
+    try{
+        const userId = req.user.correo;
+        const logs = await Log.find({ userId });
+        res.status(200).json({data: logs});
+    } catch(error){
+        console.log(error);
+        res.status(500).json({
+            message: 'Error al obtener los logs',
+            error: error.message,
+        });
+    }
 };
 
-// Actualizar un log (rutina) existente
-export const updateLogs = async (req, res) => {
-   
+export const getLogById = async (req, res) => {
+    try {
+        const logId = req.params.id; // Obtiene el ID del log de los parámetros de la URL
+
+        const log = await Log.findById(logId);
+
+        if (!log) {
+            return res.status(404).json({ message: 'Log no encontrado' });
+        }
+
+        res.status(200).json({
+            message: 'Log obtenido exitosamente',
+            data: log,
+        });
+    } catch (error) {
+        console.error('Error al obtener log:', error);
+        res.status(500).json({
+            message: 'Error al obtener log',
+            error: error.message,
+        });
+    }
 };
 
-// Eliminar un log (rutina) existente
-export const deleteAllLogs = async (req, res) => {
-   
-};
+export const updateLog = async (req, res) => {
+    try {
+        const logId = req.params.id;
+        const { ejercicio, series, repeticiones, peso, notas } = req.body;
 
+        const updatedLog = await Log.findByIdAndUpdate(
+            logId,
+            { ejercicio, series, repeticiones, peso, notas },
+            { new: true } // Devuelve el log actualizado en la respuesta
+        );
 
-export const deleteOneLogs = async (req, res) => {
-   
+        if (!updatedLog) {
+            return res.status(404).json({ message: 'Log no encontrado' });
+        }
+
+        res.status(200).json({
+            message: 'Log actualizado exitosamente',
+            data: updatedLog,
+        });
+    } catch (error) {
+        console.error('Error al actualizar log:', error);
+        res.status(500).json({
+            message: 'Error al actualizar log',
+            error: error.message,
+        });
+    }
 };

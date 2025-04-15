@@ -43,7 +43,7 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({ message: 'Credenciales inválidas' });
     }
 
-    const token = generateToken(user._id);
+    const token = generateToken(user);
     res.status(200).json({ token });
   } catch (error) {
     console.error('Error al iniciar sesión:', error);

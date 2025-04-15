@@ -1,3 +1,5 @@
+----------------------Test Authentications
+
 http://localhost:3000/
 POST /auth/register
 {
@@ -13,9 +15,11 @@ Content-Type: application/json
   "password": "1212"
 }
 
+----------------------Post  Authentications LOGS
+Lo guarda y asigna al usuariID(correo)
 POST /logs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmU5YjVkODFkNmJkYmI5MDU0YzMyMyIsImlhdCI6MTc0NDczOTI2OSwiZXhwIjoxNzQ0NzQ2NDY5fQ.s6xyoS2ULpaY43Z3Co5uS7YDX_4PcINqXinfcsRVyTg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmVhMjAzOTQxYjJjMDZjOTdjNzZhMSIsImNvcnJlbyI6ImFkM3NAYmVkZWRlLmNvbSIsImlhdCI6MTc0NDc0MDg3NiwiZXhwIjoxNzQ0NzQ4MDc2fQ.IrCfW-UbcrTbhSh-xS72v0guAdC7y1Y82oxXNX7crhc
 
 {
   "ejercicio": "Press de banca",
@@ -24,19 +28,5 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmU5YjVkO
   "peso": 60,
   "notas": "Buen entrenamiento"
 }
-```
 
-**Explicación:**
 
-* **`POST /auth/register`**: Ruta para registrar un nuevo usuario.
-* **`POST /auth/login`**: Ruta para iniciar sesión y obtener un token JWT.
-* **`POST /logs`**: Ruta para crear un nuevo log de entrenamiento.
-* **`Content-Type: application/json`**: Indica que el cuerpo de la solicitud está en formato JSON.
-* **`Authorization: Bearer <tu_token_jwt>`**: Encabezado de autorización con el token JWT obtenido después del inicio de sesión. Reemplaza `<tu_token_jwt>` con el token real.
-* **Cuerpo JSON**: Datos necesarios para cada solicitud.
-
-**Recomendaciones:**
-
-* Asegúrate de reemplazar `<tu_token_jwt>` con el token JWT real.
-* Verifica que tu backend esté en ejecución y escuchando en el puerto correcto (por defecto, 3000).
-* Verifica que mongoDB este levantado.

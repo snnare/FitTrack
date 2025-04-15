@@ -1,9 +1,13 @@
 import { Router } from 'express';
-import { createLog } from '../controller/logs.controller.js';
+import { createLog, getAllLogs, getLogById, updateLog } from '../controller/logs.controller.js';
 import { authMiddleware } from '../middleware/auth.middleware.js';
 
 const router = Router();
 
-router.post('/createlog',authMiddleware, createLog); // Crear un nuevo log (ejercicio)
+router.get('/',authMiddleware, getAllLogs);
+router.get('/:id',authMiddleware, getLogById); 
+router.post('/',authMiddleware, createLog); 
+router.put('/:id',authMiddleware, updateLog);
+
 
 export default router;
