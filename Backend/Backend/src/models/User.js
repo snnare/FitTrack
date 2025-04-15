@@ -3,14 +3,14 @@ import mongoose, { mongo } from "mongoose";
 const userSchema = new mongoose.Schema({
   nombre: {
     type: String,
-    required: [true, 'Campo obligatorio'],
+    required: false,
     trim: true,
     minlength: [2, 'El nombre debe tener al menos 2 caracteres'],
     maxlength: [50, 'El nombre no puede exceder los 50 caracteres'],
   },
   apellidos: {
     type: String,
-    required:  [true, 'Campo obligatorio'],
+    required: false,
     trim: true,
     minlength: [2, 'Los apellidos deben tener al menos 2 caracteres'],
     maxlength: [50, 'Los apellidos no pueden exceder los 50 caracteres'],
@@ -33,17 +33,19 @@ const userSchema = new mongoose.Schema({
   },
   fechaNacimiento: {
     type: Date,
+    required: false,
     default: null,
   },
   genero: {
     type: String,
-    enum: ['Masculino', 'Femenino', 'Otro'],
+    required: ['true', 'El género es obligatorio'],
+    enum: ['Masculino', 'Femenino'],
     default: null,
   },
   peso: {
     type: Number,
     default: null,
-    min: 30,
+    min: 0,
     max: 300,
   },
   estatura: {
