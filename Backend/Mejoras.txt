@@ -8,8 +8,12 @@ Claro, aquí tienes un resumen de las mejoras clave que puedes implementar en tu
 **Puntos clave y mejoras:**
 
 1.  **Registro y gestión de métricas:**
-    IMC sera calculado dinamicamente en el backeend 
-    GET /auth/imc
+Backend
+IMC sera calculado dinamicamente en el backeend 
+GET /auth/imc
+
+Frontend
+Se mostrara en el perfil del usuario
 
 2.  **Visualización de datos:**
     PENDIENTE
@@ -19,17 +23,13 @@ Claro, aquí tienes un resumen de las mejoras clave que puedes implementar en tu
     * **Mejora:** Desarrollar funcionalidades que permitan a los entrenadores revisar el historial de los usuarios y enviar recomendaciones.
     * **Objetivo:** Optimizar la interacción entre usuarios y entrenadores.
 
-5.  **Recomendaciones personalizadas:**
-    * **Mejora:** Integrar lógica para generar recomendaciones de entrenamiento basadas en el análisis de los datos del usuario.
-    * **Objetivo:** Proporcionar valor añadido a los usuarios con orientación personalizada.
+5.  **Rutinas personalizadas:**
 
-    
-6.  **Calidad del código:**
-    * **Mejora:** Agregar pruebas unitarias y de integración, y documentar la API para facilitar el desarrollo y mantenimiento.
-    * **Objetivo:** Asegurar la estabilidad y escalabilidad de la API.
+Backend
+Las rutinas estan pre hechas, en la bd
+Y se asginan segun el objetivo y niveldeexperiencia del usuario
 
+Frontend
+Aun no se define las screen
 
-7.  **Manejo de errores:**
-    * **Mejora:** Implementar un manejo de errores robusto y consistente.
-    * **Objetivo:** Dar una experiencia de usuario mas amigable.
 
