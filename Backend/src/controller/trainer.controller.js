@@ -1,5 +1,5 @@
-import User from "../models/User";
-import Trainer from "../models/Trainer";
+import User from "../models/User.js";
+import Trainer from "../models/Trainer.js";
 import { checkIfEmailExists, hashPassword, comparePassword, generateToken } from '../utils/user.utils.js';
 
 export const loginTrainer = async (req, res) => {

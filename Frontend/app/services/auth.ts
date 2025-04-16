@@ -3,7 +3,7 @@ import { LoginAndRegisterData } from "../types/auth";
 
 
 
-export const registerUser = async (userData: LoginAndRegisterData) => {
+export const registerUser = async (userData: any) => {
   try {
     const response = await api.post("/auth/register", userData);
     return response.data;
@@ -22,3 +22,16 @@ export const loginUser = async (userData: LoginAndRegisterData) => {
 }
 
 
+
+export const validateToken = async (token: string) => {
+  try {
+    const response = await api.get("/auth/validate", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error("Error validating token");
+  }
+}

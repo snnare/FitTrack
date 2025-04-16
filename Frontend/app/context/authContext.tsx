@@ -6,8 +6,10 @@ import * as SecureStore from 'expo-secure-store';
 // Interface
 import { LoginAndRegisterData } from "../types/auth";
 // Services
-import {registerUser, loginUser} from "../services/auth";
-
+import {registerUser, loginUser, validateToken} from "../services/auth";
+import api from '../services/api';
+// Env
+import { TOKEN_KEY } from "../services/env";
 
 interface AuthProps {
     authState?: { token: string | null, authenticated: boolean | null };
@@ -16,8 +18,6 @@ interface AuthProps {
     onLogout?: () => Promise<any>;
 }
 
-const TOKEN_KEY = '12';
-export const API_URL = 'https://api.developbetterapps.com';
 const AuthContext = createContext<AuthProps>({});
 
 export const useAuth = () => {
@@ -40,24 +40,16 @@ export const AuthProvider = ({ children }: any) => {
 
             if (token) {
                 try {
-                    // Intentar validar el token en la API
-                    await axios.get(`${API_URL}/auth/validate`, {
-                        headers: { Authorization: `Bearer ${token}` }
-                    });
+                    await validateToken(token); // Validar el token
+                    setAuthState({ token, authenticated: true });
+                    console.log(token); // Debugging: muestra el token
+                    api.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Configura el token en los headers de axios
 
-                    // Si el token es válido, lo setea como autenticado
-                    setAuthState({
-                        token,
-                        authenticated: true,
-                    });
-                    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 } catch (err) {
-                    // Si la validación falla, eliminamos el token
                     await SecureStore.deleteItemAsync(TOKEN_KEY);
                     setAuthState({ token: null, authenticated: false });
                 }
             } else {
-                // Si no hay token, considera como no autenticado
                 setAuthState({ token: null, authenticated: false });
             }
             setLoading(false); // Termina la carga
@@ -67,9 +59,10 @@ export const AuthProvider = ({ children }: any) => {
     }, []);
 
     // Función de registro
-    const register = async (email: string, password: string) => {
+    const register = async (userData: LoginAndRegisterData) => {
         try {
-            return await axios.post(`${API_URL}/users`, { email, password });
+            const result = await registerUser(userData);
+            return result;
         } catch (error) {
             console.error('Registration error:', error);
             return { error: true, msg: (error as any).response.data.msg };
@@ -77,18 +70,18 @@ export const AuthProvider = ({ children }: any) => {
     };
 
     // Función de login
-    const login = async (email: string, password: string) => {
+    const login = async (userData: LoginAndRegisterData) => {
         try {
-            const result = await axios.post(`${API_URL}/auth`, { email, password });
+            const result = await loginUser(userData);
             console.log('Login result:', result);
 
             setAuthState({
-                token: result.data.token,
+                token: result.token,
                 authenticated: true
             });
 
-            axios.defaults.headers.common['Authorization'] = `Bearer ${result.data.token}`;
-            await SecureStore.setItemAsync(TOKEN_KEY, result.data.token);
+            api.defaults.headers.common['Authorization'] = `Bearer ${result.token}`;
+            await SecureStore.setItemAsync(TOKEN_KEY, result.token);
 
             return result;
         } catch (error) {
@@ -105,13 +98,14 @@ export const AuthProvider = ({ children }: any) => {
           await SecureStore.deleteItemAsync(TOKEN_KEY);
           console.log('Token deleted from SecureStore');
       
-          axios.defaults.headers.common['Authorization'] = '';
+          api.defaults.headers.common['Authorization'] = '';
           console.log('Authorization header cleared');
       
           setAuthState({
             token: null,
             authenticated: false
           });
+          
           console.log('Auth state updated: logged out');
         } catch (error) {
           console.error('Logout error:', error);
