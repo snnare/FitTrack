@@ -12,7 +12,7 @@ export const registerUser = async (userData: any) => {
   }
 }
 
-export const loginUser = async (userData: LoginAndRegisterData) => {
+export const loginUser = async (userData: any) => {
   try {
     const response = await api.post("/auth/login", userData);
     return response.data;
