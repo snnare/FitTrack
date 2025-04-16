@@ -35,8 +35,6 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({ message: 'Credenciales inválidas' });
     }
 
-    console.log("passIn", password);
-    console.log("bdpass", user.password);
     const isPasswordMatch = await comparePassword(password, user.password);
 
     if (!isPasswordMatch) {

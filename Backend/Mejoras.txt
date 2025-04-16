@@ -22,6 +22,17 @@ Se mostrara en el perfil del usuario
 3.  **Comunicación con entrenadores:**
     * **Mejora:** Desarrollar funcionalidades que permitan a los entrenadores revisar el historial de los usuarios y enviar recomendaciones.
     * **Objetivo:** Optimizar la interacción entre usuarios y entrenadores.
+Backend
+login + buscar * correo 
+
+Frontend 
+Se usara el mismo login, pero verifica si el correo
+
+if corre == '*.@trainer.com' == POST /trainer/login
+else POST /auth/login
+
+
+
 
 5.  **Rutinas personalizadas:**
 
