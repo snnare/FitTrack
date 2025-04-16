@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-export const RegisterSchema = Yup.object().shape({
+export const updateSchema = Yup.object().shape({
     nombre: Yup
         .string()
         .trim()
