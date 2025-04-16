@@ -63,6 +63,10 @@ const userSchema = new mongoose.Schema({
     enum: ["Principiante", "Intermedio", "Avanzado"],
     default: "Principiante",
   },
+  profileComplete:{
+    type: Boolean,
+    default: false,
+  }
 }, {
   timestamps: true,
 });

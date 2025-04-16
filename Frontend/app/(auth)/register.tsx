@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import { useRouter } from 'expo-router';
-import { registerAndLoginSchema } from '../validations/registerSchema';
+import { registerAndLoginSchema } from '../validations/registerAndLoginSchema';
 import { registerUser } from '../services/auth';
 import { Ionicons } from '@expo/vector-icons'; // Importa Ionicons
 

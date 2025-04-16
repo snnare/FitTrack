@@ -1,11 +1,4 @@
-Claro, aquí tienes un resumen de las mejoras clave que puedes implementar en tu código, enfocándonos en los objetivos y puntos clave de tu proyecto "Fit Track":
 
-**Objetivos principales:**
-
-* Desarrollar una aplicación móvil Android para el seguimiento y análisis del progreso físico en gimnasios.
-* Proporcionar herramientas para optimizar entrenamientos a través de reportes, gráficos y recomendaciones personalizadas.
-
-**Puntos clave y mejoras:**
 
 1.  **Registro y gestión de métricas:**
 Backend
@@ -31,9 +24,6 @@ Se usara el mismo login, pero verifica si el correo
 if corre == '*.@trainer.com' == POST /trainer/login
 else POST /auth/login
 
-
-
-
 5.  **Rutinas personalizadas:**
 
 Backend
@@ -43,4 +33,28 @@ Y se asginan segun el objetivo y niveldeexperiencia del usuario
 Frontend
 Aun no se define las screen
 
+
+
+6. Post Register
+Flujo de Inicio de Sesión (Primer Inicio):
+    El usuario ingresa su correo electrónico y contraseña 
+    Ingresar
+Verificación de Credenciales
+    backend  hace la verificación.
+Inicio de Sesión Exitoso
+    devuelve un token de autenticación
+Verificación de Información Adicional:
+    La aplicación, al recibir el token, realiza una consulta al backend 
+    para determinar si el usuario ha completado su información adicional.
+
+    Se consulta el campo profileComplete: si profileComplete es falso el usuario
+    aun no completa su información.
+
+Información Adicional
+    Como profileComplete es falso por su primer inicio de sesion, se redirige a la pantalla
+    /addAditionalinfo
+Completa la Información Adicional
+    profileComplete es verdadero y ahora si lo redirige al /home
+2do Inicio de Sesión 
+    como profileComplete ya es true, ahora ya lo manda a home de forma directa
 

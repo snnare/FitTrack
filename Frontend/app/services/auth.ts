@@ -21,8 +21,6 @@ export const loginUser = async (userData: any) => {
   }
 }
 
-
-
 export const validateToken = async (token: string) => {
   try {
     const response = await api.get("/auth/validate", {
@@ -33,5 +31,43 @@ export const validateToken = async (token: string) => {
     return response.data;
   } catch (error) {
     throw new Error("Error validating token");
+  }
+}
+
+
+export const postRegister = async(userData: any, token: string) => {
+  try{
+    const response = await api.post("/auth/postRegister", userData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error("Error registering user with token");
+  }
+}
+
+
+export const getProfileUser = async (correo: any) => {
+  try{
+    const response = await api.get(`/auth/profile`, correo);
+    return response.data;
+  }catch (error){
+    throw new Error("Error getting user profile");
+  }
+}
+
+
+export const getIMC = async (token: string) => {
+  try{
+    const response = await api.get(`/auth/imc`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  }catch(error){
+    throw new Error("Error getting IMC data");
   }
 }

@@ -51,7 +51,7 @@ export const loginUser = async (req, res) => {
 
 export const getUserProfile = async (req, res) => {
   try {
-    const correo = req.user.correo; // Obtiene el correo del usuario del token
+    const correo = req.user.correo; 
 
     const user = await User.findOne({ correo: correo }).select('-password'); // Busca por correo electrónico
 
@@ -66,10 +66,27 @@ export const getUserProfile = async (req, res) => {
   }
 };
 
+export const getProfileInfo = async (req, res) => {
+  try {
+    const correo = req.user.correo;
+
+    const user = await User.findOne({ correo: correo }).select('profileComplete'); // Busca por correo y selecciona solo profileComplete
+
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    res.status(200).json({ profileComplete: user.profileComplete }); // Devuelve solo profileComplete
+  } catch (error) {
+    console.error('Error al obtener el perfil:', error);
+    res.status(500).json({ message: 'Error al obtener el perfil', error: error.message });
+  }
+}
+
 export const postRegisterUser = async (req, res) => {
   try {
-    const correo = req.user.correo; // Ahora usamos el correo electrónico del token
-    const { nombre, apellidos, fechaNacimiento, genero, peso, estatura, objetivo, nivelExperiencia } = req.body;
+    const correo = req.user.correo; 
+    const { nombre, apellidos, fechaNacimiento, genero, peso, estatura, objetivo, nivelExperiencia, profileComplete } = req.body;
 
     // Validar y formatear la fecha de nacimiento (si se proporciona)
     let formattedFechaNacimiento = null;
@@ -92,6 +109,7 @@ export const postRegisterUser = async (req, res) => {
         estatura,
         objetivo,
         nivelExperiencia,
+        profileComplete,
       },
       { new: true }
     );
