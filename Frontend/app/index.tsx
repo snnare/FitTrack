@@ -52,6 +52,6 @@ export default function IndexScreen() {
     return <Redirect href="/(tabs)/home" />;
   } else {
     // Si el usuario no está autenticado, redirige a la pantalla de inicio de sesión (login).
-    return <Redirect href="/(auth)/login" />;
+    return <Redirect href="/(auth)/loginc" />;
   }
 }

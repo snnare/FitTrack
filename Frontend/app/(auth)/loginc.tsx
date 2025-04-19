@@ -1,8 +1,7 @@
-// LoginScreen.tsx
 import React from 'react';
 import { View, Text, StyleSheet, Image, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { loginUser, getProfileUser } from '../services/auth';
+import { useAuth } from '../context/authContext'; // Importa el hook useAuth
 import { Formik } from 'formik';
 import { registerAndLoginSchema } from '../validations/registerAndLoginSchema';
 import AuthInput from '../../components/AuthInput';
@@ -13,17 +12,28 @@ const logo = require('../../assets/logo.png');
 
 export default function LoginScreen() {
   const router = useRouter();
+  const { onLogin, authState } = useAuth(); // Obtén onLogin y authState del contexto
 
   const handleLogin = async (values: any) => {
     try {
-      await loginUser(values);
-      
-      router.push('/(tabs)/home');
-      Alert.alert('OK');
+      const result = await onLogin(values); // Llama a la función onLogin del contexto
+      if (!result?.error) {
+        // La navegación ahora se gestiona en el AuthContext mediante la actualización
+        // del estado isAuthenticated. Este componente re-renderizará y la
+        // condición if (authState.isAuthenticated) {} se encargará de la redirección.
+        Alert.alert('Inicio de sesión exitoso');
+      } else {
+        Alert.alert('Error al iniciar sesión', result.msg || 'Hubo un problema al iniciar sesión.');
+      }
     } catch (error: any) {
-      Alert.alert('Error al iniciar sesión', error.message || 'Hubo un problema al iniciar sesión.');
+      Alert.alert('Error inesperado', error.message || 'Ocurrió un error inesperado.');
     }
   };
+
+  if (authState?.authenticated) {
+    router.push('/(tabs)/home');
+    return null;
+  }
 
   return (
     <Formik

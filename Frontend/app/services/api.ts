@@ -1,13 +1,33 @@
 // services/api.ts
-import axios from 'axios';
-import { API_URL } from './env';
+import axios, {AxiosInstance} from 'axios';
+import { API_URL, TOKEN_KEY } from './env';
+import * as SecureStore from 'expo-secure-store';
 
-const api = axios.create({
+const api: AxiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
 });
+
+
+api.interceptors.request.use(
+  async (config) => {
+    try {
+      const token = await SecureStore.getItemAsync(TOKEN_KEY);
+      if (token && config.headers) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+      }
+    } catch (error) {
+      console.error('Error al obtener el token para el interceptor:', error);
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 
 export const testConnection = async () => {
   try {

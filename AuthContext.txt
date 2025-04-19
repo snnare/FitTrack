@@ -1,0 +1,10 @@
+En pocas palabras:
+
+    Login Exitoso: Al iniciar sesión, el backend te da un "pase" (token JWT), que guardas de forma segura en tu teléfono (SecureStore).
+    Interceptor como Portero: Configuramos un "portero" (interceptor en api.ts) para todas las llamadas que tu app hace al backend.
+    Pase Automático: Antes de cada llamada a una ruta protegida, el portero revisa si tienes el "pase" guardado. Si lo encuentra, lo añade automáticamente a la llamada.
+    Backend Valida el Pase: El backend recibe la llamada con el "pase", lo verifica y decide si te permite acceder a la información.
+    Tus Servicios Simples: Tus archivos de servicio (logs.ts, reporte.ts) solo se preocupan por hacer la llamada a la dirección correcta (endpoint) y enviar/recibir datos. No necesitan saber cómo se añade el "pase".
+    AuthContext es el Jefe: El AuthContext se encarga de la parte inicial: conseguir el "pase" al loguearte, guardarlo y recordar si estás "dentro" (autenticado).
+
+En esencia, el interceptor automatiza la tarea de adjuntar el token a cada petición, haciendo que tus servicios sean más limpios y que la autenticación sea más centralizada.

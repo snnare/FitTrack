@@ -1,62 +1,66 @@
+// RegisterScreen.tsx
 import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
-import { Formik } from 'formik';
+import { View, Text, StyleSheet, Alert, TouchableOpacity, Image} from 'react-native';
 import { useRouter } from 'expo-router';
+import { Formik } from 'formik';
 import { registerAndLoginSchema } from '../validations/registerAndLoginSchema';
 import { registerUser } from '../services/auth';
-import { Ionicons } from '@expo/vector-icons'; // Importa Ionicons
+
+import AuthInput from '../../components/AuthInput';
+import AuthButton from '../../components/AuthButton';
+import AuthLink from '../../components/AuthLink'; 
+
+
+
+const logo = require('../../assets/logo.png');
+
+
 
 export default function RegisterScreen() {
   const router = useRouter();
 
   const handleRegister = async (values: any) => {
     try {
-      const response = await registerUser(values);
+      await registerUser(values);
       Alert.alert('OK', 'Usuario registrado correctamente.');
-      console.log(response);
-      router.push('/login'); // Redirige al login después del registro exitoso
+      router.push('/login');
     } catch (error: any) {
       Alert.alert('Error', error.message || 'Hubo un problema registrando el usuario.');
-      console.error(error);
     }
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => router.push('/login')}>
-        <Ionicons name="arrow-back" size={24} color="#22c55e" />
-      </TouchableOpacity>
+      <Image source={logo} style={styles.logo} />
+      <Text style={styles.subtitle}>¡Únete a nuestra comunidad y alcanza tus metas!</Text>
       <Formik
         initialValues={{ correo: '', password: '' }}
         validationSchema={registerAndLoginSchema}
-        onSubmit={(values) => {
-          console.log(values);
-          handleRegister(values);
-        }}
+        onSubmit={handleRegister}
       >
         {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
           <View>
-            <Text style={styles.title}>Registro</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Correo"
+            <AuthInput
+              label="Correo electrónico"
+              placeholder="Correo electrónico"
+              value={values.correo}
               onChangeText={handleChange('correo')}
               onBlur={handleBlur('correo')}
-              value={values.correo}
+              error={touched.correo && errors.correo}
               keyboardType="email-address"
               autoCapitalize="none"
             />
-            {touched.correo && errors.correo && <Text style={styles.error}>{errors.correo}</Text>}
-            <TextInput
-              style={styles.input}
+            <AuthInput
+              label="Contraseña"
               placeholder="Contraseña"
               secureTextEntry
+              value={values.password}
               onChangeText={handleChange('password')}
               onBlur={handleBlur('password')}
-              value={values.password}
+              error={touched.password && errors.password}
             />
-            {touched.password && errors.password && <Text style={styles.error}>{errors.password}</Text>}
-            <Button title="REGISTRAR" onPress={handleSubmit} />
+            <AuthButton title="Registrarse" onPress={handleSubmit} />
+            <AuthLink title="¿Ya tienes cuenta? Inicia sesión" onPress={() => router.push('/login')} />
           </View>
         )}
       </Formik>
@@ -66,35 +70,22 @@ export default function RegisterScreen() {
 
 const styles = StyleSheet.create({
   container: {
+    padding: 20,
+    backgroundColor: '#111827',
     flex: 1,
-    padding: 24,
-    backgroundColor: '#f0fdf4',
+    justifyContent: 'center',
   },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 30,
-    textAlign: 'center',
-    color: '#22c55e',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#a7f3d0',
-    padding: 14,
-    marginBottom: 12,
-    borderRadius: 10,
-    backgroundColor: '#fff',
-    fontSize: 16,
-  },
-  error: {
-    color: '#dc2626',
-    marginBottom: 8,
+  subtitle: {
     fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 20,
+    color: '#d1d5db',
   },
-  backButton: {
-    position: 'absolute',
-    top: 10,
-    left: 10,
-    zIndex: 10,
+  logo: {
+    width: 200,
+    height: 200,
+    alignSelf: 'center',
+    marginBottom: 5,
+    resizeMode: 'stretch',
   },
 });

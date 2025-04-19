@@ -3,9 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
-// Interface
 import { LoginAndRegisterData } from "../types/auth";
-// Services
 import {registerUser, loginUser, validateToken} from "../services/auth";
 import api from '../services/api';
 // Env
