@@ -1,113 +1,78 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
-import {
-    LineChart,
-    BarChart,
-    PieChart,
-    ProgressChart,
-    ContributionGraph,
-    StackedBarChart
-  } from "react-native-chart-kit";
+import WorkoutLogList from '../../components/WorkoutLogList';
+import Welcome from '../../components/Welcome';
+import { getAllLogs } from '../services/log'; // Importa getAllLogs aquí también si quieres mostrar la lista
 
 export default function HomeScreen() {
-  const [logs, setLogs] = useState([
-    {
-      id: '1',
-      fecha: '2025-04-08',
-      ejercicio: 'Press de banca',
-      series: 4,
-      repeticiones: 10,
-      peso: 60,
-    },
-    {
-      id: '2',
-      fecha: '2025-04-07',
-      ejercicio: 'Sentadillas',
-      series: 3,
-      repeticiones: 12,
-      peso: 80,
-    },
-    {
-      id: '3',
-      fecha: '2025-04-06',
-      ejercicio: 'Pull-up',
-      series: 3,
-      repeticiones: 8,
-      peso: 70,
-    },
-  ]);
+  const [logs, setLogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Contar los días de entrenamiento
-  const uniqueDates = Array.from(new Set(logs.map(log => log.fecha)));
-  const workoutDays = uniqueDates.length;
+  useEffect(() => {
+      const fetchLogs = async () => {
+          setLoading(true);
+          setError(null);
+          try {
+              const data = await getAllLogs();
+              setLogs(data.data || []);
+          } catch (err: any) {
+              setError(err.message || 'Error al cargar los logs');
+          } finally {
+              setLoading(false);
+          }
+      };
 
-  // Datos para la gráfica
-  const data = {
-    labels: ['Días Entrenados'], // Etiquetas de las barras
-    datasets: [
-      {
-        data: [workoutDays], // Número de días entrenados
-        color: (opacity = 1) => `rgba(22, 101, 52, ${opacity})`, // Color de las barras
-        strokeWidth: 2, // Grosor de la barra
-      },
-    ],
-  };
+      fetchLogs();
+  }, []);
+
+  if (loading) {
+      return <View style={styles.container}><Text style={styles.loading}>Cargando...</Text></View>;
+  }
+
+  if (error) {
+      return <View style={styles.container}><Text style={styles.error}>Error al cargar los logs: {error}</Text></View>;
+  }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Bienvenido ANGEL</Text>
-      
-      <FlatList
-        data={logs}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.logItem}>
-            <Text style={styles.logTitle}>{item.ejercicio}</Text>
-            <Text style={styles.logDetail}>
-              {item.series}x{item.repeticiones} - {item.peso} kg
-            </Text>
-            <Text style={styles.logDate}>{item.fecha}</Text>
-          </View>
-        )}
-      />
-    </View>
+      <View style={styles.container}>
+          <Welcome  />
+          
+
+          <Text style={styles.subtitle}>Últimos Entrenamientos</Text>
+          <WorkoutLogList logs={logs} />
+      </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#111827', // fondo oscuro
-    padding: 20,
+      flex: 1,
+      backgroundColor: '#111827',
+      padding: 20,
   },
   title: {
-    fontSize: 22,
-    color: '#bbf7d0', // verde claro
-    fontWeight: 'bold',
-    marginBottom: 10,
-    textAlign: 'center',
+      fontSize: 22,
+      color: '#bbf7d0',
+      fontWeight: 'bold',
+      marginBottom: 20,
+      textAlign: 'center',
   },
-  chart: {
-    marginVertical: 20,
-    borderRadius: 16,
+  subtitle: {
+      fontSize: 18,
+      color: '#d1d5db',
+      fontWeight: 'bold',
+      marginTop: 20,
+      marginBottom: 10,
   },
-  logItem: {
-    backgroundColor: '#1f2937', // un gris oscuro
-    padding: 15,
-    borderRadius: 12,
-    marginBottom: 10,
+  loading: {
+      color: '#d1d5db',
+      textAlign: 'center',
+      marginTop: 20,
   },
-  logTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#86efac', // verde brillante
-  },
-  logDetail: {
-    fontSize: 14,
-    color: '#d1d5db', // gris claro
-  },
-  logDate: {
-    fontSize: 12,
-    color: '#9ca3af',
-    marginTop: 4,
+  error: {
+      color: '#ef4444',
+      textAlign: 'center',
+      marginTop: 20,
   },
 });

@@ -49,9 +49,9 @@ export const postRegister = async(userData: any, token: string) => {
 }
 
 // Detalles
-export const getProfileUser = async (correo: any) => {
+export const getProfileUser = async () => {
   try{
-    const response = await api.get(`/auth/profile`, correo);
+    const response = await api.get(`/auth/profile`);
     return response.data;
   }catch (error){
     throw new Error("Error getting user profile");
