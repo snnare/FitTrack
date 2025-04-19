@@ -16,6 +16,8 @@ export default function UserHeader() {
       setError(null);
       try {
         const [profile, streakData] = await Promise.all([getProfileUser(), getStreak()]);
+        console.log(profile);
+        console.log(streakData);
         setUserName(profile.nombre || 'Usuario');
         setUserGender(profile.genero || null);
         setStreak(streakData.currentStreak || 0);
@@ -50,7 +52,6 @@ export default function UserHeader() {
     <View style={styles.container}>
       {/* Puedes reemplazar este emoji por una imagen/gif animado */}
       {/* <Image source={require('../assets/fire.gif')} style={styles.fireGif} /> */}
-
       <Text style={styles.streakText}>
         🔥 Racha actual: <Text style={styles.highlight}>{streak}</Text> {streak === 1 ? 'día' : 'días'}
       </Text>
