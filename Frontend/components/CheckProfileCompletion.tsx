@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { ActivityIndicator } from 'react-native';
 
-import { getProfileUser } from '../app/services/auth';
+import { profileStatus} from '../app/services/auth';
 
 
 
@@ -17,9 +17,13 @@ const CheckProfileCompletion = () => {
             setLoading(true);
             setError(null);
             try {
-                const profile = await getProfileUser();
-                if (!profile?.profileComplete) {
-                    router.replace('/(auth)/additionalInfo'); 
+                const profile = await profileStatus();
+                if(profile){
+                    router.push('/(tabs)/home');
+                    console.log(profile) 
+                } else {
+                    router.push('/(auth)/additionalInfo'); 
+                    console.log(profile)
                 }
             } catch (err: any) {
                 setError(err.message || 'Error al verificar el perfil');
@@ -32,7 +36,7 @@ const CheckProfileCompletion = () => {
     }, [router]);
 
     if (loading) {
-        return <ActivityIndicator size="large" color="#bbf7d0" />; // Muestra un indicador de carga mientras se verifica
+        return <ActivityIndicator size="large" color="#bbf7d0" />; 
     }
 
     if (error) {

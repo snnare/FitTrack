@@ -20,7 +20,7 @@ export default function RegisterScreen() {
       const result = await onRegister(values); // Llama a la función onRegister del contexto
       if (!result?.error) {
         Alert.alert('OK', 'Usuario registrado correctamente.');
-        router.push('/login');
+        router.push('/(auth)/additionalInfo'); // Navega a la pantalla de información adicional
       } else {
         Alert.alert('Error', result.msg || 'Hubo un problema registrando el usuario.');
       }

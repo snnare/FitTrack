@@ -44,7 +44,7 @@ export const postRegister = async(userData: any) => {
   }
 }
 
-// Detalles
+
 export const getProfileUser = async () => {
   try{
     const response = await api.get(`/auth/profile`);
@@ -52,6 +52,16 @@ export const getProfileUser = async () => {
   }catch (error){
     throw new Error("Error getting user profile");
   }
+}
+
+export const profileStatus = async ( ) => {
+  try{
+    const response = await api.get(`/auth/profileStatus`);
+    return response.data;
+  }catch (error){
+    throw new Error("Error getting profile status");
+  }
+
 }
 
 

@@ -1,4 +1,3 @@
-// LoginScreen.tsx
 import React from 'react';
 import { View, Text, StyleSheet, Image, Alert } from 'react-native';
 import { useRouter } from 'expo-router';

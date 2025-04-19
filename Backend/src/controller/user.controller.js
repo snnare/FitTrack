@@ -131,6 +131,25 @@ export const postRegisterUser = async (req, res) => {
   }
 };
 
+
+export const getProfileStatus = async (req, res) => {
+  try {
+    const correo = req.user.correo;
+
+    const user = await User.findOne({ correo: correo }).select('profileComplete'); 
+
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    res.status(200).json({ profileComplete: user.profileComplete }); 
+  } catch (error) {
+    console.error('Error al obtener el estado de profileComplete:', error);
+    res.status(500).json({ message: 'Error al obtener el estado de profileComplete', error: error.message });
+  }
+};
+
+
 export const getIMC = async (req, res) => {
   try {
     const peso = req.user.peso;

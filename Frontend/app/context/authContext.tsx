@@ -39,8 +39,6 @@ export const AuthProvider = ({ children }: any) => {
                 try {
                     await validateToken(token); 
                     setAuthState({ token, authenticated: true });
-                    console.log(token); // Debugging: muestra el token
-                    // api.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Configura el token en los headers de la API
                 } catch (err) {
                     await SecureStore.deleteItemAsync(TOKEN_KEY);
                     setAuthState({ token: null, authenticated: false });
@@ -60,7 +58,6 @@ export const AuthProvider = ({ children }: any) => {
             const result = await registerUser(userData);
             return result;
         } catch (error) {
-            console.error('Registration error:', error);
             return { error: true, msg: (error as any).response.data.msg };
         }
     };
@@ -69,14 +66,12 @@ export const AuthProvider = ({ children }: any) => {
     const login = async (userData: LoginAndRegisterData) => {
         try {
             const result = await loginUser(userData);
-            console.log('Login result:', result);
-
+            
             setAuthState({
                 token: result.token,
                 authenticated: true
             });
 
-            //api.defaults.headers.common['Authorization'] = `Bearer ${result.token}`;
             await SecureStore.setItemAsync(TOKEN_KEY, result.token);
             return result;
         } catch (error) {
@@ -87,24 +82,14 @@ export const AuthProvider = ({ children }: any) => {
 
     // Función de logout
     const logout = async () => {
-        console.log('Logout button pressed'); // Debugging
-      
         try {
-          await SecureStore.deleteItemAsync(TOKEN_KEY);
-          console.log('Token deleted from SecureStore');
-      
-          // Interceptores de Axios, esta pendiente de las peticiones, si encuentra un token en secureStore lo añade a la cabecera de la petición
-          // como aqui se borra el token, se le dice a axios que no lo use
-          // ya no puede acceder a rutas protegidas
-          //api.defaults.headers.common['Authorization'] = '';
-          console.log('Authorization header cleared');
-      
+          await SecureStore.deleteItemAsync(TOKEN_KEY);;
+            
           setAuthState({
             token: null,
             authenticated: false
           });
           
-          console.log('Auth state updated: logged out');
         } catch (error) {
           console.error('Logout error:', error);
         }

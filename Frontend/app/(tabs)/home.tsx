@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 
 
-import CheckProfileCompletion from '../../components/CheckProfileCompletion';
+
 import UserHeader from '../../components/UserHeader';
 import WorkoutLogList from '../../components/WorkoutLogList';
 
@@ -41,6 +41,7 @@ export default function HomeScreen() {
 
     return (
         <View style={styles.container}>
+            
             <UserHeader />
             <Text style={styles.subtitle}>Últimos Entrenamientos</Text>
             <WorkoutLogList logs={logs} />

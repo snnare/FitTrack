@@ -6,6 +6,7 @@ import {
     getIMC,
     postRegisterUser,
     getProfileInfo,
+    getProfileStatus
 } from '../controller/user.controller.js';
 import {
     validateToken
@@ -21,6 +22,7 @@ router.post('/login', loginUser);
 router.get('/validate', validateToken)       
 router.post('/postRegister', authMiddleware, postRegisterUser); 
 router.get('/profile', authMiddleware, getUserProfile); 
+router.get('/profileStatus', authMiddleware, getProfileStatus);
 router.get('/imc', authMiddleware, getIMC);
 
 
