@@ -3,7 +3,7 @@ import moment from 'moment';
 
 export const updateStreak = async (req, res) => {
     try {
-        const correo = req.user.correo; // Usamos el correo electrónico
+        const correo = req.user.correo; 
 
         const hoy = moment().startOf('day');
         const ayer = moment().subtract(1, 'days').startOf('day');
@@ -44,15 +44,15 @@ export const updateStreak = async (req, res) => {
 
 export const getStreak = async (req, res) => {
     try {
-        const correo = req.user.correo; 
+        const correo = req.user.correo;
 
-        const streak = await Streak.findOne({ userId: correo }); 
+        const streak = await Streak.findOne({ userId: correo });
 
         if (!streak) {
             return res.status(404).json({ message: 'Racha no encontrada' });
         }
 
-        res.status(200).json(streak);
+        res.status(200).json({ currentStreak: streak.currentStreak }); 
     } catch (error) {
         console.error('Error al obtener la racha:', error);
         res.status(500).json({ message: 'Error al obtener la racha', error: error.message });
