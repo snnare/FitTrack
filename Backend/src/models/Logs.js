@@ -3,12 +3,7 @@ import mongoose from 'mongoose';
 const logSchema = new mongoose.Schema({
     userId: {
         type: String,
-        required: [true, 'El correo del usuario es obligatorio'],
         trim: true
-    },
-    fecha: {
-        type: Date,
-        default: Date.now,
     },
     ejercicio: {
         type: String,

@@ -48,7 +48,7 @@ export const postRegister = async(userData: any, token: string) => {
   }
 }
 
-
+// Detalles
 export const getProfileUser = async (correo: any) => {
   try{
     const response = await api.get(`/auth/profile`, correo);

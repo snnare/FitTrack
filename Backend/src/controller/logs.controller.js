@@ -27,7 +27,8 @@ export const createLog = async (req, res) => {
             data: nuevoLog,
         });
     } catch (error) {
-        console.error('Error al crear usuario:', error);
+        console.log("correo",req.user.correo);
+        console.log(req.body);
         res.status(500).json({
             message: 'Error al crear el log',
             error: error.message,

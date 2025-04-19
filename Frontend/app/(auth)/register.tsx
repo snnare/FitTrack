@@ -1,31 +1,31 @@
 // RegisterScreen.tsx
 import React from 'react';
-import { View, Text, StyleSheet, Alert, TouchableOpacity, Image} from 'react-native';
+import { View, Text, StyleSheet, Alert, Image } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useAuth } from '../context/authContext'; // Importa el hook useAuth
 import { Formik } from 'formik';
 import { registerAndLoginSchema } from '../validations/registerAndLoginSchema';
-import { registerUser } from '../services/auth';
-
 import AuthInput from '../../components/AuthInput';
 import AuthButton from '../../components/AuthButton';
-import AuthLink from '../../components/AuthLink'; 
-
-
+import AuthLink from '../../components/AuthLink';
 
 const logo = require('../../assets/logo.png');
 
-
-
 export default function RegisterScreen() {
   const router = useRouter();
+  const { onRegister } = useAuth(); // Obtén la función onRegister del contexto
 
   const handleRegister = async (values: any) => {
     try {
-      await registerUser(values);
-      Alert.alert('OK', 'Usuario registrado correctamente.');
-      router.push('/login');
+      const result = await onRegister(values); // Llama a la función onRegister del contexto
+      if (!result?.error) {
+        Alert.alert('OK', 'Usuario registrado correctamente.');
+        router.push('/login');
+      } else {
+        Alert.alert('Error', result.msg || 'Hubo un problema registrando el usuario.');
+      }
     } catch (error: any) {
-      Alert.alert('Error', error.message || 'Hubo un problema registrando el usuario.');
+      Alert.alert('Error inesperado', error.message || 'Ocurrió un error inesperado.');
     }
   };
 

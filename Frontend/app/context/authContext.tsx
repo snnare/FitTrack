@@ -1,12 +1,11 @@
 // tu endpoint
 import { createContext, useContext, useEffect, useState } from "react";
-import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
+
+import api from '../services/api';
 import { LoginAndRegisterData } from "../types/auth";
 import {registerUser, loginUser, validateToken} from "../services/auth";
-import api from '../services/api';
-// Env
 import { TOKEN_KEY } from "../services/env";
 
 interface AuthProps {
@@ -28,9 +27,9 @@ export const AuthProvider = ({ children }: any) => {
         authenticated: null,
     });
 
-    const [loading, setLoading] = useState<boolean>(true); // Estado de carga
+    const [loading, setLoading] = useState<boolean>(true); 
 
-    // Cargar y validar el token cuando la app se monte
+    
     useEffect(() => {
         const loadToken = async () => {
             const token = await SecureStore.getItemAsync(TOKEN_KEY);
@@ -38,11 +37,10 @@ export const AuthProvider = ({ children }: any) => {
 
             if (token) {
                 try {
-                    await validateToken(token); // Validar el token
+                    await validateToken(token); 
                     setAuthState({ token, authenticated: true });
                     console.log(token); // Debugging: muestra el token
-                    api.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Configura el token en los headers de axios
-
+                    // api.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Configura el token en los headers de la API
                 } catch (err) {
                     await SecureStore.deleteItemAsync(TOKEN_KEY);
                     setAuthState({ token: null, authenticated: false });
@@ -50,7 +48,7 @@ export const AuthProvider = ({ children }: any) => {
             } else {
                 setAuthState({ token: null, authenticated: false });
             }
-            setLoading(false); // Termina la carga
+            setLoading(false); 
         };
 
         loadToken();
@@ -78,9 +76,8 @@ export const AuthProvider = ({ children }: any) => {
                 authenticated: true
             });
 
-            api.defaults.headers.common['Authorization'] = `Bearer ${result.token}`;
+            //api.defaults.headers.common['Authorization'] = `Bearer ${result.token}`;
             await SecureStore.setItemAsync(TOKEN_KEY, result.token);
-
             return result;
         } catch (error) {
             console.error('Login error:', error);
@@ -90,13 +87,16 @@ export const AuthProvider = ({ children }: any) => {
 
     // Función de logout
     const logout = async () => {
-        console.log('Logout button pressed'); // Verifica que se presiona el botón
+        console.log('Logout button pressed'); // Debugging
       
         try {
           await SecureStore.deleteItemAsync(TOKEN_KEY);
           console.log('Token deleted from SecureStore');
       
-          api.defaults.headers.common['Authorization'] = '';
+          // Interceptores de Axios, esta pendiente de las peticiones, si encuentra un token en secureStore lo añade a la cabecera de la petición
+          // como aqui se borra el token, se le dice a axios que no lo use
+          // ya no puede acceder a rutas protegidas
+          //api.defaults.headers.common['Authorization'] = '';
           console.log('Authorization header cleared');
       
           setAuthState({

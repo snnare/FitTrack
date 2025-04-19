@@ -2,9 +2,11 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { loginUser, getProfileUser } from '../services/auth';
 import { Formik } from 'formik';
+
+import { useAuth } from '../context/authContext';
 import { registerAndLoginSchema } from '../validations/registerAndLoginSchema';
+import { LoginAndRegisterData } from "../types/auth";
 import AuthInput from '../../components/AuthInput';
 import AuthButton from '../../components/AuthButton';
 import AuthLink from '../../components/AuthLink';
@@ -13,15 +15,19 @@ const logo = require('../../assets/logo.png');
 
 export default function LoginScreen() {
   const router = useRouter();
+  const { onLogin } = useAuth();
 
-  const handleLogin = async (values: any) => {
+  const handleLogin = async (values: LoginAndRegisterData) => {
     try {
-      await loginUser(values);
-      
-      router.push('/(tabs)/home');
-      Alert.alert('OK');
+      const result = await onLogin(values);
+      if (!result?.error) {
+        Alert.alert('Inicio de sesión exitoso');
+        router.push('/(tabs)/home'); // Navega a la pantalla principal aquí
+      } else {
+        Alert.alert('Error al iniciar sesión', result.msg || 'Hubo un problema al iniciar sesión.');
+      }
     } catch (error: any) {
-      Alert.alert('Error al iniciar sesión', error.message || 'Hubo un problema al iniciar sesión.');
+      Alert.alert('Error inesperado', error.message || 'Ocurrió un error inesperado.');
     }
   };
 

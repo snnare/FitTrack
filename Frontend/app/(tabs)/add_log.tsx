@@ -1,34 +1,37 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, Alert, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { Formik } from 'formik';
-import { Picker } from '@react-native-picker/picker';
-
-import colors from '../styles/colors';
 import { LogSchema } from '../validations/logSchema';
 import { crearLog } from '../services/log';
 
-
 export default function createLogScreen() {
-
-    // Conectar con la api
     const handleSubmitLog = async (values: any) => {
+        console.log('Valores del formulario al enviar:', values);
         try {
             const response = await crearLog(values);
             Alert.alert("Registrado");
-            console.log(response);
+            console.log("Respuesta del servidor:", response);
         } catch (error) {
-            Alert.alert("Registrado");
-            console.log(error)
+            Alert.alert("Error al registrar");
+            console.error("Error al registrar log:", error);
+            if (error) {
+                console.log(error);
+            } else if (error) {
+                console.error("No se recibió respuesta del servidor:", error);
+            } else {
+                console.error("Error al configurar la petición:", error);
+            }
         }
     };
 
-
     return (
         <ScrollView contentContainerStyle={styles.container}>
+            {/* Puedes añadir un logo si lo deseas */}
+            {/* <Image source={require('../assets/tu_logo.png')} style={styles.logo} /> */}
+            <Text style={styles.logo}>Registro de Ejercicio</Text>
+            <Text style={styles.subtitle}>Ingrese los detalles del ejercicio</Text>
             <Formik
                 initialValues={{
-                    userId: 'roraj77@hotmail.com',
-                    fecha: '',
                     ejercicio: '',
                     series: '',
                     repeticiones: '',
@@ -40,12 +43,10 @@ export default function createLogScreen() {
             >
                 {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
                     <View>
-                        <Text style={styles.title}>Registrar Ejercicio</Text>
-
-                        
                         <TextInput
                             style={styles.input}
                             placeholder="Ejercicio"
+                            placeholderTextColor="#d1d5db"
                             onChangeText={handleChange('ejercicio')}
                             onBlur={handleBlur('ejercicio')}
                             value={values.ejercicio}
@@ -55,6 +56,7 @@ export default function createLogScreen() {
                         <TextInput
                             style={styles.input}
                             placeholder="Series"
+                            placeholderTextColor="#d1d5db"
                             keyboardType="numeric"
                             onChangeText={handleChange('series')}
                             onBlur={handleBlur('series')}
@@ -65,6 +67,7 @@ export default function createLogScreen() {
                         <TextInput
                             style={styles.input}
                             placeholder="Repeticiones"
+                            placeholderTextColor="#d1d5db"
                             keyboardType="numeric"
                             onChangeText={handleChange('repeticiones')}
                             onBlur={handleBlur('repeticiones')}
@@ -75,6 +78,7 @@ export default function createLogScreen() {
                         <TextInput
                             style={styles.input}
                             placeholder="Peso (kg)"
+                            placeholderTextColor="#d1d5db"
                             keyboardType="numeric"
                             onChangeText={handleChange('peso')}
                             onBlur={handleBlur('peso')}
@@ -83,8 +87,9 @@ export default function createLogScreen() {
                         {touched.peso && errors.peso && <Text style={styles.error}>{errors.peso}</Text>}
 
                         <TextInput
-                            style={[styles.input, styles.textArea]}
+                            style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
                             placeholder="Notas (opcional)"
+                            placeholderTextColor="#d1d5db"
                             multiline
                             numberOfLines={4}
                             onChangeText={handleChange('notas')}
@@ -101,49 +106,59 @@ export default function createLogScreen() {
             </Formik>
         </ScrollView>
     );
-};
+}
 
 const styles = StyleSheet.create({
     container: {
-      padding: 20,
-      backgroundColor: '#f0fdf4',
-      flexGrow: 1,
-      justifyContent: 'center',
+        padding: 20,
+        backgroundColor: '#111827',
+        flex: 1,
+        justifyContent: 'center',
     },
-    title: {
-      fontSize: 26,
-      fontWeight: 'bold',
-      color: '#15803d',
-      textAlign: 'center',
-      marginBottom: 20,
+    subtitle: {
+        fontSize: 14,
+        textAlign: 'center',
+        marginBottom: 20,
+        color: '#d1d5db',
     },
     input: {
-      borderWidth: 1,
-      borderColor: '#86efac',
-      padding: 10,
-      marginBottom: 10,
-      borderRadius: 8,
-      backgroundColor: '#fff',
-    },
-    textArea: {
-      height: 100,
-      textAlignVertical: 'top',
-    },
-    error: {
-      color: '#ef4444',
-      marginBottom: 8,
+        borderWidth: 1,
+        borderColor: '#86efac',
+        padding: 10,
+        marginBottom: 10,
+        borderRadius: 8,
+        backgroundColor: '#fff',
+        color: '#000',
     },
     button: {
-      backgroundColor: '#22c55e',
-      paddingVertical: 14,
-      borderRadius: 10,
-      alignItems: 'center',
-      marginTop: 10,
+        backgroundColor: '#22c55e',
+        paddingVertical: 14,
+        borderRadius: 10,
+        alignItems: 'center',
+        marginTop: 10,
+        marginBottom: 10,
     },
     buttonText: {
-      color: '#fff',
-      fontSize: 16,
-      fontWeight: 'bold',
-      textTransform: 'uppercase',
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+        textTransform: 'uppercase',
     },
-  });
+    link: {
+        color: '#38bdf8',
+        textAlign: 'center',
+        marginTop: 10,
+        textDecorationLine: 'underline',
+    },
+    logo: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: '#fff',
+        marginBottom: 20,
+    },
+    error: {
+        color: '#ef4444', // Color de error
+        fontSize: 12,
+    },
+});

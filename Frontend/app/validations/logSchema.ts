@@ -1,17 +1,6 @@
 import * as Yup from 'yup';
 
 export const LogSchema = Yup.object().shape({
-    userId: Yup
-        .string()
-        .required('El ID de usuario es obligatorio')
-        .trim(),
-
-    fecha: Yup
-        .date()
-        .optional()
-        .default(() => new Date())
-        .max(new Date(), 'La fecha no puede ser en el futuro'),
-
     ejercicio: Yup
         .string()
         .required('El tipo de ejercicio es obligatorio')

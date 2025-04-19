@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Button, Image, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { useRouter } from 'expo-router';
+import { useAuth } from '../context/authContext'; // Importa el hook useAuth
 
 export default function ProfileScreen() {
   const [imageUri, setImageUri] = useState<string | null>(null);
+  const { onLogout } = useAuth(); // Obtén la función onLogout del contexto
+  const router = useRouter();
 
   const user = {
     nombre: 'Juan',
@@ -34,15 +38,19 @@ export default function ProfileScreen() {
     alert('Funcionalidad de editar perfil');
   };
 
-  const handleLogout = () => {
-    // Aquí puedes agregar la lógica para cerrar sesión
-    alert('Funcionalidad de cerrar sesión');
+  const handleLogoutPress = async () => {
+    try {
+      await onLogout(); // Llama a la función onLogout del contexto
+      router.push('/login'); // Navega a la pantalla de login después del logout
+    } catch (error: any) {
+      Alert.alert('Error al cerrar sesión', error.message || 'Hubo un problema al cerrar sesión.');
+    }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Perfil del Usuario</Text>
-      
+
       {/* Imagen de perfil */}
       <View style={styles.profileImageContainer}>
         <Image
@@ -70,14 +78,14 @@ export default function ProfileScreen() {
       {/* Botones para editar y cerrar sesión */}
       <View style={styles.buttonsContainer}>
         <Button title="Editar Perfil" onPress={handleEditProfile} />
-        <Button title="Cerrar Sesión" onPress={handleLogout} color="red" />
+        <Button title="Cerrar Sesión" onPress={handleLogoutPress} color="red" /> {/* Usa handleLogoutPress */}
       </View>
 
-        <View>
-            <Button title='Generar Reporte' onPress={()=> {Alert.alert("Reporte Generado")}}>
-
-            </Button>
-        </View>
+      <View>
+        <Button title='Generar Reporte' onPress={() => { Alert.alert("Reporte Generado") }}>
+          <Text>Generar Reporte</Text> {/* Asegúrate de que el texto del botón esté dentro de <Text> */}
+        </Button>
+      </View>
     </View>
   );
 }
