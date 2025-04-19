@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View , Text} from 'react-native';
 import AdditionalInfoForm from '../../components/AdditionalInfoForm';
 import { useRouter } from 'expo-router';
 
@@ -13,7 +13,7 @@ export default function additionalInfoScreen() {
 
     return (
         <View style={{ flex: 1 }}>
-            <AdditionalInfoForm onProfileComplete={handleProfileComplete} />
+            <Text>Información Adicional</Text>
         </View>
     );
 }

@@ -3,12 +3,14 @@ import { View, Text, TextInput, StyleSheet, Alert, ScrollView, TouchableOpacity,
 import { Formik } from 'formik';
 import { LogSchema } from '../validations/logSchema';
 import { crearLog } from '../services/log';
+import {updateStreak} from '../services/streak'; // Asegúrate de que la ruta sea correcta
 
 export default function createLogScreen() {
     const handleSubmitLog = async (values: any) => {
         console.log('Valores del formulario al enviar:', values);
         try {
             const response = await crearLog(values);
+            await updateStreak(); 
             Alert.alert("Registrado");
             console.log("Respuesta del servidor:", response);
         } catch (error) {

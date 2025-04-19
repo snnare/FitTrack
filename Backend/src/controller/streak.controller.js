@@ -44,9 +44,9 @@ export const updateStreak = async (req, res) => {
 
 export const getStreak = async (req, res) => {
     try {
-        const correo = req.user.correo; // Usamos el correo electrónico
+        const correo = req.user.correo; 
 
-        const streak = await Streak.findOne({ userId: correo }); // Usamos el correo electrónico
+        const streak = await Streak.findOne({ userId: correo }); 
 
         if (!streak) {
             return res.status(404).json({ message: 'Racha no encontrada' });

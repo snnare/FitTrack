@@ -21,7 +21,6 @@ const AdditionalInfoForm: React.FC<AdditionalInfoFormProps> = ({ onProfileComple
         setLoading(true);
         try {
             const userData = {
-                correo: correo,
                 nombre: values.nombre,
                 apellidos: values.apellidos,
                 fechaNacimiento: values.fechaNacimiento,
