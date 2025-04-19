@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, Picker } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Formik } from 'formik';
-import { updateSchema } from '../validations/userSchema';
 
-export default function additionaInfoScreen() {
+
+import { updateSchema } from '../validations/userSchema';
+import { postRegister } from '../services/auth';
+
+
+export default function AdditionalInfo() {
   const router = useRouter();
-  const { correo } = useLocalSearchParams<{ correo: string }>();
 
   const [loading, setLoading] = useState(false);
 
@@ -14,11 +17,10 @@ export default function additionaInfoScreen() {
     setLoading(true);
     try {
       const userData = {
-        correo,
         ...values,
         peso: parseFloat(values.peso),
       };
-      await registerUser(userData);
+      await postRegister(userData);
       Alert.alert('Éxito', 'Información adicional registrada.');
       router.push('/(tabs)/home');
     } catch (error: any) {
@@ -52,7 +54,7 @@ export default function additionaInfoScreen() {
             <Picker
               selectedValue={values.genero}
               style={styles.picker}
-              onValueChange={(itemValue) => handleChange('genero')(itemValue)}
+              onValueChange={(itemValue: string) => handleChange('genero')(itemValue)}
             >
               <Picker.Item label="Selecciona género" value="" />
               <Picker.Item label="Masculino" value="masculino" />

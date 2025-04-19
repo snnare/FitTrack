@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
+
+
 import WorkoutLogList from '../../components/WorkoutLogList';
 import Welcome from '../../components/Welcome';
+import CheckProfileCompletion from '../../components/CheckProfileCompletion'; // Asegúrate de que esta ruta sea correcta
 import { getAllLogs } from '../services/log'; // Importa getAllLogs aquí también si quieres mostrar la lista
+
 
 export default function HomeScreen() {
   const [logs, setLogs] = useState([]);
@@ -36,9 +40,9 @@ export default function HomeScreen() {
 
   return (
       <View style={styles.container}>
-          <Welcome  />
           
-
+          <Welcome  />
+        
           <Text style={styles.subtitle}>Últimos Entrenamientos</Text>
           <WorkoutLogList logs={logs} />
       </View>

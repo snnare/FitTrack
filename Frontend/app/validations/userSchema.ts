@@ -13,16 +13,6 @@ export const updateSchema = Yup.object().shape({
         .min(2, 'Muy corto')
         .max(50, 'Muy largo')
         .required('Campo obligatorio'),
-    correo: Yup
-        .string()
-        .email('Correo inválido')
-        .required('Correo requerido')
-        .trim()
-        .lowercase(),
-    password: Yup
-        .string()
-        .min(8, 'Mínimo 8 caracteres')
-        .required('Password es obligatorio'),
     fechaNacimiento: Yup
         .date()
         .nullable()

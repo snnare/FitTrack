@@ -35,13 +35,9 @@ export const validateToken = async (token: string) => {
 }
 
 
-export const postRegister = async(userData: any, token: string) => {
+export const postRegister = async(userData: any) => {
   try{
-    const response = await api.post("/auth/postRegister", userData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await api.post("/auth/postRegister", userData);
     return response.data;
   } catch (error) {
     throw new Error("Error registering user with token");
