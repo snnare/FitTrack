@@ -89,18 +89,18 @@ export default function ProfileScreen() {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0fdf4',
+    backgroundColor: '#111827', // fondo dark
     padding: 20,
   },
   title: {
     fontSize: 22,
-    color: '#166534',
+    color: '#bbf7d0', // verde claro
     fontWeight: 'bold',
     marginBottom: 20,
+    textAlign: 'center',
   },
   profileImageContainer: {
     alignItems: 'center',
@@ -109,23 +109,23 @@ const styles = StyleSheet.create({
   profileImage: {
     width: 100,
     height: 100,
-    borderRadius: 50, // Para hacerlo circular
+    borderRadius: 50,
     marginBottom: 10,
   },
   infoBox: {
-    backgroundColor: '#dcfce7',
+    backgroundColor: '#1f2937', // gris oscuro
     padding: 20,
     borderRadius: 12,
   },
   label: {
     fontSize: 14,
-    color: '#14532d',
+    color: '#86efac', // verde brillante
     fontWeight: 'bold',
     marginTop: 10,
   },
   value: {
     fontSize: 16,
-    color: '#374151',
+    color: '#d1d5db', // gris claro
   },
   buttonsContainer: {
     marginTop: 20,

@@ -6,7 +6,17 @@ export default function TabsLayout() {
     <Tabs
       initialRouteName="add_log"
       screenOptions={{
-        headerShown: false
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: '#111827',
+          borderTopColor: '#1f2937', // Borde superior sutil
+        },
+        tabBarActiveTintColor: '#22c55e', // Verde brillante activo
+        tabBarInactiveTintColor: '#9ca3af', // Gris claro inactivo
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '600',
+        },
       }}
     >
       <Tabs.Screen
@@ -18,7 +28,6 @@ export default function TabsLayout() {
           ),
         }}
       />
-
       <Tabs.Screen
         name="add_log"
         options={{
@@ -28,7 +37,6 @@ export default function TabsLayout() {
           ),
         }}
       />
-
       <Tabs.Screen
         name="profile"
         options={{

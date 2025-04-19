@@ -56,30 +56,7 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Bienvenido ANGEL</Text>
-      <BarChart
-        style={styles.chart}
-        data={data}
-        width={350} // Ancho de la gráfica
-        height={220} // Alto de la gráfica
-        yAxisLabel="" // Etiqueta del eje Y
-        chartConfig={{
-          backgroundColor: '#f0fdf4',
-          backgroundGradientFrom: '#d1fae5',
-          backgroundGradientTo: '#d1fae5',
-          decimalPlaces: 0, // No decimales
-          color: (opacity = 1) => `rgba(22, 101, 52, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(20, 83, 45, ${opacity})`,
-          style: {
-            borderRadius: 16,
-          },
-          propsForDots: {
-            r: '6',
-            strokeWidth: '2',
-            stroke: '#ffa726',
-          },
-        }}
-        fromZero={true} // Desde cero en el eje Y
-      />
+      
       <FlatList
         data={logs}
         keyExtractor={(item) => item.id}
@@ -96,26 +73,25 @@ export default function HomeScreen() {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0fdf4',
+    backgroundColor: '#111827', // fondo oscuro
     padding: 20,
   },
   title: {
     fontSize: 22,
-    color: '#166534',
+    color: '#bbf7d0', // verde claro
     fontWeight: 'bold',
     marginBottom: 10,
-    alignItems: 'center'
+    textAlign: 'center',
   },
   chart: {
     marginVertical: 20,
     borderRadius: 16,
   },
   logItem: {
-    backgroundColor: '#dcfce7',
+    backgroundColor: '#1f2937', // un gris oscuro
     padding: 15,
     borderRadius: 12,
     marginBottom: 10,
@@ -123,15 +99,15 @@ const styles = StyleSheet.create({
   logTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#14532d',
+    color: '#86efac', // verde brillante
   },
   logDetail: {
     fontSize: 14,
-    color: '#374151',
+    color: '#d1d5db', // gris claro
   },
   logDate: {
     fontSize: 12,
-    color: '#6b7280',
+    color: '#9ca3af',
     marginTop: 4,
   },
 });
