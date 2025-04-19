@@ -18,9 +18,9 @@ import { authMiddleware } from '../middleware/auth.middleware.js';
 const router = Router();
 
 router.post('/register', registerUser); 
+router.post('/postRegister', postRegisterUser); 
 router.post('/login', loginUser);
 router.get('/validate', validateToken)       
-router.post('/postRegister', authMiddleware, postRegisterUser); 
 router.get('/profile', authMiddleware, getUserProfile); 
 router.get('/profileStatus', authMiddleware, getProfileStatus);
 router.get('/imc', authMiddleware, getIMC);

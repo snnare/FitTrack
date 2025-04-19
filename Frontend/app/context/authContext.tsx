@@ -56,6 +56,12 @@ export const AuthProvider = ({ children }: any) => {
     const register = async (userData: LoginAndRegisterData) => {
         try {
             const result = await registerUser(userData);
+                     
+            setAuthState({
+                token: result.token,
+                authenticated: true
+            });
+            await SecureStore.setItemAsync(TOKEN_KEY, result.token);
             return result;
         } catch (error) {
             return { error: true, msg: (error as any).response.data.msg };

@@ -20,7 +20,8 @@ export const registerUser = async (req, res) => {
       password: hashedPassword,
     });
     await newUser.save();
-    res.status(201).json({ message: 'Usuario Registrado', user: newUser });
+    const token = generateToken(newUser);
+    res.status(201).json({ message: 'Usuario Registrado', user: newUser, token });
   } catch (error) {
     res.status(500).json({ message: 'Error al registrar usuario', error: error.message });
   }

@@ -17,15 +17,17 @@ export default function RegisterScreen() {
 
   const handleRegister = async (values: any) => {
     try {
-      const result = await onRegister(values); // Llama a la función onRegister del contexto
+      const result = await onRegister(values); 
       if (!result?.error) {
         Alert.alert('OK', 'Usuario registrado correctamente.');
-        router.push('/(auth)/additionalInfo'); // Navega a la pantalla de información adicional
+        router.push('/(auth)/additionalInfo'); 
       } else {
+        console.log(values)
         Alert.alert('Error', result.msg || 'Hubo un problema registrando el usuario.');
       }
     } catch (error: any) {
       Alert.alert('Error inesperado', error.message || 'Ocurrió un error inesperado.');
+      console.log(values)
     }
   };
 

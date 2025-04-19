@@ -3,7 +3,7 @@ import { View , Text, Button, StyleSheet} from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../context/authContext';
 
-export default function additionalInfoScreen() {
+export default function profileScreen() {
     const router = useRouter();
     const { onLogout } = useAuth();
 

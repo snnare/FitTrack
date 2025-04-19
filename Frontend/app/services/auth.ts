@@ -54,15 +54,6 @@ export const getProfileUser = async () => {
   }
 }
 
-export const profileStatus = async ( ) => {
-  try{
-    const response = await api.get(`/auth/profileStatus`);
-    return response.data;
-  }catch (error){
-    throw new Error("Error getting profile status");
-  }
-
-}
 
 
 export const getIMC = async (token: string) => {
