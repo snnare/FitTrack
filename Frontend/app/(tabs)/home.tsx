@@ -5,7 +5,7 @@ import { View, Text, FlatList, StyleSheet } from 'react-native';
 import UserHeader from '../../components/UserHeader';
 import WorkoutLogList from '../../components/WorkoutLogList';
 
-import { getAllLogs } from '../services/log'; // Importa getAllLogs aquí también si quieres mostrar la lista
+import { getAllLogs } from '../services/log'; 
 
 
 export default function HomeScreen() {
