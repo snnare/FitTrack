@@ -50,7 +50,7 @@ const userSchema = new mongoose.Schema({
   estatura: {
     type: Number,
     default: null,
-    min: 100,
+    min: .10,
     max: 250,
   },
   objetivo: {
