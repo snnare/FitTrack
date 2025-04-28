@@ -4,14 +4,16 @@ import * as SecureStore from 'expo-secure-store';
 
 
 import api from '../services/api';
-import { LoginAndRegisterData } from "../types/auth";
-import {registerUser, loginUser, validateToken} from "../services/auth";
+import { LoginData } from "../types/auth";
+import { RegisterData } from "../types/register";
+import {registerUser, loginUser, validateToken, postRegister} from "../services/auth";
 import { TOKEN_KEY } from "../services/env";
 
 interface AuthProps {
     authState?: { token: string | null, authenticated: boolean | null };
-    onRegister?: (userData: LoginAndRegisterData) => Promise<any>;
-    onLogin?: (userData: LoginAndRegisterData) => Promise<any>;
+    onFullRegister?: (userData: RegisterData) => Promise<any>;
+    onRegister?: (userData: LoginData) => Promise<any>;
+    onLogin?: (userData: LoginData) => Promise<any>;
     onLogout?: () => Promise<any>;
 }
 
@@ -52,8 +54,28 @@ export const AuthProvider = ({ children }: any) => {
         loadToken();
     }, []);
 
+
+
+
+    // Funcion completa de registro
+    const registerUser = async (userData: RegisterData) => {
+        try{
+            const result = await postRegister(userData);
+
+            setAuthState({
+                token: result.token,
+                authenticated: true
+            });
+            await SecureStore.setItemAsync(TOKEN_KEY, result.token);
+            return result;
+
+        }catch (error) {
+            console.error('Register error:', error);
+            return { error: true, msg: (error as any).response.data.msg };
+        }
+    }
     // Función de registro
-    const register = async (userData: LoginAndRegisterData) => {
+    const register = async (userData: LoginData) => {
         try {
             const result = await registerUser(userData);
                      
@@ -69,7 +91,7 @@ export const AuthProvider = ({ children }: any) => {
     };
 
     // Función de login
-    const login = async (userData: LoginAndRegisterData) => {
+    const login = async (userData: LoginData) => {
         try {
             const result = await loginUser(userData);
             
@@ -104,6 +126,7 @@ export const AuthProvider = ({ children }: any) => {
 
 
     const value = {
+        onFullRegister: registerUser,
         onRegister: register,
         onLogin: login,
         onLogout: logout,

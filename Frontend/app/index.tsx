@@ -3,6 +3,7 @@ import { Redirect } from 'expo-router';
 import { ActivityIndicator, View, Text } from 'react-native';
 import { useAuth } from './context/authContext';
 import { testConnection } from './services/api';
+
 export default function IndexScreen() {
   const { authState } = useAuth(); 
   

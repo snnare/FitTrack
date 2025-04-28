@@ -1,5 +1,4 @@
 import api from "./api";
-import { LoginAndRegisterData } from "../types/auth";
 
 
 

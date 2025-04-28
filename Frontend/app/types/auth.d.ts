@@ -1,4 +1,7 @@
-export interface LoginAndRegisterData {
+export interface LoginData {
     correo: string;
     password: string;
 }
+
+
+
