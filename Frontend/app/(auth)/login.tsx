@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, Alert, SafeAreaView} from 'react-native';
 import { useRouter } from 'expo-router';
 import { Formik } from 'formik';
 
 import { useAuth } from '../context/authContext';
 import { registerAndLoginSchema } from '../validations/registerAndLoginSchema';
-import { LoginAndRegisterData } from "../types/auth";
+import { LoginData } from "../types/auth";
 import AuthInput from '../../components/AuthInput';
 import AuthButton from '../../components/AuthButton';
 import AuthLink from '../../components/AuthLink';
@@ -16,7 +16,7 @@ export default function LoginScreen() {
   const router = useRouter();
   const { onLogin } = useAuth();
 
-  const handleLogin = async (values: LoginAndRegisterData) => {
+  const handleLogin = async (values: LoginData) => {
     try {
       const result = await onLogin(values);
       if (!result?.error) {
@@ -31,6 +31,7 @@ export default function LoginScreen() {
   };
 
   return (
+    <SafeAreaView style={styles.safeArea}>
     <Formik
       initialValues={{ correo: '', password: '' }}
       validationSchema={registerAndLoginSchema}
@@ -61,11 +62,12 @@ export default function LoginScreen() {
             error={touched.password && errors.password}
           />
           <AuthButton title="Ingresar" onPress={handleSubmit} />
-          <AuthLink title="¿Olvidaste tu contraseña?" onPress={() => Alert.alert('Funcionalidad en desarrollo')} />
+          <AuthLink title="¿Olvidaste tu contraseña?" onPress={() => router.push('/forgotpassword')} />
           <AuthLink title="¿No tienes cuenta? Regístrate" onPress={() => router.push('/register')} />
         </View>
       )}
     </Formik>
+    </SafeAreaView>
   );
 }
 
@@ -75,6 +77,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#111827',
     flex: 1,
     justifyContent: 'center',
+  },
+  safeArea: {
+    flex: 1, // Asegura que el SafeAreaView ocupe toda la pantalla disponible
+    backgroundColor: '#111827', // Mantén el color de fondo aquí o en el container
   },
   subtitle: {
     fontSize: 14,
