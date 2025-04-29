@@ -4,8 +4,8 @@ import { ActivityIndicator, View, Text } from 'react-native';
 
 import { useAuth } from './context/authContext';
 import { testConnection } from './services/api';
-import LoadingIndicator from '../components/LoadingIndicator';
-import ConnectionError from '../components/ConnectionError';
+import LoadingIndicator from '../components/feedback/LoadingIndicator';
+import ConnectionError from '../components/feedback/ConnectionError';
 
 
 

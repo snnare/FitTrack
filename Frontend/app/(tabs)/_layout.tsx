@@ -22,16 +22,27 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="home"
         options={{
-          title: 'Inicio',
+          title: 'Home',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home-outline" size={size} color={color} />
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="recomendations"
+        options={{
+          title: 'Workouts',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="star-outline" size={size} color={color} />
+          ),
+        }}
+      />
+
       <Tabs.Screen
         name="add_log"
         options={{
-          title: 'Agregar Log',
+          title: 'Add',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="add-circle-outline" size={size} color={color} />
           ),
@@ -40,12 +51,14 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: 'Perfil',
+          title: 'Profile',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" size={size} color={color} />
           ),
         }}
       />
+
+
     </Tabs>
   );
 }

@@ -6,9 +6,9 @@ import { useAuth } from '../context/authContext';
 import { Formik } from 'formik';
 import { registerAndLoginSchema } from '../validations/registerAndLoginSchema'; 
 import { RegisterData } from '../types/register';
-import AuthInput from '../../components/AuthInput';
-import AuthButton from '../../components/AuthButton';
-import AuthLink from '../../components/AuthLink';
+import AuthInput from '../../components/auth/AuthInput';
+import AuthButton from '../../components/auth/AuthButton';
+import AuthLink from '../../components/auth/AuthLink';
 import { Picker } from '@react-native-picker/picker';
 
 const logo = require('../../assets/logo.png');

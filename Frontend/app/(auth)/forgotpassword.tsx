@@ -5,9 +5,9 @@ import { useRouter } from 'expo-router';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import AuthInput from '../../components/AuthInput';
-import AuthButton from '../../components/AuthButton';
-import AuthLink from '../../components/AuthLink';
+import AuthInput from '../../components/auth/AuthInput';
+import AuthButton from '../../components/auth/AuthButton';
+import AuthLink from '../../components/auth/AuthLink';
 
 const logo = require('../../assets/logo.png');
 
