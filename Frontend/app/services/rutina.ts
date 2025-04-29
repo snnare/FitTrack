@@ -1,7 +1,7 @@
 import api from "./api";
 
 export const getRutinas = async () => {
-  const res = await api.get('/rutinas');
+  const res = await api.get('/rutina');
   return res.data;
 };
 

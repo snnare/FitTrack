@@ -11,7 +11,6 @@ export const getRutinasRecomendadas = async (req, res) => {
             return res.status(404).json({ message: 'Usuario no encontrado' });
         }
 
-        console.log(usuario);
         const objetivo = usuario.objetivo;
         const nivelExperiencia = usuario.nivelExperiencia;
 

@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import UserStreak from '../../components/user/UserStreak';
 import WorkoutLogList from '../../components/workouts/WorkoutLogList';
+
 import { getAllLogs } from '../services/log';
-import { TouchableOpacity } from 'react-native'; // Importa TouchableOpacity
-import { MaterialIcons } from '@expo/vector-icons'; // Importa MaterialIcons para el ícono
+import { TouchableOpacity } from 'react-native'; 
+import { MaterialIcons } from '@expo/vector-icons'; 
 
 import { getStreak } from '../services/streak';
 

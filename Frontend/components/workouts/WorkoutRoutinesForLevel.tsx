@@ -1,31 +1,26 @@
-// components/workouts/WorkoutRoutinesForLevel.tsx
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { useAuth } from '../../app/context/authContext'; //Importamos el contexto de autenticacion
+import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { getRutinas } from '../../app/services/rutina'; // Importamos la función getRutinas
 
 interface Workout {
   id: string;
   nombre: string;
   descripcion: string;
-  nivelExperiencia: 'Principiante' | 'Intermedio' | 'Avanzado';
-  // Agrega aquí otros campos de tu modelo de rutina
+  // nivelExperiencia: 'Principiante' | 'Intermedio' | 'Avanzado'; // Ya no necesitamos esto
 }
 
-interface WorkoutRoutinesForLevelProps {
-    nivelExperiencia: 'Principiante' | 'Intermedio' | 'Avanzado';
-}
-const WorkoutRoutinesForLevel: React.FC<WorkoutRoutinesForLevelProps> = ({nivelExperiencia}) => {
+const WorkoutRoutinesForLevel: React.FC = () => { // Eliminamos la prop nivelExperiencia
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { authState } = useAuth(); // Usamos el contexto para obtener el estado de autenticación
 
   useEffect(() => {
     const fetchWorkouts = async () => {
       setLoading(true);
       setError(null);
       try {
-
+        const allWorkouts = await getRutinas();
+        setWorkouts(allWorkouts);
       } catch (err: any) {
         setError(err.message || 'Error al cargar las rutinas.');
       } finally {
@@ -34,7 +29,7 @@ const WorkoutRoutinesForLevel: React.FC<WorkoutRoutinesForLevelProps> = ({nivelE
     };
 
     fetchWorkouts();
-  }, [nivelExperiencia]);
+  }, []);
 
   if (loading) {
     return (
@@ -55,29 +50,32 @@ const WorkoutRoutinesForLevel: React.FC<WorkoutRoutinesForLevelProps> = ({nivelE
   if (workouts.length === 0) {
     return (
       <View style={styles.noWorkoutsContainer}>
-        <Text style={styles.noWorkoutsText}>No hay rutinas disponibles para este nivel.</Text>
+        <Text style={styles.noWorkoutsText}>No hay rutinas disponibles.</Text>
       </View>
     );
   }
 
   return (
-    <ScrollView style={styles.container}>
-      {workouts.map((workout) => (
-        <View key={workout.id} style={styles.workoutCard}>
-          <Text style={styles.workoutName}>{workout.nombre}</Text>
-          <Text style={styles.workoutDescription}>{workout.descripcion}</Text>
+    <FlatList // Usamos FlatList
+      data={workouts}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => (
+        <View style={styles.workoutCard}>
+          <Text style={styles.workoutName}>{item.nombre}</Text>
+          <Text style={styles.workoutDescription}>{item.descripcion}</Text>
           {/* Muestra otros detalles de la rutina */}
         </View>
-      ))}
-    </ScrollView>
+      )}
+      style={styles.list}
+    />
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-  },
+    list: {
+        padding: 10,
+        flex: 1
+      },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',

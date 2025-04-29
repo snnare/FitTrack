@@ -9,8 +9,7 @@ export default function recomendationScreen(){
         <View style={styles.container}>
         <Text style={styles.title}>Recomendaciones</Text>
         <Text >Aquí van las recomendaciones</Text>\
-        <WorkoutRoutinesForLevel nivelExperiencia="Principiante" />
-        <Button title="Volver" onPress={() => {}} />
+        <WorkoutRoutinesForLevel  />
         </View>
     )
 }
@@ -20,7 +19,7 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       padding: 20,
-      alignItems: 'center', // Centra el contenido horizontalmente
+      alignItems: 'center',
       backgroundColor: '#111827',
     },
     title: {

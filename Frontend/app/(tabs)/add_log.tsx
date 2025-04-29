@@ -3,7 +3,9 @@ import { View, Text, TextInput, StyleSheet, Alert, ScrollView, TouchableOpacity,
 import { Formik } from 'formik';
 import { LogSchema } from '../validations/logSchema';
 import { crearLog } from '../services/log';
-import {updateStreak} from '../services/streak'; // Asegúrate de que la ruta sea correcta
+import {updateStreak} from '../services/streak'; 
+
+const banner = require('../../assets/Logs/Logs-Banner.png');
 
 export default function createLogScreen() {
     const handleSubmitLog = async (values: any) => {
@@ -28,9 +30,10 @@ export default function createLogScreen() {
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            {/* Puedes añadir un logo si lo deseas */}
-            {/* <Image source={require('../assets/tu_logo.png')} style={styles.logo} /> */}
             <Text style={styles.logo}>Registro de Ejercicio</Text>
+            <View style={styles.bannerContainer}>
+            <Image source={banner} style={styles.banner} />
+            </View>
             <Text style={styles.subtitle}>Ingrese los detalles del ejercicio</Text>
             <Formik
                 initialValues={{
@@ -151,6 +154,15 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 10,
         textDecorationLine: 'underline',
+    },
+    bannerContainer: {
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    banner: {
+        width: 200,
+        height: 200,
+        resizeMode: 'contain',
     },
     logo: {
         fontSize: 24,
