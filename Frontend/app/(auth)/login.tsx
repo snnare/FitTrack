@@ -20,7 +20,7 @@ export default function LoginScreen() {
     try {
       const result = await onLogin(values);
       if (!result?.error) {
-        Alert.alert('Inicio de sesión exitoso');
+        
         router.push('/(tabs)/home'); // Navega a la pantalla principal aquí
       } else {
         Alert.alert('Error al iniciar sesión', result.msg || 'Hubo un problema al iniciar sesión.');

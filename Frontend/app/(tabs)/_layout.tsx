@@ -9,10 +9,10 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: '#111827',
-          borderTopColor: '#1f2937', // Borde superior sutil
+          borderTopColor: '#1f2937', 
         },
-        tabBarActiveTintColor: '#22c55e', // Verde brillante activo
-        tabBarInactiveTintColor: '#9ca3af', // Gris claro inactivo
+        tabBarActiveTintColor: '#22c55e', 
+        tabBarInactiveTintColor: '#9ca3af', 
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: '600',
