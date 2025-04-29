@@ -4,10 +4,7 @@ import { useRouter } from 'expo-router';
 import { useAuth } from '../context/authContext';
 
 import UserProfileHeader from '../../components/user/UserProfileHeader';
-import UserProfileDetails from '../../components/user/UserProfileDetails';
-import UserProfileActions from '../../components/user/UserProfileActions';
-
-
+import UserStats from '../../components/user/UserStats';
 
 import CustomButton from '../../components/utils/Button';
 
@@ -19,22 +16,11 @@ export default function profileScreen() {
     await onLogout();
     router.replace('/(auth)/login');
   };
-  const nombre = 'Nombre de Usuario'; 
-  const correo = 'email@email.com';
-  const imagenPerfil = undefined; 
-  const genero = 'Masculino'
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Información del Perfil</Text>
-      <UserProfileHeader
-        nombre={nombre}
-        correo={correo}
-        imagenPerfil={imagenPerfil}
-        genero={genero}
-      />
-
-
+      <UserProfileHeader/>
+      
 
       <CustomButton  title='Cerrar Sesión' onPress={handleLogout} style={{ marginTop: 20 }} textStyle={{ color: '#fff' }} />
     </View>
