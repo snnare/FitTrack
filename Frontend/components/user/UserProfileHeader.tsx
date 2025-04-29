@@ -1,44 +1,94 @@
-// components/user/UserProfileHeader.tsx
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import { TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { getProfileUser } from '../../app/services/auth';
+import { useNavigation } from 'expo-router';
 
-// Importa las imágenes desde tus assets
-const maleIcon = require('../../assets/man-profile-icon.png'); // Asegúrate de que la ruta sea correcta
-const femaleIcon = require('../../assets/women-profile-icon.png'); // Asegúrate de que la ruta sea correcta
+const maleIcon = require('../../assets/man-profile-icon.png');
+const femaleIcon = require('../../assets/women-profile-icon.png');
 
-interface UserProfileHeaderProps {
+interface UserProfile {
   nombre?: string;
   correo: string;
-  imagenPerfil?: string;
-  genero?: 'Masculino' | 'Femenino' | null;
-  onEditProfile?: () => void;
+  objetivo: string;
+  nivelExperiencia: string;
+  genero: string;
 }
 
-const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ nombre, correo, imagenPerfil, genero }) => {
+const UserProfileHeader: React.FC = () => {
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [logCount, setLogCount] = useState<number>(0); 
+  const [streak, setStreak] = useState<number | null>(null);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const userData = await getProfileUser();
+        setUserProfile(userData);
+      } catch (err: any) {
+        setError(err.message || 'Error al obtener el perfil del usuario');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUserProfile();
+  }, []);
+
+  const getInitials = (name?: string) => {
+    if (!name) return '??';
+    const names = name.split(' ');
+    let initials = '';
+    for (let i = 0; i < Math.min(2, names.length); i++) {
+      initials += names[i][0].toUpperCase();
+    }
+    return initials;
+  };
+
+  const getProfileImageSource = () => {
+    return userProfile?.genero === 'Masculino' ? maleIcon : femaleIcon;
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text>Cargando perfil...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.errorText}>Error: {error}</Text>
+      </View>
+    );
+  }
+
+  if (!userProfile) {
+    return (
+      <View style={styles.container}>
+        <Text>No se pudo cargar el perfil del usuario.</Text>
+      </View>
+    );
+  }
+
+  const initials = getInitials(userProfile.nombre);
+  const profileImageSource = getProfileImageSource();
+
   return (
     <View style={styles.container}>
-      {/* Imagen de Perfil */}
       <View style={styles.imageContainer}>
-        {imagenPerfil ? (
-          <Image source={{ uri: imagenPerfil }} style={styles.profileImage} />
-        ) : genero === 'Masculino' ? (
-          <Image source={maleIcon} style={styles.profileImage} />
-        ) : genero === 'Femenino' ? (
-          <Image source={femaleIcon} style={styles.profileImage} />
-        ) : (
-          <View style={styles.placeholderImage}>
-            <Text style={styles.placeholderText}>
-              {nombre ? nombre[0].toUpperCase() : correo[0].toUpperCase()}
-            </Text>
-          </View>
-        )}
+        <Image source={profileImageSource} style={styles.profileImage} />
       </View>
-
-      {/* Nombre y Correo */}
       <View style={styles.infoContainer}>
-        {nombre && <Text style={styles.name}>{nombre}</Text>}
-        <Text style={styles.email}>{correo}</Text>
+        <Text style={styles.name}>{userProfile.nombre || 'Nombre Desconocido'}</Text>
+        <Text style={styles.email}>{userProfile.correo}</Text>
+        <Text style={styles.infoText}>Objetivo: {userProfile.objetivo || 'No definido'}</Text>
+        <Text style={styles.infoText}>Nivel: {userProfile.nivelExperiencia || 'No definido'}</Text>
       </View>
     </View>
   );
@@ -59,25 +109,12 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   profileImage: {
-    width: 80,
-    height: 80,
+    width: 120,
+    height: 120,
     borderRadius: 40,
     borderWidth: 2,
     borderColor: '#6ee7b7',
-    resizeMode: 'contain', // Importante para que las imágenes de hombre/mujer se ajusten bien
-  },
-  placeholderImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#4b5563',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  placeholderText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#d1d5db',
+    resizeMode: 'contain',
   },
   infoContainer: {
     flex: 1,
@@ -89,6 +126,11 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   email: {
+    fontSize: 16,
+    color: '#d1d5db',
+    marginBottom: 5
+  },
+  infoText: {
     fontSize: 16,
     color: '#d1d5db',
   },
@@ -104,6 +146,9 @@ const styles = StyleSheet.create({
   editButtonText: {
     color: '#fff',
     fontSize: 12,
+  },
+  errorText: {
+    color: '#ef4444',
   },
 });
 

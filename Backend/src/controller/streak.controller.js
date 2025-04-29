@@ -58,3 +58,5 @@ export const getStreak = async (req, res) => {
         res.status(500).json({ message: 'Error al obtener la racha', error: error.message });
     }
 };
+
+

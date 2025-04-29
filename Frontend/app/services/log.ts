@@ -39,3 +39,12 @@ export const updateLog = async (id: string, logData: any) => {
     throw error.response?.data || error;
   }
 };
+
+export const getCountLogs = async () => {
+  try {
+    const res = await api.get('/logs/count');
+    return res.data;
+  } catch (error: any) {
+    throw error.response?.data || error;
+  }
+}

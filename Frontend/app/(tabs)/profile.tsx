@@ -2,9 +2,14 @@ import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../context/authContext';
+
 import UserProfileHeader from '../../components/user/UserProfileHeader';
-import UserProfileActions from '../../components/user/UserProfileActions'; // Asegúrate de que la ruta sea correcta
 import UserProfileDetails from '../../components/user/UserProfileDetails';
+import UserProfileActions from '../../components/user/UserProfileActions';
+
+
+
+import CustomButton from '../../components/utils/Button';
 
 export default function profileScreen() {
   const router = useRouter();
@@ -28,7 +33,10 @@ export default function profileScreen() {
         imagenPerfil={imagenPerfil}
         genero={genero}
       />
-      <Button title="Cerrar Sesión" onPress={handleLogout} />
+
+
+
+      <CustomButton  title='Cerrar Sesión' onPress={handleLogout} style={{ marginTop: 20 }} textStyle={{ color: '#fff' }} />
     </View>
   );
 }

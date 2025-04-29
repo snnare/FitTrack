@@ -100,3 +100,18 @@ export const updateLog = async (req, res) => {
         });
     }
 };
+
+
+export const getCountLogs = async (req, res) => {
+    try {
+      const userId = req.user.correo;
+      const count = await Log.countDocuments({ userId }); 
+      res.status(200).json({ count }); 
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        message: 'Error al obtener el conteo de logs',
+        error: error.message,
+      });
+    }
+  };
