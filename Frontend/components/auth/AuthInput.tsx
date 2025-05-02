@@ -46,7 +46,7 @@ const AuthInput: React.FC<AuthInputProps> = ({
   const styles = StyleSheet.create({
     label: {
       marginBottom: 5,
-      color: '#d1d5db', // Modo oscuro
+      color: '#d1d5db', 
     },
     input: {
       borderWidth: 1,

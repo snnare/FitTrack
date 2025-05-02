@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { View, Text, TextInput, StyleSheet, Alert, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { Formik } from 'formik';
+
 import { LogSchema } from '../validations/logSchema';
 import { crearLog } from '../services/log';
 import {updateStreak} from '../services/streak'; 
@@ -8,8 +9,9 @@ import {updateStreak} from '../services/streak';
 const banner = require('../../assets/Logs/Logs-Banner.png');
 
 export default function createLogScreen() {
+    const [logError, setLogError] = useState<string | null>(null);
+
     const handleSubmitLog = async (values: any) => {
-        console.log('Valores del formulario al enviar:', values);
         try {
             const response = await crearLog(values);
             await updateStreak(); 

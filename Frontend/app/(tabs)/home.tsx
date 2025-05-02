@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import UserStreak from '../../components/user/UserStreak';
-import WorkoutLogList from '../../components/workouts/WorkoutLogList';
-
-import { getAllLogs } from '../services/log';
 import { TouchableOpacity } from 'react-native'; 
 import { MaterialIcons } from '@expo/vector-icons'; 
 
+import UserStreak from '../../components/user/UserStreak';
+import WorkoutLogList from '../../components/workouts/WorkoutLogList';
+import LoadingIndicator from '../../components/feedback/LoadingIndicator';
+import { getAllLogs } from '../services/log';
 import { getStreak } from '../services/streak';
 
 export default function HomeScreen() {
@@ -16,14 +16,14 @@ export default function HomeScreen() {
   const [streak, setStreak] = useState<number | null>(null);
 
 
- const fetchLogsAndStreak = async () => { // Función combinada
+ const fetchLogsAndStreak = async () => { 
     setLoading(true);
     setError(null);
     try {
       const logsData = await getAllLogs();
       const streakData = await getStreak();
       setLogs(logsData.data || []);
-      setStreak(streakData.currentStreak || 0); // Obtiene la racha o usa 0 por defecto
+      setStreak(streakData.currentStreak || 0);
     } catch (err: any) {
       setError(err.message || 'Error al cargar los datos');
     } finally {
@@ -42,9 +42,7 @@ export default function HomeScreen() {
 
   if (loading) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.loading}>Cargando...</Text>
-      </View>
+      <LoadingIndicator message="Cargando..." />
     );
   }
 

@@ -11,18 +11,6 @@ export const loginUser = async (userData: any) => {
   }
 }
 
-export const validateToken = async (token: string) => {
-  try {
-    const response = await api.get("/auth/validate", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error("Error validating token");
-  }
-}
 
 
 export const postRegister = async(userData: any) => {
@@ -34,6 +22,15 @@ export const postRegister = async(userData: any) => {
   }
 }
 
+
+export const updateUser = async (userData: any) => {
+  try {
+    const response = await api.put("/auth/updateUser", userData);
+    return response.data;
+  } catch (error) {
+    throw new Error("Error updating user data");
+  }
+}
 
 export const getProfileUser = async () => {
   try{

@@ -23,6 +23,8 @@ export default function profileScreen() {
       
 
       <CustomButton  title='Cerrar Sesión' onPress={handleLogout} style={{ marginTop: 20 }} textStyle={{ color: '#fff' }} />
+      <CustomButton title='Editar Perfil' onPress={() => router.push('/screens/editProfile')} style={{ marginTop: 20 }} textStyle={{ color: '#fff' }} />
+
     </View>
   );
 }

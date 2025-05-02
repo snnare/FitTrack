@@ -1,19 +1,14 @@
-// tu endpoint
 import { createContext, useContext, useEffect, useState } from "react";
 import * as SecureStore from 'expo-secure-store';
 
-import { LoginData } from "../types/auth";
+import { loginUser, postRegister } from "../services/auth";
+
+import { LoginData } from "../types/login";
 import { RegisterData } from "../types/register";
-import { loginUser, validateToken, postRegister} from "../services/auth";
+
+import { AuthProps } from "../types/auth";
 import { TOKEN_KEY } from "../services/env";
 
-interface AuthProps {
-    authState?: { token: string | null, authenticated: boolean | null };
-    onFullRegister?: (userData: RegisterData) => Promise<any>;
-    onRegister?: (userData: LoginData) => Promise<any>;
-    onLogin?: (userData: LoginData) => Promise<any>;
-    onLogout?: () => Promise<any>;
-}
 
 const AuthContext = createContext<AuthProps>({});
 
@@ -22,22 +17,25 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: any) => {
-    const [authState, setAuthState] = useState<{ token: string | null, authenticated: boolean | null }>({
+    const [authState, setAuthState] = useState<{
+        token: string | null,
+        authenticated: boolean | null
+    }>({
         token: null,
         authenticated: null,
     });
 
-    const [loading, setLoading] = useState<boolean>(true); 
+    const [loading, setLoading] = useState<boolean>(true);
 
-    
+
     useEffect(() => {
         const loadToken = async () => {
             const token = await SecureStore.getItemAsync(TOKEN_KEY);
-            console.log("Loaded token:", token);
-
+            // Debugging line
+            //console.log("Loaded token:", token);
             if (token) {
                 try {
-                    await validateToken(token); 
+
                     setAuthState({ token, authenticated: true });
                 } catch (err) {
                     await SecureStore.deleteItemAsync(TOKEN_KEY);
@@ -46,39 +44,44 @@ export const AuthProvider = ({ children }: any) => {
             } else {
                 setAuthState({ token: null, authenticated: false });
             }
-            setLoading(false); 
+            setLoading(false);
         };
-
         loadToken();
     }, []);
 
 
-
-
-    // Funcion completa de registro
+    // Registro de usuario
     const registerUser = async (userData: RegisterData) => {
-        try{
+        try {
             const result = await postRegister(userData);
+
+            if (result.error) {
+                return result;
+            }
 
             setAuthState({
                 token: result.token,
                 authenticated: true
             });
+
             await SecureStore.setItemAsync(TOKEN_KEY, result.token);
             return result;
-
-        }catch (error) {
+        } catch (error) {
             console.error('Register error:', error);
             return { error: true, msg: (error as any).response.data.msg };
         }
     }
 
 
-    // Función de login
+    // Login de usuario
     const login = async (userData: LoginData) => {
         try {
             const result = await loginUser(userData);
-            
+
+            if (result.error) {
+                return result;
+            }
+
             setAuthState({
                 token: result.token,
                 authenticated: true
@@ -95,30 +98,32 @@ export const AuthProvider = ({ children }: any) => {
     // Función de logout
     const logout = async () => {
         try {
-          await SecureStore.deleteItemAsync(TOKEN_KEY);;
-            
-          setAuthState({
-            token: null,
-            authenticated: false
-          });
-          
+            await SecureStore.deleteItemAsync(TOKEN_KEY);;
+
+            setAuthState({
+                token: null,
+                authenticated: false
+            });
+
         } catch (error) {
-          console.error('Logout error:', error);
+            console.error('Logout error:', error);
+            return { error: true, msg: (error as any).response.data.msg };
         }
-      };
-      
+    };
+
 
 
     const value = {
         onFullRegister: registerUser,
         onLogin: login,
         onLogout: logout,
-        authState
+        authState,
     };
 
     return (
         <AuthContext.Provider value={value}>
-            {children}
+            {/* Renderiza hijos solo cuando no está cargando */}
+            {!loading ? children : null}
         </AuthContext.Provider>
     );
 };

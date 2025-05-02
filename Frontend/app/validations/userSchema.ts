@@ -21,7 +21,7 @@ export const updateSchema = Yup.object().shape({
         .max(new Date(), 'No puedes ser del futuro'),
     genero: Yup
         .string()
-        .oneOf(['Masculino', 'Femenino', 'Otro'], 'Género no válido')
+        .oneOf(['Masculino', 'Femenino'], 'Género no válido')
         .nullable()
         .optional(),
     peso: Yup
@@ -30,9 +30,18 @@ export const updateSchema = Yup.object().shape({
         .optional()
         .min(30, 'Peso mínimo 30 kg')
         .max(300, 'Peso máximo 300 kg'),
+    estatura: Yup
+        .number()
+        .nullable()
+        .optional()
+        .min(1, 'Estatura mínima 1 cm')
+        .max(300, 'Estatura máxima 300 cm'),
     objetivo: Yup
         .string()
         .oneOf(['Perder peso', 'Ganar peso', 'Definir', 'Mantener'], 'Objetivo no válido')
         .nullable()
         .optional(),
+    nivelExperiencia: Yup
+        .string()
+        .oneOf(['Principiante', 'Intermedio', 'Avanzado'], 'Nivel de experiencia no válido')
 });
