@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    alignItems: 'center', // Centra el contenido horizontalmente
+    alignItems: 'center', 
     backgroundColor: '#111827',
   },
   title: {
@@ -43,5 +43,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#d1d5db',
   },
-  // Puedes agregar más estilos si los necesitas
+ 
 });

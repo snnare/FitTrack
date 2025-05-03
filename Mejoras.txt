@@ -1,0 +1,22 @@
+En HomeScreen el apartado que obtiene los logs del usuario.
+
+Si se hace la peticion y devuelve 404  es decir que no se encontro nada
+por que el usuario es nuevo, NO mandar error, si no la LogScreen + No hay registros recientes
+
+
+Recomendaciones
+Mejorar el estilo  y poder seleccionar una rutina y verla de forma mas desplegada
+
+
+Log
+De momento dejarlo asi
+
+
+Profile
+Mejora de estilo y organizacion al editar sus datos.
+
+
+
+Generar estadisticas
+Tener un boton que genere un pdf 
+
