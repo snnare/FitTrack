@@ -5,56 +5,95 @@ import { MaterialIcons } from '@expo/vector-icons';
 import UserStreak from '../../components/user/UserStreak';
 import WorkoutLogList from '../../components/workouts/WorkoutLogList';
 import LoadingIndicator from '../../components/feedback/LoadingIndicator';
-import ErrorScreen from '../../components/feedback/ErrorScreen'; // Importa el componente ErrorScreen
+import ErrorScreen from '../../components/feedback/ErrorScreen';
 import { getAllLogs } from '../services/log';
 import { getStreak } from '../services/streak';
 
 export default function HomeScreen() {
     const [logs, setLogs] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [loadingLogs, setLoadingLogs] = useState(true);
+    const [errorLogs, setErrorLogs] = useState<string | null>(null);
     const [streak, setStreak] = useState<number | null>(null);
+    const [loadingStreak, setLoadingStreak] = useState(true);
+    const [errorStreak, setErrorStreak] = useState<string | null>(null);
 
-    const fetchLogsAndStreak = async () => {
-        setLoading(true);
-        setError(null);
+    const fetchLogs = async () => {
+        setLoadingLogs(true);
+        setErrorLogs(null);
         try {
             const logsData = await getAllLogs();
-            const streakData = await getStreak();
-            setLogs(logsData.data || []); // Si no hay datos, establece un array vacío
-            setStreak(streakData.currentStreak || 0); // Si no hay racha, establece 0
+            setLogs(logsData.data || []);
         } catch (err: any) {
-            setError(err.message || 'Error al cargar los datos');
+            setErrorLogs(err.message || 'Error al cargar los entrenamientos');
         } finally {
-            setLoading(false);
+            setLoadingLogs(false);
+        }
+    };
+
+    const fetchStreak = async () => {
+        setLoadingStreak(true);
+        setErrorStreak(null);
+        try {
+            const streakData = await getStreak();
+            setStreak(streakData.currentStreak || 0);
+        } catch (err: any) {
+            // Verifica si el error indica un 404 (Not Found)
+            if (err.message && err.message.includes('404')) {
+                setStreak(0); // Establece la racha en 0 si es un 404
+            } else {
+                setErrorStreak(err.message || 'Error al cargar la racha');
+            }
+        } finally {
+            setLoadingStreak(false);
         }
     };
 
     useEffect(() => {
-        fetchLogsAndStreak();
+        fetchLogs();
+    }, []);
+
+    useEffect(() => {
+        fetchStreak();
     }, []);
 
     const handleReload = () => {
-        fetchLogsAndStreak();
+        fetchLogs();
+        fetchStreak();
     };
 
-    if (loading) {
+    if (loadingLogs || loadingStreak) {
+        return <LoadingIndicator message="Cargando datos..." />;
+    }
+
+    if (errorLogs) {
         return (
-            <LoadingIndicator message="Cargando..." />
+            <ErrorScreen
+                message={`Error al cargar los entrenamientos: ${errorLogs}`}
+                onRetry={handleReload}
+            />
         );
     }
 
-    if (error) {
-        return (
-            <ErrorScreen message={`Error al cargar los datos: ${error}`} onRetry={handleReload} />
-        );
-    }
+    // Ya no necesitamos un ErrorScreen específico para la racha,
+    // ya que un 404 se manejará estableciendo la racha en 0.
+    // if (errorStreak) {
+    //     return (
+    //         <ErrorScreen
+    //             message={`Error al cargar la racha: ${errorStreak}`}
+    //             onRetry={handleReload}
+    //         />
+    //     );
+    // }
 
     return (
         <View style={styles.container}>
             <UserStreak streak={streak} />
             <Text style={styles.subtitle}>Últimos Entrenamientos</Text>
-            <WorkoutLogList logs={logs} />
+            {logs.length > 0 ? (
+                <WorkoutLogList logs={logs} />
+            ) : (
+                <Text style={styles.noDataText}>Sin registros de entrenamiento por el momento.</Text>
+            )}
             <TouchableOpacity style={styles.reloadButton} onPress={handleReload}>
                 <MaterialIcons name="refresh" size={24} color="#fff" />
                 <Text style={styles.reloadButtonText}>Actualizar</Text>
@@ -69,13 +108,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#111827',
         padding: 20,
     },
-    title: {
-        fontSize: 22,
-        color: '#bbf7d0',
-        fontWeight: 'bold',
-        marginBottom: 20,
-        textAlign: 'center',
-    },
     subtitle: {
         fontSize: 18,
         color: '#d1d5db',
@@ -83,32 +115,11 @@ const styles = StyleSheet.create({
         marginTop: 20,
         marginBottom: 10,
     },
-    loading: {
-        color: '#d1d5db',
+    noDataText: {
+        color: '#9ca3af',
         textAlign: 'center',
         marginTop: 20,
-    },
-    error: {
-        color: '#ef4444',
-        textAlign: 'center',
-        marginTop: 20,
-    },
-    errorButton: {
-        backgroundColor: '#22c55e',
-        paddingVertical: 14,
-        borderRadius: 10,
-        alignItems: 'center',
-        marginTop: 10,
-        marginBottom: 10,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        gap: 8,
-    },
-    errorButtonText: {
-        color: '#fff',
         fontSize: 16,
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
     },
     reloadButton: {
         backgroundColor: '#22c55e',

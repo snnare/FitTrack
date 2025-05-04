@@ -12,14 +12,7 @@ export const crearLog = async (logData: any) => {
   }
 };
 
-export const getLogFromUser = async (userId: string) => {
-  try {
-    const res = await api.get(`/logs/${userId}`);
-    return res.data;
-  } catch (error: any) {
-    throw error.response?.data || error;
-  }
-};
+
 
 
 export const getAllLogs = async () => {

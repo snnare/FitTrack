@@ -8,7 +8,6 @@ export default function recomendationScreen(){
     return(
         <View style={styles.container}>
         <Text style={styles.title}>Recomendaciones</Text>
-        <Text >Aquí van las recomendaciones</Text>\
         <WorkoutRoutinesForLevel  />
         </View>
     )
