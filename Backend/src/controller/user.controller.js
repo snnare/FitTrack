@@ -147,3 +147,51 @@ export const getIMC = async (req, res) => {
     res.status(500).json({ message: 'Error al calcular el IMC', error: error.message });
   }
 };
+
+
+
+export const updateUserProfile = async (req, res) => {
+  const correo = req.user.correo; // Obtener el correo del usuario autenticado
+    console.log("correo", correo);
+  try {
+    const { nombre, apellidos, fechaNacimiento, genero, peso, estatura, objetivo, nivelExperiencia } = req.body;
+    const correo = req.user.correo; // Obtener el correo del usuario autenticado
+    console.log("correo", correo);
+    // Validar y formatear la fecha de nacimiento (si se proporciona)
+    let formattedFechaNacimiento = null;
+    if (fechaNacimiento) {
+      formattedFechaNacimiento = moment(fechaNacimiento, 'YYYY-MM-DD').format('YYYY-MM-DD');
+      if (!moment(formattedFechaNacimiento, 'YYYY-MM-DD', true).isValid()) {
+        return res.status(400).json({ message: 'Fecha de nacimiento inválida, debe estar en el formato YYYY-MM-DD' });
+      }
+    }
+
+    const updatedUser = await User.findOneAndUpdate(
+      { correo: correo }, 
+      {
+        nombre,
+        apellidos,
+        fechaNacimiento: formattedFechaNacimiento,
+        genero,
+        peso,
+        estatura,
+        objetivo,
+        nivelExperiencia,
+        profileComplete: true // Actualizar profileComplete a true
+      },
+      { new: true } // Devuelve el documento actualizado
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    res.status(200).json({ message: 'Perfil actualizado', user: updatedUser });
+  } catch (error) {
+    console.error('Error al actualizar datos del usuario:', error);
+    res.status(500).json({
+      message: 'Error al actualizar datos del usuario',
+      error: error.message,
+    });
+  }
+};

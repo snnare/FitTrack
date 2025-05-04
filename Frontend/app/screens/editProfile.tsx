@@ -32,7 +32,6 @@ export default function EditProfileScreen() {
         setError(null);
         try {
             const userData = await getProfileUser();
-            console.log(userData);
             if (userData) {
                 setInitialValues({
                     nombre: userData.nombre,
@@ -40,8 +39,8 @@ export default function EditProfileScreen() {
                     correo: userData.correo,
                     fechaNacimiento: userData.fechaNacimiento ? formatDate(userData.fechaNacimiento) : '',
                     genero: userData.genero,
-                    peso: userData.peso,
-                    estatura: userData.estatura,
+                    peso: String(userData.peso),
+                    estatura: String(userData.estatura),
                     objetivo: userData.objetivo,
                     nivelExperiencia: userData.nivelExperiencia || 'Principiante',
                 });
@@ -60,32 +59,55 @@ export default function EditProfileScreen() {
     useEffect(() => {
         fetchUserProfile();
     }, []);
-
-
     const handleUpdateProfile = async (values: UserProfileData, { setSubmitting }: FormikHelpers<UserProfileData>) => {
+        setSubmitting(true);
         try {
-            setSubmitting(true);
-            const result = await updateUser(values);
-            if (result) {
+            // Crear un objeto con los valores a actualizar, excluyendo correo y password
+            const updateData = {
+                nombre: values.nombre,
+                apellidos: values.apellidos,
+                fechaNacimiento: values.fechaNacimiento,
+                genero: values.genero,
+                peso: values.peso ? Number(values.peso) : null,
+                estatura: values.estatura ? Number(values.estatura) : null,
+                objetivo: values.objetivo,
+                nivelExperiencia: values.nivelExperiencia,
+                profileComplete: true, 
+            };
+            console.log(updateData);
+
+            const result = await updateUser(updateData);
+
+            if (result && !result.error) {
                 Alert.alert('Perfil actualizado correctamente.');
                 router.push('/profile');
             } else {
-                Alert.alert('Error', 'No se pudo actualizar el perfil.');
+                Alert.alert(
+                    'Error al actualizar el perfil',
+                    result?.msg || 'Hubo un problema al actualizar el perfil.',
+                    [{ text: 'OK', style: 'destructive' }],
+                    { cancelable: false }
+                );
             }
-        } catch (error) {
-            Alert.alert('Error', 'No se pudo actualizar el perfil.');
+        } catch (error: any) {
+            const errorMessage = error.message || 'Ocurrió un error inesperado al actualizar el perfil.';
+            Alert.alert(
+                'Error Inesperado',
+                errorMessage,
+                [{ text: 'OK', style: 'destructive' }],
+                { cancelable: false }
+            );
         } finally {
             setSubmitting(false);
         }
     };
 
-
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.formContainer}>
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={() => router.goBack()} style={styles.backButton}>
-                        
+                    <TouchableOpacity onPress={() => router.push('/(tabs)/profile')} style={styles.backButton}>
+                        <Text> Back</Text>
                     </TouchableOpacity>
                     <Text style={styles.title}>Editar Perfil</Text>
                     <View style={{ width: 24 }} />
@@ -146,6 +168,7 @@ export default function EditProfileScreen() {
                                 error={touched.peso && errors.peso}
                                 keyboardType="numeric"
                             />
+
                             <AuthInput
                                 label="Estatura (cm)"
                                 placeholder="Estatura (cm)"

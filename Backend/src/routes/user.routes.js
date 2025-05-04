@@ -5,6 +5,7 @@ import {
     getUserProfile,
     getIMC,
     postRegisterUser,
+    updateUserProfile
 } from '../controller/user.controller.js';
 import {
     validateToken
@@ -19,7 +20,7 @@ router.post('/register', registerUser);
 router.post('/postRegister', postRegisterUser); 
 router.post('/login', loginUser);
 
-router.post('/update', authMiddleware, getUserProfile); // Cambia el método a POST para actualizar el perfil
+router.put('/update', authMiddleware, updateUserProfile);
 
 router.get('/validate', validateToken)       
 router.get('/profile', authMiddleware, getUserProfile); 

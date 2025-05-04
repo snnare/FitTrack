@@ -4,8 +4,8 @@ export interface UserProfileData {
     correo: string;
     fechaNacimiento: string;
     genero: string | null;
-    peso: string;
-    estatura: string;
+    peso: number |  String | null;
+    estatura: number | String |  null;
     objetivo: string | null;
     nivelExperiencia: string;
 }

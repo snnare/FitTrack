@@ -25,7 +25,7 @@ export const postRegister = async(userData: any) => {
 
 export const updateUser = async (userData: any) => {
   try {
-    const response = await api.put("/auth/updateUser", userData);
+    const response = await api.put("/auth/update", userData);
     return response.data;
   } catch (error) {
     throw new Error("Error updating user data");
