@@ -115,4 +115,4 @@ export const getCountLogs = async (req, res) => {
         error: error.message,
       });
     }
-  };
+};
