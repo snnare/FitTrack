@@ -1,0 +1,83 @@
+Encabezado:
+
+        Nombre del app ("FIT TRACK")
+
+        Título del reporte ("REPORTE MENSUAL DE PROGRESO")
+
+        Información del usuario: Nombre y correo electrónico.
+
+    Resumen de entrenamiento:
+
+        Total de ejercicios completados.
+
+        Total de series completadas.
+
+    Medidas:
+
+        Medidas corporales (glúteos, piernas, cintura).
+
+        Cambio en las medidas respecto al mes anterior.
+
+    Evolución del peso:
+
+        Gráfico lineal que muestra la evolución del peso del usuario a lo largo del tiempo.
+
+    Objetivo:
+
+        Objetivo del usuario (por ejemplo, "Ganar Peso").
+
+        Porcentaje de progreso hacia el objetivo.
+
+    Repeticiones por ejercicio:
+
+        Gráfico de barras que muestra el número de repeticiones realizadas por ejercicio.
+
+    Métricas:
+
+        Valoración de "Métricas" como Energía, Sueño y Motivación (representadas con estrellas).
+
+    Recomendaciones:
+
+        Recomendaciones personalizadas basadas en el progreso del usuario.
+
+Generación de gráficos a partir de los logs de los usuarios
+
+Para generar los gráficos de "Evolución del Peso" y "Repeticiones por Ejercicio" a partir de los logs de los usuarios, necesitarás procesar los datos de los logs y transformarlos en un formato que LaTeX pueda entender. Aquí te doy una idea de cómo hacerlo:
+
+    Obtener los datos de los logs:
+
+        En tu backend (Node.js), consulta la base de datos para obtener los logs del usuario para el período del reporte (por ejemplo, el último mes).
+
+        También obtén los datos del usuario (peso, objetivo, etc.) de la tabla de usuarios.
+
+    Procesar los datos para el gráfico de peso:
+
+        Agrupa los logs por fecha.
+
+        Para cada fecha, obtén el peso del usuario (si está disponible en el log, o puedes usar el peso registrado en la tabla de usuarios en esa fecha).
+
+        Crea un array de objetos con la fecha y el peso: [{ fecha: '2024-07-01', peso: 62 }, { fecha: '2024-07-08', peso: 61 }, ...].
+
+        Este array se utilizará para generar el gráfico de líneas en LaTeX.
+
+    Procesar los datos para el gráfico de repeticiones:
+
+        Agrupa los logs por ejercicio.
+
+        Para cada ejercicio, suma el número total de repeticiones.
+
+        Crea un array de objetos con el ejercicio y el total de repeticiones: [{ ejercicio: 'Sentadilla', repeticiones: 280 }, { ejercicio: 'Peso Muerto', repeticiones: 230 }, ...].
+
+        Este array se utilizará para generar el gráfico de barras en LaTeX.
+
+    Generar el código LaTeX:
+
+        En tu módulo latex.js, crea funciones que tomen estos arrays de datos y generen el código LaTeX para los gráficos (usando pgfplots u otro paquete).
+
+        Inserta este código LaTeX en la plantilla del reporte.
+
+    Compilar el reporte:
+
+        Usa pdflatex para compilar el archivo LaTeX y generar el PDF.
+
+Siguiendo estos pasos, podrás generar un reporte de progreso dinámico que incluya gráficos basados en los datos de entrenamiento del usuario.

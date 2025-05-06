@@ -25,4 +25,19 @@ function compilarLaTeX(texContent, nombreBase) {
   });
 }
 
-module.exports = { renderTemplate, compilarLaTeX };
+
+const generarDatosReporte = (datos) => {
+  // Prepara los datos para Nunjucks, adaptándolos a los marcadores de posición de la plantilla.
+  const datosReporte = {
+    NOMBRE_USUARIO: datos.nombreUsuario,
+    CORREO_USUARIO: datos.correoUsuario,
+    TOTAL_EJERCICIOS: datos.totalEjercicios,
+    TOTAL_SERIES: datos.totalSeries,
+    OBJETIVO_USUARIO: datos.objetivoUsuario,
+    PORCENTAJE_PROGRESO: datos.porcentajeProgreso,
+  };
+  return datosReporte;
+};
+
+
+module.exports = { renderTemplate, compilarLaTeX , generarDatosReporte };
