@@ -1,13 +1,14 @@
 import React from "react";
-import { View, Text, Button, StyleSheet } from 'react-native';
-
+import { View, Text, StyleSheet } from 'react-native';
 import WorkoutRoutinesForLevel from "../../components/workouts/WorkoutRoutinesForLevel";
 
 export default function recomendationScreen(){
 
+    const title = "Rutinas para ti"; // O "Enfocadas para ti"
+
     return(
         <View style={styles.container}>
-        <Text style={styles.title}>Recomendaciones</Text>
+        <Text style={styles.title}>{title}</Text>
         <WorkoutRoutinesForLevel  />
         </View>
     )
@@ -29,4 +30,3 @@ const styles = StyleSheet.create({
       color: '#d1d5db',
     },
   });
-  
