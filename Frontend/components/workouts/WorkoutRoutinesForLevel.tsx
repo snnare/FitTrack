@@ -1,22 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
-import { Picker } from '@react-native-picker/picker'; // Asegúrate de que estás usando @react-native-picker/picker
-import { getRutinas } from '../../app/services/rutina'; // Importamos la función getRutinas
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import { getRutinas } from '../../app/services/rutina';
 
 interface Workout {
   id: string;
   nombre: string;
   descripcion: string;
   categoria: string;
-  // nivelExperiencia: 'Principiante' | 'Intermedio' | 'Avanzado'; // Ya no necesitamos esto
+  ejercicios: {
+    nombre: string;
+    series: number;
+    repeticiones: number;
+    peso?: number;
+    notas?: string;
+  }[];
 }
 
-const WorkoutRoutinesForLevel: React.FC = () => { // Eliminamos la prop nivelExperiencia
+interface WorkoutRoutinesForLevelProps {
+  onWorkoutSelect: (workoutId: string) => void;
+}
+
+const WorkoutRoutinesForLevel: React.FC<WorkoutRoutinesForLevelProps> = ({ onWorkoutSelect }) => {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const categories: string[] = ["Pecho", "Espalda", "Piernas", "Glúteos", "Brazos", "Hombro", "Abs", "Full Body"]; //Lista de las categorias
+  const categories: string[] = ["Pecho", "Espalda", "Piernas", "Glúteos", "Brazos", "Hombro", "Abs", "Full Body"];
 
   useEffect(() => {
     const fetchWorkouts = async () => {
@@ -35,33 +45,9 @@ const WorkoutRoutinesForLevel: React.FC = () => { // Eliminamos la prop nivelExp
     fetchWorkouts();
   }, []);
 
-    const filteredWorkouts = selectedCategory
+  const filteredWorkouts = selectedCategory
     ? workouts.filter(workout => workout.categoria === selectedCategory)
     : workouts;
-
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Text style={styles.loadingText}>Cargando rutinas...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>Error: {error}</Text>
-      </View>
-    );
-  }
-
-  if (workouts.length === 0) {
-    return (
-      <View style={styles.noWorkoutsContainer}>
-        <Text style={styles.noWorkoutsText}>No hay rutinas disponibles.</Text>
-      </View>
-    );
-  }
 
   return (
     <View style={styles.container}>
@@ -77,15 +63,17 @@ const WorkoutRoutinesForLevel: React.FC = () => { // Eliminamos la prop nivelExp
           ))}
         </Picker>
       </View>
-      <FlatList // Usamos FlatList
+      <FlatList
         data={filteredWorkouts}
-        keyExtractor={(item) => item._id} // Corregido: Usar item.id o item._id
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.workoutCard}>
+          <TouchableOpacity
+            style={styles.workoutCard}
+            onPress={() => onWorkoutSelect(item.id)}
+          >
             <Text style={styles.workoutName}>{item.nombre}</Text>
             <Text style={styles.workoutDescription}>{item.descripcion}</Text>
-            {/* Muestra otros detalles de la rutina */}
-          </View>
+          </TouchableOpacity>
         )}
         style={styles.list}
       />
@@ -94,14 +82,14 @@ const WorkoutRoutinesForLevel: React.FC = () => { // Eliminamos la prop nivelExp
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-      },
-      list: {
-        padding: 10,
-        flex: 1
-      },
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  list: {
+    padding: 10,
+    flex: 1
+  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -129,39 +117,38 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#9ca3af',
   },
-    workoutCard: {
-        backgroundColor: '#1f2937', // Color de fondo de la tab
-        padding: 15,
-        borderRadius: 8,
-        marginBottom: 10,
-        borderWidth: 1,
-        borderColor: '#4b5563', // Color del borde de la tab
-    },
-    workoutName: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#fff', // Color del texto activo de la tab
-        marginBottom: 8,
-    },
-    workoutDescription: {
-        fontSize: 16,
-        color: '#d1d5db', // Color del texto inactivo de la tab
-    },
-  pickerContainer: { // Agregado para el contenedor del Picker
+  workoutCard: {
+    backgroundColor: '#1f2937',
+    padding: 15,
+    borderRadius: 8,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#4b5563',
+  },
+  workoutName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: 8,
+  },
+  workoutDescription: {
+    fontSize: 16,
+    color: '#d1d5db',
+  },
+  pickerContainer: {
     borderWidth: 1,
     borderColor: '#374151',
     borderRadius: 8,
     backgroundColor: '#1f2937',
     marginBottom: 20,
     color: '#d1d5db',
-    paddingHorizontal: 0, // Ajusta el padding según sea necesario
+    paddingHorizontal: 0,
   },
   picker: {
     color: '#d1d5db',
-    height: 50, // Asegura que el Picker tenga una altura definida
+    height: 50,
     width: '100%',
   },
 });
 
 export default WorkoutRoutinesForLevel;
-
