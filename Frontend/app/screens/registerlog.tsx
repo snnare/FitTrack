@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Alert, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { Formik } from 'formik';
-
 import { LogSchema } from '../validations/logSchema';
 import { crearLog } from '../services/log';
 import { updateStreak } from '../services/streak';
+import { useRouter } from 'expo-router';
 
-
-// Ya no se agrega el banner
-export default function registerMeasuresScreen() {
-
+export default function RegisterMeasuresScreen() {
+    const router = useRouter();
 
     const handleSubmitLog = async (values: any, { resetForm }: any) => {
-
         try {
             const response = await crearLog(values);
             await updateStreak();
@@ -23,10 +20,15 @@ export default function registerMeasuresScreen() {
         }
     };
 
-
+    const handleGoBack = () => {
+        router.push('/(tabs)/add')
+    };
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
+            <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
+                <Text style={styles.backButtonText}>Atrás</Text>
+            </TouchableOpacity>
             <Text style={styles.logo}> Registra tu entrenamiento</Text>
             <Text style={styles.subtitle}>Ingrese los detalles del ejercicio</Text>
             <Formik
@@ -107,8 +109,6 @@ export default function registerMeasuresScreen() {
     )
 }
 
-
-
 const styles = StyleSheet.create({
     container: {
         padding: 20,
@@ -168,7 +168,21 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     error: {
-        color: '#ef4444', // Color de error
+        color: '#ef4444',
         fontSize: 12,
+    },
+    backButton: {
+        position: 'absolute',
+        top: 20,
+        left: 20,
+        paddingVertical: 8,
+        paddingHorizontal: 12,
+        borderRadius: 8,
+        backgroundColor: '#22c55e',
+    },
+    backButtonText: {
+        color: '#fff',
+        fontSize: 12,
+        fontWeight: 'bold',
     },
 });

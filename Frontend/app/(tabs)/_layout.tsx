@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 export default function TabsLayout() {
   return (
     <Tabs
-      initialRouteName="add_log"
+      initialRouteName="add"
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
