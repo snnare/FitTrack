@@ -1,4 +1,3 @@
-// Inserción del usuario Ángel en la colección 'user'
 db.users.insert({
     nombre: "Ángel",
     apellidos: "Pérez",
