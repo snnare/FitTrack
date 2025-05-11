@@ -3,6 +3,19 @@ import Log from '../models/Logs.js';
 import Medida from '../models/Medidas.js';
 import Streak from '../models/Streak.js';
 
+
+export const verificaRquisitos  = async (req, res) => {
+    try {
+        const correo = req.user.correo;       
+    } catch (error) {
+        
+    }
+}
+
+
+
+
+
 export const getInfoPersonal = async (req, res) => {
     try {
         const userId = req.user.correo;
@@ -68,4 +81,6 @@ export const getRachaActual = async (req, res) => {
         });
     }
 }
+
+
 

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getInfoPersonal , getHistorialMedidas, getHistorialEntrenamientos, getRachaActual} from '../controller/data.controler.js';
+import { getInfoPersonal , getHistorialMedidas, getHistorialEntrenamientos, getRachaActual} from '../controller/data.controller.js';
 
 import { authMiddleware } from '../middleware/auth.middleware.js';
 

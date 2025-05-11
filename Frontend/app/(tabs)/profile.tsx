@@ -1,11 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'; // Importa TouchableOpacity
 import { useRouter, useFocusEffect } from 'expo-router';
 import { useAuth } from '../context/authContext';
-import { MaterialIcons } from '@expo/vector-icons'; // Importa MaterialIcons
+import { MaterialIcons } from '@expo/vector-icons'; 
+
+
 import UserProfileHeader from '../../components/user/UserProfileHeader';
 import UserStats from '../../components/user/UserStats';
 import CustomButton from '../../components/utils/Button';
+
 
 export default function profileScreen() {
     const router = useRouter();
@@ -20,8 +23,14 @@ export default function profileScreen() {
         router.push('/screens/editProfile');
     };
 
+
+
+
+
+
+    
     const handleGenerateReport = () => {
-        console.log('Generar Reporte presionado');
+        router.push('/screens/generarReporte');
     };
 
     useFocusEffect(

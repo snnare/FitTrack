@@ -9,7 +9,7 @@ import {
 } from '../controller/user.controller.js';
 import {
     validateToken
-} from '../controller/auth.controler.js';
+} from '../controller/auth.controller.js';
 import { authMiddleware } from '../middleware/auth.middleware.js';
 
 
