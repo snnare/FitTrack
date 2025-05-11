@@ -1,6 +1,6 @@
-import Reporte from '../models/Reporte.js';
-import Log from '../models/Logs.js';
 
+import Reporte from '../models/Reporte.js';
+import { generarReportePDF } from '../utils/latex/generarReporte.js';
 
 export const createReporte = async (req, res) => {
     try {
@@ -14,17 +14,27 @@ export const createReporte = async (req, res) => {
 
         await nuevoReporte.save();
 
-        res.status(201).json({ message: 'Reporte creado exitosamente', data: nuevoReporte });
+        const pdfPath = await generarReportePDF(userId);
+
+        const nombreArchivo = path.basename(pdfPath);
+        const url = `${req.protocol}://${req.get('host')}/reports/${nombreArchivo}`;
+
+        res.status(201).json({ 
+            message: 'Reporte creado y PDF generado', 
+            data: nuevoReporte,
+            pdfUrl: url
+        });
     } catch (error) {
         console.error('Error al crear reporte:', error);
         res.status(500).json({ message: 'Error al crear reporte', error: error.message });
     }
 };
 
+
+
 export const getReporte = async (req, res) => {
     try {
         const userId = req.user.correo; 
-
         const reporte = await Reporte.findOne({ userId });
 
         if (!reporte) {
@@ -37,3 +47,4 @@ export const getReporte = async (req, res) => {
         res.status(500).json({ message: 'Error al obtener reporte', error: error.message });
     }
 };
+

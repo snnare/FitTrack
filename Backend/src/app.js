@@ -13,7 +13,7 @@ import logsRoutes from './routes/logs.routes.js';
 import reporteRoutes from './routes/reporte.routes.js';
 import streakRoutes from './routes/streak.routes.js';
 import rutinaRoutes from './routes/rutina.routes.js';
-
+import medidaRoutes from './routes/medidas.routes.js';
 dotenv.config();
 
 const app = express ();
@@ -32,9 +32,13 @@ app.use('/auth', userRoutes);
 app.use('/trainer', trainerRoutes);
 // Rutas protegidas
 app.use('/logs', logsRoutes);
-app.use('/reporte', reporteRoutes);
+
+app.use('/get-reporte', express.static('public/reports'));
+app.use('/reporte', reporteRoutes)
+
 app.use('/streak', streakRoutes);
 app.use('/rutina', rutinaRoutes);
+app.use('/medidas',medidaRoutes)
 
 app.listen(port, () => {
     console.log(`Servidor escuchando en el puerto ${port}`);
