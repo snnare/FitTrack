@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 export const validateToken = async (req, res) => {
     try {
-        const token = req.headers.authorization?.split(' ')[1]; // Obtiene el token del encabezado
+        const token = req.headers.authorization?.split(' ')[1]; 
 
         if (!token) {
             return res.status(401).json({ message: 'Token no proporcionado' });

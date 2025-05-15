@@ -1,4 +1,4 @@
-import Medida from "../models/Medidas.js";
+import Medida from "../models/medida.model.js";
 
 
 export const crearMedida = async (req, res) => {

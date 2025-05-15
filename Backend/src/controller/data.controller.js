@@ -1,7 +1,7 @@
-import User from '../models/User.js';
-import Log from '../models/Logs.js';
-import Medida from '../models/Medidas.js';
-import Streak from '../models/Streak.js';
+import User from '../models/user.model.js';
+import Log from '../models/logs.model.js';
+import Medida from '../models/medida.model.js';
+import Streak from '../models/streak.model.js';
 
 
 export const verificaRquisitos  = async (req, res) => {

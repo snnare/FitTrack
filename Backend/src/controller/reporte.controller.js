@@ -1,7 +1,7 @@
-import Reporte from '../models/Reporte.js';
-import User from '../models/User.js';
-import Log from '../models/Logs.js';
-import Medida from '../models/Medidas.js';
+import Reporte from '../models/reporte.model.js';
+import User from '../models/user.model.js';
+import Log from '../models/logs.model.js';
+import Medida from '../models/medida.model.js';
 
 export const createReporte = async (req, res) => {
     try {
