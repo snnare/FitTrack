@@ -1,4 +1,4 @@
-import Streak from '../models/Streak.js';
+import Streak from '../models/streak.model.js';
 import moment from 'moment';
 
 export const updateStreak = async (req, res) => {

@@ -1,5 +1,5 @@
-import Rutina from '../models/Rutina.js';
-import User from '../models/User.js';
+import Rutina from '../models/rutina.model.js';
+import User from '../models/user.model.js';
 
 export const getRutinasRecomendadas = async (req, res) => {
     try {
@@ -28,7 +28,6 @@ export const getRutinasRecomendadas = async (req, res) => {
         res.status(500).json({ message: 'Error al obtener rutinas recomendadas', error: error.message });
     }
 };
-
 
 export const getRutinaById = async (req, res) => {
     try {

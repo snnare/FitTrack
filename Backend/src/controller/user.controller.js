@@ -1,6 +1,57 @@
-import User from '../models/User.js'
+import User from '../models/user.model.js'
 import { checkIfEmailExists, hashPassword, comparePassword, generateToken } from '../utils/user.utils.js';
 import moment from 'moment';
+
+
+
+export const registerUser = async (req, res) => {
+  try {
+    const { correo, password, nombre, apellidos, fechaNacimiento, genero, peso, estatura, objetivo, nivelExperiencia, profileComplete } = req.body;
+    const emailExists = await checkIfEmailExists(correo);
+
+    if(emailExists) {
+      return res.status(400).json({ message: 'El correo ya está registrado' });
+    }
+
+    const hashedPassword = await hashPassword(password);
+
+    // Validar y formatear la fecha de nacimiento (si se proporciona)
+    let formattedFechaNacimiento = null;
+    if (fechaNacimiento) {
+      formattedFechaNacimiento = moment(fechaNacimiento, 'YYYY-MM-DD').format('YYYY-MM-DD');
+      if (!moment(formattedFechaNacimiento, 'YYYY-MM-DD', true).isValid()) {
+        return res.status(400).json({ message: 'Fecha de nacimiento inválida, debe estar en el formato YYYY-MM-DD' });
+      }
+    }
+
+    const newUser = new User({
+      correo,
+      password: hashedPassword,
+      nombre,
+      apellidos,
+      fechaNacimiento: formattedFechaNacimiento,
+      genero,
+      peso,
+      estatura,
+      objetivo,
+      nivelExperiencia,
+      profileComplete
+    });
+
+
+    await newUser.save();
+    const token = generateToken(newUser); 
+
+    res.status(201).json({ message: 'Usuario registrado', user: newUser, token });
+  } catch (error) {
+    console.error('Error al actualizar datos del usuario:', error);
+    res.status(500).json({
+      message: 'Error al registrar el usuario',
+      error: error.message,
+    });
+  }
+};
+
 
 
 export const loginUser = async (req, res) => {
@@ -59,55 +110,6 @@ export const getProfileInfo = async (req, res) => {
     res.status(500).json({ message: 'Error al obtener el perfil', error: error.message });
   }
 }
-
-export const postRegisterUser = async (req, res) => {
-  try {
-    const { correo, password, nombre, apellidos, fechaNacimiento, genero, peso, estatura, objetivo, nivelExperiencia, profileComplete } = req.body;
-    const emailExists = await checkIfEmailExists(correo);
-
-    if(emailExists) {
-      return res.status(400).json({ message: 'El correo ya está registrado' });
-    }
-
-    const hashedPassword = await hashPassword(password);
-
-    // Validar y formatear la fecha de nacimiento (si se proporciona)
-    let formattedFechaNacimiento = null;
-    if (fechaNacimiento) {
-      formattedFechaNacimiento = moment(fechaNacimiento, 'YYYY-MM-DD').format('YYYY-MM-DD');
-      if (!moment(formattedFechaNacimiento, 'YYYY-MM-DD', true).isValid()) {
-        return res.status(400).json({ message: 'Fecha de nacimiento inválida, debe estar en el formato YYYY-MM-DD' });
-      }
-    }
-
-    const newUser = new User({
-      correo,
-      password: hashedPassword,
-      nombre,
-      apellidos,
-      fechaNacimiento: formattedFechaNacimiento,
-      genero,
-      peso,
-      estatura,
-      objetivo,
-      nivelExperiencia,
-      profileComplete
-    });
-
-
-    await newUser.save();
-    const token = generateToken(newUser); 
-
-    res.status(201).json({ message: 'Usuario registrado', user: newUser, token });
-  } catch (error) {
-    console.error('Error al actualizar datos del usuario:', error);
-    res.status(500).json({
-      message: 'Error al registrar el usuario',
-      error: error.message,
-    });
-  }
-};
-
 
 
 export const getIMC = async (req, res) => {

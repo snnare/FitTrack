@@ -19,8 +19,7 @@ router.post('/register', registerUser);
 router.post('/login', loginUser);
 
 router.put('/update', authMiddleware, updateUserProfile);
-
-router.get('/validate', validateToken)       
+router.get('/validate', validateToken);      
 router.get('/profile', authMiddleware, getUserProfile); 
 router.get('/imc', authMiddleware, getIMC);
 
