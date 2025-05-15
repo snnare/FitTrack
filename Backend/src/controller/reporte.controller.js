@@ -1,13 +1,9 @@
-import Reporte from '../models/Reporte.js'
+import Reporte from '../models/Reporte.js';
 import User from '../models/User.js';
 import Log from '../models/Logs.js';
 import Medida from '../models/Medidas.js';
 
-
-
-
-
-export const getReporte = async (req, res) => {
+export const createReporte = async (req, res) => {
     try {
         const userId = req.user.correo;
         const { mes, anio } = req.body;
@@ -19,22 +15,33 @@ export const getReporte = async (req, res) => {
             });
         }
 
-        const startOfMonth = new Date(parseInt(anio), parseInt(mes) - 1, 1);
-        const endOfMonth = new Date(parseInt(anio), parseInt(mes), 0, 23, 59, 59, 999);
+        const mesReportado = parseInt(mes);
+        const anioReportado = parseInt(anio);
+
+        // Verificar si ya existe un reporte para este usuario en el mes y año especificados
+        const reporteExistente = await Reporte.findOne({ userId, mesReportado, anioReportado });
+
+        if (reporteExistente) {
+            return res.status(200).json({ message: 'OK', data: reporteExistente, messageInfo: 'Ya existe un reporte para este mes y año.' });
+        }
+
+        const startOfMonth = new Date(anioReportado, mesReportado - 1, 1);
+        const endOfMonth = new Date(anioReportado, mesReportado, 0, 23, 59, 59, 999);
 
         // Info del usuario
         const userInfo = await User.findOne({ correo: userId }).select('-password');
-        console.log(userInfo)
+        //console.log("User Info", userInfo)
         if (!userInfo) {
             return res.status(404).json({ message: 'Error', error: 'Usuario no encontrado.' });
         }
-
 
         // Obtener las medidas del usuario para el mes solicitado
         const medidasMensuales = await Medida.find({
             userId: userId,
             fecha: { $gte: startOfMonth, $lte: endOfMonth }
         }).sort({ fecha: 1 });
+        console.log(medidasMensuales);
+
 
         // Obtener los logs de entrenamiento del usuario para el mes solicitado
         const logsMensuales = await Log.find({
@@ -100,20 +107,19 @@ export const getReporte = async (req, res) => {
             pantorrilla: medida.pantorrilla,
             brazoRelajado: medida.brazoRelajado,
             brazoFlexionado: medida.brazoFlexionado,
-            porcentajeGrasaCorporal: medida.porcentajeGrasaCorporal,
-            notasUsuario: medida.notas
+            porcentajeGrasaCorporal: medida.porcentajeGrasaCorporal
         }));
 
-        const fechaReporteFormateada = `${new Date(parseInt(anio), parseInt(mes) - 1).toLocaleString('default', { month: 'long' })} ${anio}`;
+        const fechaReporteFormateada = `${new Date(anioReportado, mesReportado - 1).toLocaleString('default', { month: 'long' })} ${anioReportado}`;
 
         const reporteData = {
             tituloReporte: "Reporte Mensual de Progreso Físico",
             nombreUsuario: `${userInfo.nombre}  ${userInfo.apellidos}`,
             fechaReporte: fechaReporteFormateada,
             resumenEjecutivo: {
-                progresoGeneral: "Aquí irá un breve resumen del progreso.", // Esto se llenará en el frontend
-                logrosMejoras: "Aquí se destacarán los logros y áreas de mejora.", // Esto se llenará en el frontend
-                mensajeAliento: "¡Sigue adelante con tu progreso!" // Esto se llenará en el frontend
+                progresoGeneral: "Aquí irá un breve resumen del progreso.",
+                logrosMejoras: "Aquí se destacarán los logros y áreas de mejora.",
+                mensajeAliento: "¡Sigue adelante con tu progreso!"
             },
             datosMedidasSemanales: datosMedidasSemanales,
             analisisProgresoMensual: {
@@ -131,20 +137,12 @@ export const getReporte = async (req, res) => {
                 calculoIMC: { imcInicial, imcFinal, clasificacionInicial: clasificacionInicialIMC, clasificacionFinal: clasificacionFinalIMC },
                 relacionCinturaCadera: { inicial: relacionInicialCinturaCadera, final: relacionFinalCinturaCadera, riesgoInicial: riesgoInicialCinturaCadera, riesgoFinal: riesgoFinalCinturaCadera }
             },
-            // Sección de Gráficos - Las URLs se generarán en el frontend
-            recomendacionesGenerales: {
-                ajustesEjercicio: "Aquí irán recomendaciones sobre la rutina.", // Se llenará en el frontend
-                consejosNutricion: "Aquí irán consejos de nutrición.", // Se llenará en el frontend
-                recordatorioConsistencia: "Recuerda la importancia de la consistencia.",
-                motivacionObjetivos: "¡Mantén la motivación para alcanzar tus metas!"
-            },
-            informacionAdicional: "Información adicional relevante." // Se llenará en el frontend si es necesario
         };
 
         const nuevoReporte = new Reporte({
-            userId: userId,  // Usa el correo del usuario 
-            mesReportado: parseInt(mes),
-            anioReportado: parseInt(anio),
+            userId: userId,
+            mesReportado: mesReportado,
+            anioReportado: anioReportado,
             fechaCreacion: new Date(),
             tituloReporte: reporteData.tituloReporte,
             nombreUsuario: reporteData.nombreUsuario,
@@ -152,15 +150,50 @@ export const getReporte = async (req, res) => {
             resumenEjecutivo: reporteData.resumenEjecutivo,
             datosMedidasSemanales: reporteData.datosMedidasSemanales,
             analisisProgresoMensual: reporteData.analisisProgresoMensual,
-            recomendacionesGenerales: reporteData.recomendacionesGenerales,
-            informacionAdicional: reporteData.informacionAdicional,
         });
         await nuevoReporte.save();
 
-        res.status(200).json({ message: 'OK', data: reporteData });
+        res.status(201).json({ message: 'OK', data: reporteData });
 
-    } catch (err) {
+    } catch (error) {
+        console.error('Error al crear la información del reporte:', error);
+        res.status(500).json({ message: 'Error', error: error.message });
+    }
+};
+
+export const getReporte = async (req, res) => {
+    try {
+        const userId = req.user.correo;
+        let mes, anio;
+        const anioActual = new Date().getFullYear();
+        const mesActual = new Date().getMonth() + 1;
+
+        // Determinar el mes y el año a buscar
+        if (req.query.mes && req.query.anio) {
+            mes = parseInt(req.query.mes);
+            anio = parseInt(req.query.anio);
+        } else {
+            // Si no se proporcionan mes y año, buscar el reporte más reciente
+            const ultimoReporte = await Reporte.findOne({ userId }).sort({ fechaCreacion: -1 });
+            if (ultimoReporte) {
+                anio = ultimoReporte.anioReportado;
+                mes = ultimoReporte.mesReportado;
+            } else {
+                // Si no hay reportes, devolver un mensaje indicando que no hay reportes aún
+                return res.status(404).json({ message: 'OK', data: null, messageInfo: 'No se encontraron reportes para este usuario.' });
+            }
+        }
+
+        const reporteExistente = await Reporte.findOne({ userId, mesReportado: mes, anioReportado: anio });
+
+        if (reporteExistente) {
+            return res.status(200).json({ message: 'OK', data: reporteExistente });
+        } else {
+            return res.status(404).json({ message: 'OK', data: null, messageInfo: `No se encontró un reporte para el mes ${mes} del año ${anio}.` });
+        }
+
+    } catch (error) {
         console.error('Error al obtener la información del reporte:', error);
         res.status(500).json({ message: 'Error', error: error.message });
     }
-}
+};

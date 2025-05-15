@@ -1,5 +1,6 @@
 // utils/reportUtils.ts
 export const generateReportHTML = (data: any) => {
+    console.log("html", data.progresoGeneral)
     const formatearFecha = (fecha: string) => {
         const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(fecha).toLocaleDateString('es-ES', options);

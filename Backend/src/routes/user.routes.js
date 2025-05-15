@@ -4,7 +4,6 @@ import {
     loginUser,
     getUserProfile,
     getIMC,
-    postRegisterUser,
     updateUserProfile
 } from '../controller/user.controller.js';
 import {
@@ -17,7 +16,6 @@ import { authMiddleware } from '../middleware/auth.middleware.js';
 const router = Router();
 
 router.post('/register', registerUser); 
-router.post('/postRegister', postRegisterUser); 
 router.post('/login', loginUser);
 
 router.put('/update', authMiddleware, updateUserProfile);

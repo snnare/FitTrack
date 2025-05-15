@@ -3,30 +3,6 @@ import { checkIfEmailExists, hashPassword, comparePassword, generateToken } from
 import moment from 'moment';
 
 
-
-// Registro
-export const registerUser = async (req, res) => {
-  try {
-    const { correo, password } = req.body;
-    const emailExists = await checkIfEmailExists(correo);
-    if (emailExists) {
-      return res.status(400).json({ message: 'El correo ya está registrado' });
-    }
-
-    const hashedPassword = await hashPassword(password);
-    console.log(hashedPassword);
-    const newUser = new User({
-      correo,
-      password: hashedPassword,
-    });
-    await newUser.save();
-    const token = generateToken(newUser);
-    res.status(201).json({ message: 'Usuario Registrado', user: newUser, token });
-  } catch (error) {
-    res.status(500).json({ message: 'Error al registrar usuario', error: error.message });
-  }
-}
-
 export const loginUser = async (req, res) => {
   try {
     const { correo, password } = req.body;

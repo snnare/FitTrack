@@ -34,11 +34,14 @@ const GenerarReporteScreen = () => {
 
     const getAndGenerateReport = async () => {
         setIsGenerating(true);
+        const reporteData2 = await getReporte(selectedMes, selectedAnio);
+        console.log(reporteData2)
         try {
             if (selectedMes === null || selectedAnio === null) {
                 throw new Error("Mes y Año deben ser seleccionados.");
             }
             const reporteData = await getReporte(selectedMes, selectedAnio);
+            console.log("Respuesta del backend:", reporteData);
             const htmlContent = generateReportHTML(reporteData);
             await generarYCompartirPDF(htmlContent);
         } catch (error: any) {
