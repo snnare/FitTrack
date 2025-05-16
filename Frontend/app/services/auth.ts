@@ -15,7 +15,7 @@ export const loginUser = async (userData: any) => {
 
 export const postRegister = async(userData: any) => {
   try{
-    const response = await api.post("/auth/postRegister", userData);
+    const response = await api.post("/auth/register", userData);
     return response.data;
   } catch (error) {
     throw new Error("Error registering user with token");

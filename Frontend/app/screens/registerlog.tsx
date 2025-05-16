@@ -1,17 +1,25 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Alert, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert, ScrollView, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import { LogSchema } from '../validations/logSchema';
 import { crearLog } from '../services/log';
 import { updateStreak } from '../services/streak';
 import { useRouter } from 'expo-router';
 
+const LBS_TO_KG = 0.453592;
+
 export default function RegisterMeasuresScreen() {
     const router = useRouter();
+    const [unit, setUnit] = useState('kg');
 
     const handleSubmitLog = async (values: any, { resetForm }: any) => {
         try {
-            const response = await crearLog(values);
+            let pesoEnKg = parseFloat(values.peso);
+            if (unit === 'lb') {
+                pesoEnKg = pesoEnKg * LBS_TO_KG;
+            }
+            const logData = { ...values, peso: pesoEnKg.toString() }; // Guardamos en kg
+            const response = await crearLog(logData);
             await updateStreak();
             Alert.alert("Registrado");
             resetForm();
@@ -21,7 +29,11 @@ export default function RegisterMeasuresScreen() {
     };
 
     const handleGoBack = () => {
-        router.push('/(tabs)/add')
+        router.push('/(tabs)/add');
+    };
+
+    const toggleUnit = () => {
+        setUnit(prevUnit => (prevUnit === 'kg' ? 'lb' : 'kg'));
     };
 
     return (
@@ -44,6 +56,20 @@ export default function RegisterMeasuresScreen() {
             >
                 {({ handleChange, handleBlur, handleSubmit, values, errors, touched, resetForm }) => (
                     <View>
+                        <TextInput
+                            style={styles.input}
+                            placeholder={`Peso (${unit})`}
+                            placeholderTextColor="#d1d5db"
+                            keyboardType="numeric"
+                            onChangeText={handleChange('peso')}
+                            onBlur={handleBlur('peso')}
+                            value={values.peso}
+                        />
+                        <TouchableOpacity style={styles.unitButton} onPress={toggleUnit}>
+                            <Text style={styles.unitButtonText}>{unit.toUpperCase()}</Text>
+                        </TouchableOpacity>
+                        {touched.peso && errors.peso && <Text style={styles.error}>{errors.peso}</Text>}
+
                         <TextInput
                             style={styles.input}
                             placeholder="Ejercicio"
@@ -77,17 +103,6 @@ export default function RegisterMeasuresScreen() {
                         {touched.repeticiones && errors.repeticiones && <Text style={styles.error}>{errors.repeticiones}</Text>}
 
                         <TextInput
-                            style={styles.input}
-                            placeholder="Peso (kg)"
-                            placeholderTextColor="#d1d5db"
-                            keyboardType="numeric"
-                            onChangeText={handleChange('peso')}
-                            onBlur={handleBlur('peso')}
-                            value={values.peso}
-                        />
-                        {touched.peso && errors.peso && <Text style={styles.error}>{errors.peso}</Text>}
-
-                        <TextInput
                             style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
                             placeholder="Notas (opcional)"
                             placeholderTextColor="#d1d5db"
@@ -106,7 +121,7 @@ export default function RegisterMeasuresScreen() {
                 )}
             </Formik>
         </ScrollView>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
@@ -151,15 +166,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         textDecorationLine: 'underline',
     },
-    bannerContainer: {
-        alignItems: 'center',
-        marginBottom: 10,
-    },
-    banner: {
-        width: 200,
-        height: 200,
-        resizeMode: 'contain',
-    },
     logo: {
         fontSize: 24,
         fontWeight: 'bold',
@@ -181,6 +187,20 @@ const styles = StyleSheet.create({
         backgroundColor: '#22c55e',
     },
     backButtonText: {
+        color: '#fff',
+        fontSize: 12,
+        fontWeight: 'bold',
+    },
+    unitButton: {
+        position: 'absolute',
+        right: 10,
+        top: 15, // Ajusta según la altura del input
+        backgroundColor: '#6b7280',
+        paddingVertical: 5,
+        paddingHorizontal: 8,
+        borderRadius: 5,
+    },
+    unitButtonText: {
         color: '#fff',
         fontSize: 12,
         fontWeight: 'bold',

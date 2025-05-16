@@ -1,10 +1,11 @@
 import mongoose, { Schema } from 'mongoose';
 
-const medidaSchema = new Schema({
+const metricaSchema = new Schema({
     userId: { 
         type: String,
         trim: true
     },
+    
     fecha: {
         type: Date,
         required: true,
@@ -67,6 +68,6 @@ const medidaSchema = new Schema({
     }
 });
 
-const Medida = mongoose.model('Medida', medidaSchema);
+const Metrica = mongoose.model('Metrica', metricaSchema);
 
-export default Medida;
+export default Metrica;

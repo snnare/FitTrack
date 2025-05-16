@@ -12,7 +12,7 @@ import trainerRoutes from './routes/trainer.routes.js';
 import logsRoutes from './routes/logs.routes.js';
 import streakRoutes from './routes/streak.routes.js';
 import rutinaRoutes from './routes/rutina.routes.js';
-import medidaRoutes from './routes/medidas.routes.js';
+import metricaRoutes from './routes/metrica.routes.js';
 import dataRotues from './routes/data.routes.js';
 import reportRoutes from './routes/reporte.routes.js';
 
@@ -37,7 +37,7 @@ app.use('/logs', logsRoutes);
 
 app.use('/streak', streakRoutes);
 app.use('/rutina', rutinaRoutes);
-app.use('/medidas',medidaRoutes);
+app.use('/metrica',metricaRoutes);
 app.use('/data', dataRotues);
 
 app.use('/reporte', reportRoutes);

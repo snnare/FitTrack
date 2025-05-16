@@ -1,7 +1,7 @@
 import Reporte from '../models/reporte.model.js';
 import User from '../models/user.model.js';
 import Log from '../models/logs.model.js';
-import Medida from '../models/medida.model.js';
+import Metrica from '../models/metrica.model.js';
 
 export const createReporte = async (req, res) => {
     try {

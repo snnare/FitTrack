@@ -1,222 +1,95 @@
 db.rutinas.insertMany([
-    {
-      nombre: "Rutina de Fuerza para Principiantes - Semana 1",
-      descripcion: "Rutina de cuerpo completo para principiantes enfocada en construir una base de fuerza.",
-      objetivo: "Ganar peso",
-      nivelExperiencia: "Principiante",
-      categoria: "Full Body",
-      ejercicios: [
-        {
-          nombre: "Sentadilla con Barra",
-          series: 3,
-          repeticiones: 8,
-          peso: 40,
-          notas: "Concéntrate en la forma correcta."
-        },
-        {
-          nombre: "Press de Banca con Barra",
-          series: 3,
-          repeticiones: 8,
-          peso: 30,
-          notas: "Mantén los codos ligeramente hacia adentro."
-        },
-        {
-          nombre: "Remo con Barra",
-          series: 3,
-          repeticiones: 8,
-          peso: 35,
-          notas: "Mantén la espalda recta."
-        },
-        {
-          nombre: "Press Militar con Barra",
-          series: 3,
-          repeticiones: 10,
-          peso: 20,
-          notas: "Movimiento controlado."
-        },
-        {
-          nombre: "Plancha",
-          series: 3,
-          repeticiones: 60,
-          peso: null,
-          notas: "Mantén el cuerpo recto."
-        }
-      ]
-    },
-    {
-      nombre: "Rutina de Definición - Intermedio - Pecho y Tríceps",
-      descripcion: "Rutina enfocada en definir el pecho y los tríceps.",
-      objetivo: "Definir",
-      nivelExperiencia: "Intermedio",
-      categoria: "Pecho",
-      ejercicios: [
-        {
-          nombre: "Press de Banca con Mancuernas",
-          series: 4,
-          repeticiones: 12,
-          peso: 20,
-          notas: "Rango de movimiento completo."
-        },
-        {
-          nombre: "Press Inclinado con Mancuernas",
-          series: 4,
-          repeticiones: 12,
-          peso: 18,
-          notas: "Enfócate en la parte superior del pecho."
-        },
-        {
-          nombre: "Aperturas con Mancuernas",
-          series: 3,
-          repeticiones: 15,
-          peso: 10,
-          notas: "Estiramiento profundo."
-        },
-        {
-          nombre: "Fondos en Paralelas",
-          series: 3,
-          repeticiones: 10,
-          peso: null,
-          notas: "Si es necesario, usa asistencia."
-        },
-        {
-          nombre: "Press Francés con Mancuerna",
-          series: 3,
-          repeticiones: 12,
-          peso: 12,
-          notas: "Controla el movimiento."
-        }
-      ]
-    },
-    {
-      nombre: "Rutina de Piernas Avanzada",
-      descripcion: "Rutina intensa para trabajar todos los músculos de las piernas.",
-      objetivo: "Ganar peso",
-      nivelExperiencia: "Avanzado",
-      categoria: "Piernas",
-      ejercicios: [
-        {
-          nombre: "Sentadilla con Barra Baja",
-          series: 4,
-          repeticiones: 6,
-          peso: 100,
-          notas: "Profundidad controlada."
-        },
-        {
-          nombre: "Peso Muerto Rumano",
-          series: 4,
-          repeticiones: 8,
-          peso: 80,
-          notas: "Enfócate en los isquiotibiales y glúteos."
-        },
-        {
-          nombre: "Zancadas con Mancuernas",
-          series: 3,
-          repeticiones: 10,
-          peso: 15,
-          notas: "Mantén el equilibrio."
-        },
-        {
-          nombre: "Press de Piernas",
-          series: 3,
-          repeticiones: 12,
-          peso: 120,
-          notas: "Variedad en la colocación de los pies."
-        },
-        {
-          nombre: "Elevación de Gemelos de Pie",
-          series: 4,
-          repeticiones: 15,
-          peso: 50,
-          notas: "Estiramiento completo."
-        }
-      ]
-    },
-    {
-      nombre: "Rutina de Mantenimiento - Intermedio - Espalda y Bíceps",
-      descripcion: "Rutina para mantener la fuerza y definición en la espalda y los bíceps.",
-      objetivo: "Mantener",
-      nivelExperiencia: "Intermedio",
-      categoria: "Espalda",
-      ejercicios: [
-        {
-          nombre: "Dominadas",
-          series: 3,
-          repeticiones: 8,
-          peso: null,
-          notas: "Agarre prono o supino."
-        },
-        {
-          nombre: "Remo con Mancuernas",
-          series: 3,
-          repeticiones: 10,
-          peso: 25,
-          notas: "Mantén la espalda recta."
-        },
-        {
-          nombre: "Jalón al Pecho con Polea Alta",
-          series: 3,
-          repeticiones: 12,
-          peso: 45,
-          notas: "Concéntrate en la contracción de la espalda."
-        },
-        {
-          nombre: "Curl de Bíceps con Barra",
-          series: 3,
-          repeticiones: 10,
-          peso: 30,
-          notas: "Movimiento controlado."
-        },
-        {
-          nombre: "Curl de Martillo con Mancuernas",
-          series: 3,
-          repeticiones: 12,
-          peso: 15,
-          notas: "Enfócate en el braquial."
-        }
-      ]
-    },
-    {
-      nombre: "Rutina Full Body - Principiante - Semana 2",
-      descripcion: "Segunda semana de rutina de cuerpo completo para principiantes, incrementando ligeramente la carga.",
-      objetivo: "Ganar peso",
-      nivelExperiencia: "Principiante",
-      categoria: "Full Body",
-      ejercicios: [
-        {
-          nombre: "Sentadilla con Barra",
-          series: 3,
-          repeticiones: 8,
-          peso: 45,
-          notas: "Buena forma."
-        },
-        {
-          nombre: "Press de Banca con Barra",
-          series: 3,
-          repeticiones: 8,
-          peso: 35,
-          notas: "Control en el descenso."
-        },
-        {
-          nombre: "Remo con Barra",
-          series: 3,
-          repeticiones: 8,
-          peso: 40,
-          notas: "Espalda recta."
-        },
-        {
-          nombre: "Press Militar con Mancuernas",
-          series: 3,
-          repeticiones: 10,
-          peso: 12,
-          notas: "Rango completo."
-        },
-        {
-          nombre: "Plancha",
-          series: 3,
-          repeticiones: 75,
-          peso: null,
-          notas: "Core activado."
-        }
-      ]
-    }
-  ]);
+  // Pecho - Ganar Peso - Principiante (10 rutinas)
+  { nombre: "Press de banca principiante - Ganar pecho 1", descripcion: "Rutina básica para principiantes.", objetivo: "Ganar peso", nivelExperiencia: "Principiante", categoria: "Pecho", ejercicios: [{ nombre: "Press de banca con barra", series: 3, repeticiones: 8 }, { nombre: "Press de banca con mancuernas", series: 3, repeticiones: 10 }] },
+  { nombre: "Press inclinado principiante - Ganar pecho 2", descripcion: "Enfoque en la parte superior del pecho.", objetivo: "Ganar peso", nivelExperiencia: "Principiante", categoria: "Pecho", ejercicios: [{ nombre: "Press inclinado con barra", series: 3, repeticiones: 8 }, { nombre: "Aperturas inclinadas con mancuernas", series: 3, repeticiones: 12 }] },
+  { nombre: "Fondos en paralelas asistidos - Ganar pecho 3", descripcion: "Para desarrollar la parte inferior del pecho.", objetivo: "Ganar peso", nivelExperiencia: "Principiante", categoria: "Pecho", ejercicios: [{ nombre: "Fondos en paralelas asistidos", series: 3, repeticiones: 8 }, { nombre: "Crossover en polea baja", series: 3, repeticiones: 12 }] },
+  { nombre: "Press declinado principiante - Ganar pecho 4", descripcion: "Trabajo en la parte baja del pecho.", objetivo: "Ganar peso", nivelExperiencia: "Principiante", categoria: "Pecho", ejercicios: [{ nombre: "Press declinado con barra", series: 3, repeticiones: 8 }, { nombre: "Pullover con mancuerna", series: 3, repeticiones: 10 }] },
+  { nombre: "Rutina de pecho básica 1", descripcion: "Combinación de ejercicios fundamentales.", objetivo: "Ganar peso", nivelExperiencia: "Principiante", categoria: "Pecho", ejercicios: [{ nombre: "Press de banca con barra", series: 3, repeticiones: 10 }, { nombre: "Press inclinado con mancuernas", series: 3, repeticiones: 10 }] },
+  { nombre: "Rutina de pecho básica 2", descripcion: "Otro enfoque para principiantes.", objetivo: "Ganar peso", nivelExperiencia: "Principiante", categoria: "Pecho", ejercicios: [{ nombre: "Press de banca con mancuernas", series: 3, repeticiones: 12 }, { nombre: "Aperturas planas con mancuernas", series: 3, repeticiones: 12 }] },
+  { nombre: "Fuerza en pecho principiante 1", descripcion: "Enfocada en ganar fuerza.", objetivo: "Ganar peso", nivelExperiencia: "Principiante", categoria: "Pecho", ejercicios: [{ nombre: "Press de banca con barra", series: 4, repeticiones: 6 }, { nombre: "Press inclinado con barra", series: 3, repeticiones: 8 }] },
+  { nombre: "Volumen en pecho principiante 1", descripcion: "Mayor número de repeticiones.", objetivo: "Ganar peso", nivelExperiencia: "Principiante", categoria: "Pecho", ejercicios: [{ nombre: "Press de banca con mancuernas", series: 3, repeticiones: 12 }, { nombre: "Aperturas inclinadas con mancuernas", series: 3, repeticiones: 15 }] },
+  { nombre: "Introducción al press de banca", descripcion: "Para quienes se inician en este ejercicio.", objetivo: "Ganar peso", nivelExperiencia: "Principiante", categoria: "Pecho", ejercicios: [{ nombre: "Press de banca con barra", series: 3, repeticiones: 10 }] },
+  { nombre: "Primeros pasos en pecho", descripcion: "Rutina suave para empezar.", objetivo: "Ganar peso", nivelExperiencia: "Principiante", categoria: "Pecho", ejercicios: [{ nombre: "Flexiones", series: 3, repeticiones: 10 }, { nombre: "Aperturas planas con mancuernas", series: 3, repeticiones: 12 }] },
+
+  // Espalda - Perder Peso - Intermedio (10 rutinas)
+  { nombre: "Remo con barra intermedio - Quemar grasa 1", descripcion: "Rutina para quemar calorías y trabajar la espalda.", objetivo: "Perder peso", nivelExperiencia: "Intermedio", categoria: "Espalda", ejercicios: [{ nombre: "Remo con barra", series: 3, repeticiones: 12 }, { nombre: "Dominadas (si es posible)", series: 3, repeticiones: "AMRAP" }] },
+  { nombre: "Jalón al pecho intermedio - Quemar grasa 2", descripcion: "Ejercicio vertical para la espalda.", objetivo: "Perder peso", nivelExperiencia: "Intermedio", categoria: "Espalda", ejercicios: [{ nombre: "Jalón al pecho con agarre ancho", series: 3, repeticiones: 12 }, { nombre: "Remo con mancuernas", series: 3, repeticiones: 12 }] },
+  { nombre: "Remo en polea baja intermedio - Quemar grasa 3", descripcion: "Buen ejercicio para la espalda baja y media.", objetivo: "Perder peso", nivelExperiencia: "Intermedio", categoria: "Espalda", ejercicios: [{ nombre: "Remo en polea baja", series: 3, repeticiones: 15 }, { nombre: "Face pulls", series: 3, repeticiones: 15 }] },
+  { nombre: "Peso muerto rumano intermedio - Quemar grasa 4", descripcion: "También involucra los isquiotibiales y glúteos.", objetivo: "Perder peso", nivelExperiencia: "Intermedio", categoria: "Espalda", ejercicios: [{ nombre: "Peso muerto rumano", series: 3, repeticiones: 12 }, { nombre: "Hiperextensiones", series: 3, repeticiones: 15 }] },
+  { nombre: "Rutina de espalda quema calorías 1", descripcion: "Alto volumen para quemar más.", objetivo: "Perder peso", nivelExperiencia: "Intermedio", categoria: "Espalda", ejercicios: [{ nombre: "Jalón al pecho agarre estrecho", series: 4, repeticiones: 15 }, { nombre: "Remo con barra", series: 3, repeticiones: 12 }] },
+  { nombre: "Espalda y cardio intermedio 1", descripcion: "Combinando fuerza y cardiovascular.", objetivo: "Perder peso", nivelExperiencia: "Intermedio", categoria: "Espalda", ejercicios: [{ nombre: "Remo con mancuernas", series: 3, repeticiones: 12 }, { nombre: "Elíptica", tiempo: 20, notas: "Minutos" }] },
+  { nombre: "Definición de espalda intermedio 1", descripcion: "Enfoque en la forma muscular.", objetivo: "Perder peso", nivelExperiencia: "Intermedio", categoria: "Espalda", ejercicios: [{ nombre: "Jalón al pecho con polea alta", series: 3, repeticiones: 15 }, { nombre: "Remo en polea con agarre prono", series: 3, repeticiones: 15 }] },
+  { nombre: "Circuito de espalda intermedio 1", descripcion: "Entrenamiento en circuito para quemar más.", objetivo: "Perder peso", nivelExperiencia: "Intermedio", categoria: "Espalda", ejercicios: [{ nombre: "Dominadas negativas", series: 3, repeticiones: 8 }, { nombre: "Remo con barra", series: 3, repeticiones: 10 }] },
+  { nombre: "Espalda funcional intermedio 1", descripcion: "Ejercicios que imitan movimientos diarios.", objetivo: "Perder peso", nivelExperiencia: "Intermedio", categoria: "Espalda", ejercicios: [{ nombre: "Buenos días", series: 3, repeticiones: 12 }, { nombre: "Superman", series: 3, repeticiones: 15 }] },
+  { nombre: "Resistencia en espalda intermedio 1", descripcion: "Mayor número de series y repeticiones.", objetivo: "Perder peso", nivelExperiencia: "Intermedio", categoria: "Espalda", ejercicios: [{ nombre: "Jalón al pecho con agarre inverso", series: 4, repeticiones: 12 }, { nombre: "Remo con mancuernas", series: 4, repeticiones: 12 }] },
+
+  // Piernas - Definir - Avanzado (10 rutinas)
+  { nombre: "Sentadilla avanzada - Definición 1", descripcion: "Rutina intensa para definir piernas.", objetivo: "Definir", nivelExperiencia: "Avanzado", categoria: "Piernas", ejercicios: [{ nombre: "Sentadilla con barra", series: 4, repeticiones: 8 }, { nombre: "Zancadas con mancuernas", series: 3, repeticiones: 10 }] },
+  { nombre: "Peso muerto avanzado - Definición 2", descripcion: "Ejercicio fundamental para la cadena posterior.", objetivo: "Definir", nivelExperiencia: "Avanzado", categoria: "Piernas", ejercicios: [{ nombre: "Peso muerto", series: 3, repeticiones: 6 }, { nombre: "Buenos días", series: 3, repeticiones: 12 }] },
+  { nombre: "Prensa de piernas avanzada - Definición 3", descripcion: "Para trabajar todos los músculos de las piernas.", objetivo: "Definir", nivelExperiencia: "Avanzado", categoria: "Piernas", ejercicios: [{ nombre: "Prensa de piernas", series: 4, repeticiones: 10 }, { nombre: "Sentadilla búlgara", series: 3, repeticiones: 10 }] },
+  { nombre: "Extensión de cuádriceps avanzada - Definición 4", descripcion: "Aislamiento para los cuádriceps.", objetivo: "Definir", nivelExperiencia: "Avanzado", categoria: "Piernas", ejercicios: [{ nombre: "Extensión de cuádriceps", series: 3, repeticiones: 15 }, { nombre: "Curl femoral", series: 3, repeticiones: 15 }] },
+  { nombre: "Rutina de definición cuádriceps avanzado 1", descripcion: "Enfoque en los cuádriceps.", objetivo: "Definir", nivelExperiencia: "Avanzado", categoria: "Piernas", ejercicios: [{ nombre: "Sentadilla frontal", series: 4, repeticiones: 8 }, { nombre: "Zancadas inversas", series: 3, repeticiones: 10 }] },
+  { nombre: "Rutina de definición isquiotibiales y glúteo avanzado 1", descripcion: "Trabajo en la parte posterior de la pierna.", objetivo: "Definir", nivelExperiencia: "Avanzado", categoria: "Piernas", ejercicios: [{ nombre: "Peso muerto rumano", series: 4, repeticiones: 10 }, { nombre: "Hip Thrust", series: 3, repeticiones: 12 }] },
+  { nombre: "Circuito de piernas avanzado 1", descripcion: "Combinación de ejercicios sin descanso.", objetivo: "Definir", nivelExperiencia: "Avanzado", categoria: "Piernas", ejercicios: [{ nombre: "Salto de caja", series: 3, repeticiones: 10 }, { nombre: "Sentadilla con salto", series: 3, repeticiones: 10 }] },
+  { nombre: "Piernas pliométricas avanzado 1", descripcion: "Enfoque en la potencia y explosividad.", objetivo: "Definir", nivelExperiencia: "Avanzado", categoria: "Piernas", ejercicios: [{ nombre: "Salto con sentadilla", series: 3, repeticiones: 8 }, { nombre: "Zancada con salto", series: 3, repeticiones: 8 }] },
+  { nombre: "Aislamiento de gemelos avanzado 1", descripcion: "Trabajo específico para los gemelos.", objetivo: "Definir", nivelExperiencia: "Avanzado", categoria: "Piernas", ejercicios: [{ nombre: "Elevación de talones de pie", series: 4, repeticiones: 15 }, { nombre: "Elevación de talones sentado", series: 4, repeticiones: 15 }] },
+  { nombre: "Resistencia en piernas avanzado 1", descripcion: "Alto volumen para definición.", objetivo: "Definir", nivelExperiencia: "Avanzado", categoria: "Piernas", ejercicios: [{ nombre: "Sentadilla con pausa", series: 3, repeticiones: 12 }, { nombre: "Prensa a una pierna", series: 3, repeticiones: 12 }] },
+
+  // Glúteos - Mantener - Principiante (10 rutinas)
+  { nombre: "Puente de glúteo principiante - Mantener 1", descripcion: "Ejercicio básico para activar los glúteos.", objetivo: "Mantener", nivelExperiencia: "Principiante", categoria: "Glúteos", ejercicios: [{ nombre: "Puente de glúteo", series: 3, repeticiones: 15 }, { nombre: "Patada de burro", series: 3, repeticiones: 15 }] },
+  { nombre: "Sentadilla con banda principiante - Mantener 2", descripcion: "Añade resistencia para un mayor trabajo.", objetivo: "Mantener", nivelExperiencia: "Principiante", categoria: "Glúteos", ejercicios: [{ nombre: "Sentadilla con banda de resistencia", series: 3, repeticiones: 12 }, { nombre: "Abducción de cadera con banda", series: 3, repeticiones: 15 }] },
+  { nombre: "Zancada lateral principiante - Mantener 3", descripcion: "Trabaja los glúteos medios.", objetivo: "Mantener", nivelExperiencia: "Principiante", categoria: "Glúteos", ejercicios: [{ nombre: "Zancada lateral", series: 3, repeticiones: 10 }, { nombre: "Elevación de pierna lateral acostado", series: 3, repeticiones: 15 }] },
+  { nombre: "Peso muerto rumano con poco peso principiante - Mantener 4", descripcion: "Para fortalecer la cadena posterior.", objetivo: "Mantener", nivelExperiencia: "Principiante", categoria: "Glúteos", ejercicios: [{ nombre: "Peso muerto rumano con poco peso", series: 3, repeticiones: 12 }, { nombre: "Buenos días con poco peso", series: 3, repeticiones: 12 }] },
+  { nombre: "Rutina suave de glúteo 1", descripcion: "Para mantener la activación.", objetivo: "Mantener", nivelExperiencia: "Principiante", categoria: "Glúteos", ejercicios: [{ nombre: "Puente de glúteo", series: 3, repeticiones: 12 }, { nombre: "Patada de burro", series: 3, repeticiones: 12 }] },
+  { nombre: "Ejercicios isométricos para glúteo 1", descripcion: "Mantener la contracción para fortalecer.", objetivo: "Mantener", nivelExperiencia: "Principiante", categoria: "Glúteos", ejercicios: [{ nombre: "Puente de glúteo mantenido", series: 3, repeticiones: "30 segundos" }, { nombre: "Sentadilla isométrica contra la pared", series: 3, repeticiones: "30 segundos" }] },
+  { nombre: "Movilidad de cadera y glúteo 1", descripcion: "Enfoque en el movimiento y la activación.", objetivo: "Mantener", nivelExperiencia: "Principiante", categoria: "Glúteos", ejercicios: [{ nombre: "Círculos de cadera", series: 3, repeticiones: 10 }, { nombre: "Balanceo de piernas", series: 3, repeticiones: 10 }] },
+  { nombre: "Activación con banda elástica 1", descripcion: "Usando bandas para mantener la activación.", objetivo: "Mantener", nivelExperiencia: "Principiante", categoria: "Glúteos", ejercicios: [{ nombre: "Caminata lateral con banda", series: 3, repeticiones: 10 }, { nombre: "Abducción de cadera con banda", series: 3, repeticiones: 12 }] },
+  { nombre: "Ejercicios unilaterales suaves 1", descripcion: "Trabajando cada lado por separado.", objetivo: "Mantener", nivelExperiencia: "Principiante", categoria: "Glúteos", ejercicios: [{ nombre: "Zancada estática", series: 3, repeticiones: 8 }, { nombre: "Elevación de pierna en cuadrupedia", series: 3, repeticiones: 10 }] },
+  { nombre: "Rutina de bajo impacto para glúteo 1", descripcion: "Suave para las articulaciones.", objetivo: "Mantener", nivelExperiencia: "Principiante", categoria: "Glúteos", ejercicios: [{ nombre: "Elevación de cadera a una pierna", series: 3, repeticiones: 8 }, { nombre: "Bird dog", series: 3, repeticiones: 10 }] },
+
+  // Brazos - Ganar Peso - Intermedio (10 rutinas)
+  { nombre: "Curl de bíceps con barra intermedio - Ganar brazo 1", descripcion: "Ejercicio fundamental para el bíceps.", objetivo: "Ganar peso", nivelExperiencia: "Intermedio", categoria: "Brazos", ejercicios: [{ nombre: "Curl de bíceps con barra", series: 3, repeticiones: 8 }, { nombre: "Curl con mancuernas alterno", series: 3, repeticiones: 10 }] },
+  { nombre: "Press francés intermedio - Ganar brazo 2", descripcion: "Ejercicio clave para el tríceps.", objetivo: "Ganar peso", nivelExperiencia: "Intermedio", categoria: "Brazos", ejercicios: [{ nombre: "Press francés con barra Z", series: 3, repeticiones: 8 }, { nombre: "Extensión de tríceps con mancuerna sobre la cabeza", series: 3, repeticiones: 10 }] },
+  { nombre: "Curl martillo intermedio - Ganar brazo 3", descripcion: "Trabaja la parte externa del bíceps y el braquial.", objetivo: "Ganar peso", nivelExperiencia: "Intermedio", categoria: "Brazos", ejercicios: [{ nombre: "Curl martillo", series: 3, repeticiones: 10 }, { nombre: "Curl concentrado", series: 3, repeticiones: 12 }] },
+  { nombre: "Fondos en paralelas intermedio - Ganar brazo 4", descripcion: "Excelente ejercicio compuesto para el tríceps.", objetivo: "Ganar peso", nivelExperiencia: "Intermedio", categoria: "Brazos", ejercicios: [{ nombre: "Fondos en paralelas", series: 3, repeticiones: "AMRAP" }, { nombre: "Patada de tríceps con mancuernas", series: 3, repeticiones: 12 }] },
+  { nombre: "Rutina de bíceps enfocada en masa 1", descripcion: "Mayor volumen para el crecimiento.", objetivo: "Ganar peso", nivelExperiencia: "Intermedio", categoria: "Brazos", ejercicios: [{ nombre: "Curl de bíceps con barra", series: 4, repeticiones: 8 }, { nombre: "Curl con mancuernas en banco inclinado", series: 3, repeticiones: 10 }] },
+  { nombre: "Rutina de tríceps enfocada en masa 1", descripcion: "Ejercicios clave para el tamaño del tríceps.", objetivo: "Ganar peso", nivelExperiencia: "Intermedio", categoria: "Brazos", ejercicios: [{ nombre: "Press de banca agarre cerrado", series: 3, repeticiones: 8 }, { nombre: "Press francés con mancuernas", series: 3, repeticiones: 10 }] },
+  { nombre: "Combinación bíceps y tríceps 1", descripcion: "Alternando para un entrenamiento completo.", objetivo: "Ganar peso", nivelExperiencia: "Intermedio", categoria: "Brazos", ejercicios: [{ nombre: "Curl de bíceps con barra", series: 3, repeticiones: 8 }, { nombre: "Press francés con barra Z", series: 3, repeticiones: 8 }, { nombre: "Curl martillo", series: 3, repeticiones: 10 }] },
+  { nombre: "Entrenamiento de brazos con poleas 1", descripcion: "Utilizando la resistencia de las poleas.", objetivo: "Ganar peso", nivelExperiencia: "Intermedio", categoria: "Brazos", ejercicios: [{ nombre: "Curl en polea baja", series: 3, repeticiones: 10 }, { nombre: "Extensión de tríceps en polea alta", series: 3, repeticiones: 10 }] },
+  { nombre: "Brazos con énfasis en el pico del bíceps 1", descripcion: "Ejercicios para dar forma al bíceps.", objetivo: "Ganar peso", nivelExperiencia: "Intermedio", categoria: "Brazos", ejercicios: [{ nombre: "Curl concentrado", series: 3, repeticiones: 12 }, { nombre: "Curl de predicador", series: 3, repeticiones: 10 }] },
+  { nombre: "Brazos con énfasis en la cabeza larga del tríceps 1", descripcion: "Ejercicios para la parte externa del tríceps.", objetivo: "Ganar peso", nivelExperiencia: "Intermedio", categoria: "Brazos", ejercicios: [{ nombre: "Extensión de tríceps con mancuerna sobre la cabeza", series: 3, repeticiones: 10 }, { nombre: "Jalón con cuerda en polea alta", series: 3, repeticiones: 12 }] },
+
+  // Hombro - Perder Peso - Avanzado (10 rutinas)
+  { nombre: "Press militar avanzado - Quemar grasa hombro 1", descripcion: "Ejercicio compuesto para hombros.", objetivo: "Perder peso", nivelExperiencia: "Avanzado", categoria: "Hombro", ejercicios: [{ nombre: "Press militar con barra", series: 3, repeticiones: 10 }, { nombre: "Elevaciones laterales con mancuernas", series: 3, repeticiones: 12 }] },
+  { nombre: "Elevaciones frontales avanzadas - Quemar grasa hombro 2", descripcion: "Enfoque en la parte anterior del hombro.", objetivo: "Perder peso", nivelExperiencia: "Avanzado", categoria: "Hombro", ejercicios: [{ nombre: "Elevaciones frontales con mancuernas", series: 3, repeticiones: 12 }, { nombre: "Press Arnold", series: 3, repeticiones: 10 }] },
+  { nombre: "Elevaciones laterales en polea avanzada - Quemar grasa hombro 3", descripcion: "Resistencia constante para el deltoides medio.", objetivo: "Perder peso", nivelExperiencia: "Avanzado", categoria: "Hombro", ejercicios: [{ nombre: "Elevaciones laterales en polea", series: 3, repeticiones: 15 }, { nombre: "Face pulls", series: 3, repeticiones: 15 }] },
+  { nombre: "Pájaros avanzado - Quemar grasa hombro 4", descripcion: "Para trabajar el deltoides posterior.", objetivo: "Perder peso", nivelExperiencia: "Avanzado", categoria: "Hombro", ejercicios: [{ nombre: "Pájaros con mancuernas", series: 3, repeticiones: 15 }, { nombre: "Remo al mentón", series: 3, repeticiones: 12 }] },
+  { nombre: "Rutina de hombro alto volumen 1", descripcion: "Mayor número de series y repeticiones.", objetivo: "Perder peso", nivelExperiencia: "Avanzado", categoria: "Hombro", ejercicios: [{ nombre: "Press militar con barra", series: 4, repeticiones: 12 }, { nombre: "Elevaciones laterales con mancuernas", series: 4, repeticiones: 15 }, { nombre: "Pájaros con mancuernas", series: 4, repeticiones: 15 }] },
+  { nombre: "Circuito de hombro avanzado 1", descripcion: "Entrenamiento sin descanso para quemar calorías.", objetivo: "Perder peso", nivelExperiencia: "Avanzado", categoria: "Hombro", ejercicios: [{ nombre: "Press Arnold", series: 3, repeticiones: 10 }, { nombre: "Elevaciones frontales alternas", series: 3, repeticiones: 12 }, { nombre: "Elevaciones laterales", series: 3, repeticiones: 12 }] },
+  { nombre: "Hombro y cardio avanzado 1", descripcion: "Combinando entrenamiento de fuerza y cardiovascular.", objetivo: "Perder peso", nivelExperiencia: "Avanzado", categoria: "Hombro", ejercicios: [{ nombre: "Press de hombros con mancuernas", series: 3, repeticiones: 10 }, { nombre: "Bicicleta estática", tiempo: 25, notas: "Minutos" }] },
+  { nombre: "Definición de hombros avanzado 1", descripcion: "Enfoque en la separación muscular.", objetivo: "Perder peso", nivelExperiencia: "Avanzado", categoria: "Hombro", ejercicios: [{ nombre: "Elevaciones laterales en polea", series: 3, repeticiones: 15 }, { nombre: "Elevaciones frontales en polea", series: 3, repeticiones: 15 }, { nombre: "Pájaros en polea", series: 3, repeticiones: 15 }] },
+  { nombre: "Hombro funcional avanzado 1", descripcion: "Ejercicios que mejoran la movilidad y estabilidad.", objetivo: "Perder peso", nivelExperiencia: "Avanzado", categoria: "Hombro", ejercicios: [{ nombre: "Landmine press", series: 3, repeticiones: 12 }, { nombre: "Rotaciones externas con banda", series: 3, repeticiones: 15 }] },
+  { nombre: "Resistencia en hombros avanzado 1", descripcion: "Series largas para quemar más calorías.", objetivo: "Perder peso", nivelExperiencia: "Avanzado", categoria: "Hombro", ejercicios: [{ nombre: "Press de hombros con mancuernas", series: 4, repeticiones: 12 }, { nombre: "Elevaciones laterales", series: 4, repeticiones: 15 }, { nombre: "Pájaros", series: 4, repeticiones: 15 }] },
+
+  // Abs - Definir - Principiante (10 rutinas)
+  { nombre: "Crunches principiante - Definir abs 1", descripcion: "Ejercicio básico para el abdomen superior.", objetivo: "Definir", nivelExperiencia: "Principiante", categoria: "Abs", ejercicios: [{ nombre: "Crunches", series: 3, repeticiones: 15 }, { nombre: "Elevación de piernas acostado", series: 3, repeticiones: 15 }] },
+  { nombre: "Plancha principiante - Definir abs 2", descripcion: "Ejercicio isométrico para todo el core.", objetivo: "Definir", nivelExperiencia: "Principiante", categoria: "Abs", ejercicios: [{ nombre: "Plancha", series: 3, repeticiones: "30 segundos" }, { nombre: "Plancha lateral", series: 3, repeticiones: "30 segundos por lado" }] },
+  { nombre: "Giros rusos principiante - Definir abs 3", descripcion: "Para trabajar los oblicuos.", objetivo: "Definir", nivelExperiencia: "Principiante", categoria: "Abs", ejercicios: [{ nombre: "Giros rusos sin peso", series: 3, repeticiones: 15 }, { nombre: "Toque de talones", series: 3, repeticiones: 15 }] },
+  { nombre: "Elevación de cadera principiante - Definir abs 4", descripcion: "Para el abdomen inferior.", objetivo: "Definir", nivelExperiencia: "Principiante", categoria: "Abs", ejercicios: [{ nombre: "Elevación de cadera acostado", series: 3, repeticiones: 15 }, { nombre: "Bicicleta en el aire", series: 3, repeticiones: 15 }] },
+  { nombre: "Rutina de abdomen básico 1", descripcion: "Ejercicios fundamentales para principiantes.", objetivo: "Definir", nivelExperiencia: "Principiante", categoria: "Abs", ejercicios: [{ nombre: "Crunches", series: 3, repeticiones: 20 }, { nombre: "Elevación de piernas", series: 3, repeticiones: 15 }] },
+  { nombre: "Rutina de oblicuos básico 1", descripcion: "Enfoque en los lados del abdomen.", objetivo: "Definir", nivelExperiencia: "Principiante", categoria: "Abs", ejercicios: [{ nombre: "Crunches laterales", series: 3, repeticiones: 15 }, { nombre: "Plancha lateral", series: 3, repeticiones: "30 segundos por lado" }] },
+  { nombre: "Rutina de core principiante 1", descripcion: "Ejercicios para fortalecer el centro.", objetivo: "Definir", nivelExperiencia: "Principiante", categoria: "Abs", ejercicios: [{ nombre: "Plancha", series: 3, repeticiones: "45 segundos" }, { nombre: "Bird dog", series: 3, repeticiones: 10 }] },
+  { nombre: "Rutina de bajo impacto para abs 1", descripcion: "Suave para la espalda baja.", objetivo: "Definir", nivelExperiencia: "Principiante", categoria: "Abs", ejercicios: [{ nombre: "Inclinación pélvica acostado", series: 3, repeticiones: 15 }, { nombre: "Dead bug", series: 3, repeticiones: 10 }] },
+  { nombre: "Rutina de resistencia para abs 1", descripcion: "Manteniendo la contracción.", objetivo: "Definir", nivelExperiencia: "Principiante", categoria: "Abs", ejercicios: [{ nombre: "Crunches isométricos", series: 3, repeticiones: "20 segundos" }, { nombre: "Plancha mantenida", series: 3, repeticiones: "45 segundos" }] },
+  { nombre: "Rutina de movilidad para core 1", descripcion: "Mejorando el rango de movimiento.", objetivo: "Definir", nivelExperiencia: "Principiante", categoria: "Abs", ejercicios: [{ nombre: "Rotaciones de tronco acostado", series: 3, repeticiones: 10 }, { nombre: "Cat-cow stretch", series: 3, repeticiones: 10 }] },
+
+  // Full Body - Mantener - Intermedio (10 rutinas)
+  { nombre: "Rutina full body intermedio - Mantener 1", descripcion: "Entrenamiento completo para mantener la forma.", objetivo: "Mantener", nivelExperiencia: "Intermedio", categoria: "Full Body", ejercicios: [{ nombre: "Sentadilla", series: 3, repeticiones: 10 }, { nombre: "Press de banca", series: 3, repeticiones: 8 }, { nombre: "Remo con barra", series: 3, repeticiones: 10 }] },
+  { nombre: "Circuito full body intermedio - Mantener 2", descripcion: "Combinación de ejercicios sin descanso.", objetivo: "Mantener", nivelExperiencia: "Intermedio", categoria: "Full Body", ejercicios: [{ nombre: "Zancadas", series: 3, repeticiones: 10 }, { nombre: "Flexiones", series: 3, repeticiones: "AMRAP" }, { nombre: "Remo con mancuernas", series: 3, repeticiones: 10 }] },
+  { nombre: "Full body con peso corporal intermedio - Mantener 3", descripcion: "Usando solo el peso del cuerpo.", objetivo: "Mantener", nivelExperiencia: "Intermedio", categoria: "Full Body", ejercicios: [{ nombre: "Dominadas (si es posible)", series: 3, repeticiones: "AMRAP" }, { nombre: "Flexiones", series: 3, repeticiones: "AMRAP" }, { nombre: "Sentadillas", series: 3, repeticiones: 15 }] },
+  { nombre: "Rutina funcional full body intermedio - Mantener 4", descripcion: "Ejercicios que imitan movimientos diarios.", objetivo: "Mantener", nivelExperiencia: "Intermedio", categoria: "Full Body", ejercicios: [{ nombre: "Peso muerto rumano", series: 3, repeticiones: 10 }, { nombre: "Press de hombros con mancuernas", series: 3, repeticiones: 10 }, { nombre: "Remo en polea baja", series: 3, repeticiones: 12 }] },
+  { nombre: "Full body express 1", descripcion: "Rutina rápida para todo el cuerpo.", objetivo: "Mantener", nivelExperiencia: "Intermedio", categoria: "Full Body", ejercicios: [{ nombre: "Burpees", series: 3, repeticiones: 10 }, { nombre: "Sentadilla con salto", series: 3, repeticiones: 10 }, { nombre: "Flexiones", series: 3, repeticiones: "AMRAP" }] },
+  { nombre: "Full body con énfasis en core 1", descripcion: "Incorporando ejercicios para el abdomen.", objetivo: "Mantener", nivelExperiencia: "Intermedio", categoria: "Full Body", ejercicios: [{ nombre: "Sentadilla", series: 3, repeticiones: 12 }, { nombre: "Remo con mancuernas", series: 3, repeticiones: 12 }, { nombre: "Plancha", series: 3, repeticiones: "60 segundos" }] },
+  { nombre: "Full body con bandas de resistencia 1", descripcion: "Añadiendo resistencia para mayor intensidad.", objetivo: "Mantener", nivelExperiencia: "Intermedio", categoria: "Full Body", ejercicios: [{ nombre: "Sentadilla con banda", series: 3, repeticiones: 15 }, { nombre: "Remo con banda", series: 3, repeticiones: 12 }, { nombre: "Press de hombros con banda", series: 3, repeticiones: 12 }] },
+
+]);

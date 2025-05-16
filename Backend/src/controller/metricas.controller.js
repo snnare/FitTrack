@@ -1,7 +1,7 @@
-import Medida from "../models/medida.model.js";
+import Medida from "../models/metrica.model.js";
 
 
-export const crearMedida = async (req, res) => {
+export const registerMetrica = async (req, res) => {
     try {
         const {
             fecha,
@@ -54,7 +54,7 @@ export const crearMedida = async (req, res) => {
 };
 
 
-export const obtenerMedidas = async (req, res) => {
+export const getMetricaForUser = async (req, res) => {
     try {
         const userId = req.user.correo;
         const medidas = await Medida.find({ userId });

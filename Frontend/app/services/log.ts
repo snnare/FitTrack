@@ -13,8 +13,6 @@ export const crearLog = async (logData: any) => {
 };
 
 
-
-
 export const getAllLogs = async () => {
   try {
     const res = await api.get('/logs');

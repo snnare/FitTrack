@@ -7,6 +7,8 @@ import { Picker } from '@react-native-picker/picker';
 import { useAuth } from '../context/authContext';
 import { registerAndLoginSchema } from '../validations/registerAndLoginSchema';
 import { RegisterData } from '../types/register';
+
+
 import AuthInput from '../../components/auth/AuthInput';
 import AuthButton from '../../components/auth/AuthButton';
 import AuthLink from '../../components/auth/AuthLink';
@@ -42,8 +44,8 @@ export default function RegisterScreen() {
       const result = await onFullRegister(values);
       if (!result?.error) {
         Alert.alert(
-          'Registro Exitoso',
-          'Usuario registrado correctamente.',
+          'OK',
+          'Usuario registrado.',
           [{ text: 'OK', onPress: () => router.push('/(auth)/login') }], 
           { cancelable: false }
         );
@@ -208,7 +210,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20, 
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 16,
     textAlign: 'center',
     marginBottom: 20,
     color: '#d1d5db',

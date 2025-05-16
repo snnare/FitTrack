@@ -5,7 +5,7 @@ const rutinaSchema = new mongoose.Schema({
     descripcion: { type: String, required: true },
     objetivo: { type: String, enum: ["Ganar peso", "Perder peso", "Definir", "Mantener"], required: true },
     nivelExperiencia: { type: String, enum: ["Principiante", "Intermedio", "Avanzado"], required: true },
-    categoria: { type: String, required: true, enum: ["Pecho", "Espalda", "Piernas", "Glúteos", "Brazos", "Hombro", "Abs", "Full Body"] }, // Nuevo campo
+    categoria: { type: String, required: true, enum: ["Pecho", "Espalda", "Piernas", "Glúteos", "Brazos", "Hombro", "Abs", "Full Body"] }, 
     ejercicios: [{
         nombre: { type: String, required: true },
         series: { type: Number, required: true },
