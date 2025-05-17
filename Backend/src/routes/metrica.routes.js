@@ -6,6 +6,6 @@ const router = Router();
 
 
 router.post('/', authMiddleware, registerMetrica);
-router.get('/', authMiddleware, getMetricaForUser);
+router.get('/get', authMiddleware, getMetricaForUser);
 
 export default router;
