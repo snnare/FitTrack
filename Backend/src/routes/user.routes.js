@@ -15,9 +15,5 @@ router.put('/update', authMiddleware, updateUser);
 router.get('/profile', authMiddleware, getInfo); 
 router.get('/imc', authMiddleware, getIMC);
 router.delete('/delete', authMiddleware, deleteUser)
-router.get('/test', (req, res) => {
-    res.json({ message: 'Conexión exitosa desde el frontend' });
-  });
-
 
 export default router;

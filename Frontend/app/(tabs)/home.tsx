@@ -8,6 +8,8 @@ import LoadingIndicator from '../../components/feedback/LoadingIndicator';
 import ErrorScreen from '../../components/feedback/ErrorScreen';
 import { getAllLogs } from '../services/log';
 import { getStreak } from '../services/streak';
+import { Log } from '../types/logs';
+import { router } from 'expo-router';
 
 export default function HomeScreen() {
     const [logs, setLogs] = useState([]);
@@ -48,6 +50,7 @@ export default function HomeScreen() {
         }
     };
 
+
     useEffect(() => {
         fetchLogs();
     }, []);
@@ -61,6 +64,12 @@ export default function HomeScreen() {
         fetchStreak();
     };
 
+    const handleLogsPress = (log: Log) => {
+        router.push({
+            pathname: '/screens/LogDetailScreen',
+            params: { logId: log._id }
+        })
+    }
     if (loadingLogs || loadingStreak) {
         return <LoadingIndicator message="Cargando datos..." />;
     }
@@ -74,23 +83,18 @@ export default function HomeScreen() {
         );
     }
 
-    // Ya no necesitamos un ErrorScreen específico para la racha,
-    // ya que un 404 se manejará estableciendo la racha en 0.
-    // if (errorStreak) {
-    //     return (
-    //         <ErrorScreen
-    //             message={`Error al cargar la racha: ${errorStreak}`}
-    //             onRetry={handleReload}
-    //         />
-    //     );
-    // }
 
     return (
         <View style={styles.container}>
+            {/* MUestra la racha del usuario */}
             <UserStreak streak={streak} />
+
             <Text style={styles.subtitle}>Últimos Entrenamientos</Text>
             {logs.length > 0 ? (
-                <WorkoutLogList logs={logs} />
+                <WorkoutLogList
+                    logs={logs}
+                    onLogPress={handleLogsPress}
+                />
             ) : (
                 <Text style={styles.noDataText}>Sin registros de entrenamiento por el momento.</Text>
             )}

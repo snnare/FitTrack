@@ -68,6 +68,30 @@ export const getLogById = async (req, res) => {
     }
 };
 
+export const deleteLog = async (req, res) => {
+    try {
+        const logId = req.params.id; 
+        const log = await Log.deleteOne({_id: logId});
+        if (!log) {
+            return res.status(404).json({ message: 'Log no encontrado' });
+        }
+
+        res.status(200).json({
+            message: 'Log eliminado'
+        });
+    } catch (error) {
+        console.error('Error al eliminar log:', error);
+        res.status(500).json({
+            message: 'Error al obtener log',
+            error: error.message,
+        });
+    }
+};
+
+
+
+
+
 export const updateLog = async (req, res) => {
     try {
         const logId = req.params.id;

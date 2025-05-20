@@ -1,40 +1,24 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import { Log } from '../../app/types/logs'
 
-interface Log {
-  _id: string;
-  userId: string;
-  ejercicio: string;
-  series: number;
-  repeticiones: number;
-  peso: number;
-  notas: string | null;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-}
-
-interface Props {
+interface WorkoutLogListProps {
   logs: Log[];
+  // Callback para cuando se presiona un log, pasándole el log completo
+  onLogPress: (log: Log) => void;
 }
 
-const WorkoutLogList: React.FC<Props> = ({ logs }) => {
-  const router = useRouter();
 
-  const handleLogPress = (log: Log) => {
-    router.push({
-      pathname: '/logDetail',
-      params: { log: JSON.stringify(log) },
-    });
-  };
+const WorkoutLogList: React.FC<WorkoutLogListProps> = ({ logs, onLogPress }) => {
+ 
 
   return (
     <FlatList
       data={logs}
       keyExtractor={(item) => item._id.toString()}
       renderItem={({ item }) => (
-        <TouchableOpacity onPress={() => handleLogPress(item)} style={styles.logItem}>
+        <TouchableOpacity onPress={() => onLogPress(item)} style={styles.logItem}>
           <Text style={styles.logTitle}>{item.ejercicio}</Text>
           <Text style={styles.logDetail}>
             {item.series}x{item.repeticiones} - {item.peso} kg
