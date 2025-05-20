@@ -25,7 +25,7 @@ const AddLogAndMeasuresScreen = () => {
                 style={styles.button}
                 onPress={() => router.push('/screens/registermeasures')} // Navega a la pantalla de Registrar Medidas
             >
-                <Text style={styles.buttonText}>Registrar Medidas</Text>
+                <Text style={styles.buttonText}>Registrar Metricas</Text>
             </TouchableOpacity>
         </View>
     );

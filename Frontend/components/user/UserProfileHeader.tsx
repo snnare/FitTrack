@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { getProfileUser } from '../../app/services/auth';
+import { getProfileUser } from '../../app/services/users';
 import { useNavigation } from 'expo-router';
 
 const maleIcon = require('../../assets/man-profile-icon.png');

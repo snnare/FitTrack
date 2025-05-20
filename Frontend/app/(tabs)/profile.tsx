@@ -57,7 +57,7 @@ export default function profileScreen() {
                             <Text style={styles.reloadButtonText}>Editar Perfil</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={[styles.reloadButton, { backgroundColor: '#84cc16' }]} // Estilo de generar reporte
+                            style={[styles.reloadButton, { backgroundColor: '#22c55e' }]} // Estilo de generar reporte
                             onPress={handleGenerateReport}
                         >
                             <MaterialIcons name="print" size={20} color="#fff" />

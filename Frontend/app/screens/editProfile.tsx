@@ -5,9 +5,11 @@ import { Formik, FormikHelpers } from 'formik';
 import { Picker } from "@react-native-picker/picker";
 import AuthButton from "../../components/auth/AuthButton";
 import AuthInput from "../../components/auth/AuthInput";
+import BackButton from '../../components/utils/BackButton';
+
 import { UserProfileData } from "../types/userProfile";
 import { updateSchema } from "../validations/userSchema";
-import { getProfileUser, updateUser } from "../services/auth";
+import { getProfileUser, updateUser } from "../services/users";
 import { formatDate } from '../utils/dateUtils';
 
 export default function EditProfileScreen() {
@@ -62,7 +64,6 @@ export default function EditProfileScreen() {
     const handleUpdateProfile = async (values: UserProfileData, { setSubmitting }: FormikHelpers<UserProfileData>) => {
         setSubmitting(true);
         try {
-            // Crear un objeto con los valores a actualizar, excluyendo correo y password
             const updateData = {
                 nombre: values.nombre,
                 apellidos: values.apellidos,
@@ -72,7 +73,7 @@ export default function EditProfileScreen() {
                 estatura: values.estatura ? Number(values.estatura) : null,
                 objetivo: values.objetivo,
                 nivelExperiencia: values.nivelExperiencia,
-                profileComplete: true, 
+                profileComplete: true,
             };
             console.log(updateData);
 
@@ -80,7 +81,7 @@ export default function EditProfileScreen() {
 
             if (result && !result.error) {
                 Alert.alert('Perfil actualizado correctamente.');
-                router.push('/profile');
+                router.push('/(auth)/profile');
             } else {
                 Alert.alert(
                     'Error al actualizar el perfil',
@@ -106,9 +107,7 @@ export default function EditProfileScreen() {
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.formContainer}>
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={() => router.push('/(tabs)/profile')} style={styles.backButton}>
-                        <Text> Back</Text>
-                    </TouchableOpacity>
+                    <BackButton />
                     <Text style={styles.title}>Editar Perfil</Text>
                     <View style={{ width: 24 }} />
                 </View>
@@ -125,7 +124,6 @@ export default function EditProfileScreen() {
                                 placeholder="Tu nombre"
                                 value={values.nombre}
                                 onChangeText={handleChange('nombre')}
-                                onBlur={handleBlur('nombre')}
                                 error={touched.nombre && errors.nombre}
                             />
                             <AuthInput
@@ -133,7 +131,6 @@ export default function EditProfileScreen() {
                                 placeholder="Tus apellidos"
                                 value={values.apellidos}
                                 onChangeText={handleChange('apellidos')}
-                                onBlur={handleBlur('apellidos')}
                                 error={touched.apellidos && errors.apellidos}
                             />
                             <AuthInput
@@ -141,7 +138,6 @@ export default function EditProfileScreen() {
                                 placeholder="YYYY-MM-DD"
                                 value={values.fechaNacimiento}
                                 onChangeText={handleChange('fechaNacimiento')}
-                                onBlur={handleBlur('fechaNacimiento')}
                                 error={touched.fechaNacimiento && errors.fechaNacimiento}
                                 keyboardType="number-pad"
                             />

@@ -5,6 +5,8 @@ import { LogSchema } from '../validations/logSchema';
 import { crearLog } from '../services/log';
 import { updateStreak } from '../services/streak';
 import { useRouter } from 'expo-router';
+import BackButton from '../../components/utils/BackButton';
+
 
 const LBS_TO_KG = 0.453592;
 
@@ -28,9 +30,7 @@ export default function RegisterMeasuresScreen() {
         }
     };
 
-    const handleGoBack = () => {
-        router.push('/(tabs)/add');
-    };
+
 
     const toggleUnit = () => {
         setUnit(prevUnit => (prevUnit === 'kg' ? 'lb' : 'kg'));
@@ -38,9 +38,7 @@ export default function RegisterMeasuresScreen() {
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
-                <Text style={styles.backButtonText}>Atrás</Text>
-            </TouchableOpacity>
+            <BackButton to='/(tabs)/add'/>
             <Text style={styles.logo}> Registra tu entrenamiento</Text>
             <Text style={styles.subtitle}>Ingrese los detalles del ejercicio</Text>
             <Formik

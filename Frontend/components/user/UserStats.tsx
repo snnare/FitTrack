@@ -5,7 +5,7 @@ import { getStreak } from '../../app/services/streak';
 
 const UserStats: React.FC = () => {
     const [streak, setStreak] = useState<number>(0);
-    const [logCount, setLogCount] = useState<number>(0);
+    const [logCount, setLogCount] = useState<any>(0);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -13,6 +13,7 @@ const UserStats: React.FC = () => {
             try {
                 const streakData = await getStreak();
                 setStreak(streakData?.currentStreak || 0);
+
                 const logsData = await getCountLogs();
                 setLogCount(logsData?.count || 0);
                 setError(null);
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
     statsContainer: {
         width: '100%',
         alignItems: 'flex-start',
-        paddingVertical: 16, // Añadido padding vertical
+        paddingVertical: 16, 
     },
     statsText: {
         fontSize: 18,  // Aumentado tamaño de fuente

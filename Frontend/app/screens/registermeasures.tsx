@@ -1,19 +1,12 @@
 import { View, Text, TextInput, StyleSheet, Alert, ScrollView, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
-
 import { metricaSchema } from '../validations/metricaSchema';
 import { registerMetrica } from '../services/metrica';
-
-
 import { useRouter } from 'expo-router';
+import BackButton from '../../components/utils/BackButton';
 
 export default function registerMeasuresScreen () {
     const router = useRouter();
-
-
-    const handleGoBack = () => {
-        router.push('/(tabs)/add');
-    };
 
     const handleSubmitMetrica = async (values: any) => {
         try {
@@ -25,9 +18,7 @@ export default function registerMeasuresScreen () {
     }
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
-                <Text style={styles.backButtonText}>Atrás</Text>
-            </TouchableOpacity>
+            <BackButton to='/(tabs)/add'/>
             <Text style={styles.logo}>Metricas</Text>
             <Text style={styles.subtitle}>Ingrese sus medidas corporales</Text>
             <Formik
