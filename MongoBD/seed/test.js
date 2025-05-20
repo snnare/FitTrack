@@ -8,8 +8,7 @@ db.users.insert({
     peso: 75,
     estatura: 1.78,
     objetivo: "Definir",
-    nivelExperiencia: "Intermedio",
-    profileComplete: true
+    nivelExperiencia: "Intermedio"
   });
   
   // Inserción de registros de entrenamiento (logs) para el usuario 'angel@gmail.com' en la colección 'logs'
@@ -260,7 +259,7 @@ db.users.insert({
     ]);
   
   // Inserción de 8 medidas para el usuario 'angel@gmail.com' en la colección 'medidas' a lo largo de dos meses
-  db.medidas.insertMany([
+  db.metricas.insertMany([
     {
       userId: "angel@gmail.com",
       fecha: new Date("2025-03-10"), // Inicio del primer mes

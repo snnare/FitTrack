@@ -3,7 +3,8 @@ import mongoose from 'mongoose';
 const logSchema = new mongoose.Schema({
     userId: {
         type: String,
-        trim: true
+        trim: true,
+        lowercase: true
     },
     ejercicio: {
         type: String,

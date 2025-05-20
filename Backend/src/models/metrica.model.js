@@ -3,14 +3,9 @@ import mongoose, { Schema } from 'mongoose';
 const metricaSchema = new Schema({
     userId: { 
         type: String,
-        trim: true
-    },
-    
-    fecha: {
-        type: Date,
         required: true,
-        default: Date.now,
-        index: true
+        trim: true,
+        lowercase: true
     },
     peso: {
         type: Number,
@@ -66,6 +61,8 @@ const metricaSchema = new Schema({
         type: String,
         trim: true
     }
+},{ 
+    timestamps: true,
 });
 
 const Metrica = mongoose.model('Metrica', metricaSchema);

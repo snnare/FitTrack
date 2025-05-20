@@ -23,12 +23,9 @@ export const createLog = async (req, res) => {
         await nuevoLog.save(); 
 
         res.status(201).json({
-            message: 'Log creado exitosamente',
-            data: nuevoLog,
+            message: 'Log creado',
         });
     } catch (error) {
-        console.log("correo",req.user.correo);
-        console.log(req.body);
         res.status(500).json({
             message: 'Error al crear el log',
             error: error.message,
@@ -52,16 +49,14 @@ export const getAllLogs = async (req, res) => {
 
 export const getLogById = async (req, res) => {
     try {
-        const logId = req.params.id; // Obtiene el ID del log de los parámetros de la URL
-
+        const logId = req.params.id; 
         const log = await Log.findById(logId);
-
         if (!log) {
             return res.status(404).json({ message: 'Log no encontrado' });
         }
 
         res.status(200).json({
-            message: 'Log obtenido exitosamente',
+            message: 'Log x Id',
             data: log,
         });
     } catch (error) {
@@ -81,7 +76,7 @@ export const updateLog = async (req, res) => {
         const updatedLog = await Log.findByIdAndUpdate(
             logId,
             { ejercicio, series, repeticiones, peso, notas },
-            { new: true } // Devuelve el log actualizado en la respuesta
+            { new: true } 
         );
 
         if (!updatedLog) {
@@ -89,8 +84,7 @@ export const updateLog = async (req, res) => {
         }
 
         res.status(200).json({
-            message: 'Log actualizado exitosamente',
-            data: updatedLog,
+            message: 'Log actualizado',
         });
     } catch (error) {
         console.error('Error al actualizar log:', error);

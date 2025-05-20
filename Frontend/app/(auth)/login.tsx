@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { Formik } from 'formik';
 
 // Importa el hook de autenticación
-import { useAuth } from '../context/authContext';
+import { useAuth} from '../context/authContext';
 // Schema de validación para el formulario de inicio de sesión
 import { registerAndLoginSchema } from '../validations/registerAndLoginSchema';
 // Interface para los datos de inicio de sesión

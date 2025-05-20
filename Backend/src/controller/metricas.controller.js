@@ -40,8 +40,7 @@ export const registerMetrica = async (req, res) => {
         await nuevaMedida.save();
 
         res.status(201).json({
-            message: 'Medida creado exitosamente',
-            data: nuevaMedida,
+            message: 'Medida creado exitosamente'
         });
     } catch (error) {
         console.log("correo", req.user.correo);
@@ -52,6 +51,10 @@ export const registerMetrica = async (req, res) => {
         });
     }
 };
+
+
+
+
 
 
 export const getMetricaForUser = async (req, res) => {
@@ -69,6 +72,55 @@ export const getMetricaForUser = async (req, res) => {
 }
 
 
-export const eliminarMedida = async (req, res) => {
+export const deleteMetrica = async (req, res) => {
+    try {
+        
+        const { id } = req.params;
+        const userId = req.user.correo; // O req.user._id
+        const deletedMedida = await Medida.findOneAndDelete({ _id: id, userId: userId });
 
+        if (!deletedMedida) {
+            return res.status(404).json({ message: 'Métrica no encontrada o no tienes permiso para eliminarla.' });
+        }
+
+        res.status(200).json({
+            message: 'Métrica eliminada exitosamente'
+        });
+    } catch (error) {
+        console.error('Error al eliminar la métrica:', error);
+        res.status(500).json({
+            message: 'Error al eliminar la métrica',
+            error: error.message,
+        });
+    }
 }
+
+
+export const updateMetrica = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userId = req.user.correo;
+        const updates = req.body;
+
+        const updatedMedida = await Medida.findOneAndUpdate(
+            { _id: id, userId: userId },
+            updates,
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedMedida) {
+            return res.status(404).json({ message: 'Métrica no encontrada o no tienes permiso para actualizarla.' });
+        }
+
+        res.status(200).json({
+            message: 'Métrica actualizada',
+            data: updatedMedida
+        });
+    } catch (error) {
+        console.error('Error al actualizar la métrica:', error);
+        res.status(500).json({
+            message: 'Error al actualizar la métrica',
+            error: error.message,
+        });
+    }
+};

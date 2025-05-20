@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import { Redirect } from 'expo-router';
-import { ActivityIndicator, View, Text } from 'react-native';
 
 import { useAuth } from './context/authContext';
 import { testConnection } from './services/api';

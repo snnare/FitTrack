@@ -3,19 +3,27 @@ import { checkIfEmailExists, hashPassword, comparePassword, generateToken } from
 import moment from 'moment';
 
 
-
 export const registerUser = async (req, res) => {
   try {
-    const { correo, password, nombre, apellidos, fechaNacimiento, genero, peso, estatura, objetivo, nivelExperiencia, profileComplete } = req.body;
-    const emailExists = await checkIfEmailExists(correo);
+    const {
+      nombre,
+      apellidos,
+      correo,
+      password,
+      fechaNacimiento,
+      genero,
+      peso,
+      estatura,
+      objetivo,
+      nivelExperiencia
+    } = req.body;
 
-    if(emailExists) {
+    const emailExists = await checkIfEmailExists(correo);
+    if (emailExists) {
       return res.status(400).json({ message: 'El correo ya está registrado' });
     }
 
     const hashedPassword = await hashPassword(password);
-
-    // Validar y formatear la fecha de nacimiento (si se proporciona)
     let formattedFechaNacimiento = null;
     if (fechaNacimiento) {
       formattedFechaNacimiento = moment(fechaNacimiento, 'YYYY-MM-DD').format('YYYY-MM-DD');
@@ -34,108 +42,40 @@ export const registerUser = async (req, res) => {
       peso,
       estatura,
       objetivo,
-      nivelExperiencia,
-      profileComplete
+      nivelExperiencia
     });
 
 
     await newUser.save();
-    const token = generateToken(newUser); 
-
-    res.status(201).json({ message: 'Usuario registrado', user: newUser, token });
+    res.status(201).json({ message: 'Usuario registrado' });
   } catch (error) {
-    console.error('Error al actualizar datos del usuario:', error);
     res.status(500).json({
       message: 'Error al registrar el usuario',
       error: error.message,
     });
   }
-};
-
-
-
-export const loginUser = async (req, res) => {
-  try {
-    const { correo, password } = req.body;
-    const user = await User.findOne({ correo });
-
-    if (!user) {
-      return res.status(401).json({ message: 'Credenciales inválidas' });
-    }
-
-    const isPasswordMatch = await comparePassword(password, user.password);
-
-    if (!isPasswordMatch) {
-      return res.status(401).json({ message: 'Credenciales inválidas' });
-    }
-
-    const token = generateToken(user);
-    res.status(200).json({ token });
-  } catch (error) {
-    console.error('Error al iniciar sesión:', error);
-    res.status(500).json({ message: 'Error al iniciar sesión', error: error.message });
-  }
-};
-
-export const getUserProfile = async (req, res) => {
-  try {
-    const correo = req.user.correo; 
-
-    const user = await User.findOne({ correo: correo }).select('-password'); // Busca por correo electrónico
-
-    if (!user) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
-    }
-
-    res.status(200).json(user);
-  } catch (error) {
-    console.error('Error al obtener el perfil:', error);
-    res.status(500).json({ message: 'Error al obtener el perfil', error: error.message });
-  }
-};
-
-export const getProfileInfo = async (req, res) => {
-  try {
-    const correo = req.user.correo;
-
-    const user = await User.findOne({ correo: correo }).select('profileComplete'); // Busca por correo y selecciona solo profileComplete
-
-    if (!user) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
-    }
-
-    res.status(200).json({ profileComplete: user.profileComplete }); // Devuelve solo profileComplete
-  } catch (error) {
-    console.error('Error al obtener el perfil:', error);
-    res.status(500).json({ message: 'Error al obtener el perfil', error: error.message });
-  }
 }
 
 
-export const getIMC = async (req, res) => {
+export const getInfo = async (req, res) => {
   try {
-    const peso = req.user.peso;
-    const estatura = req.user.estatura;
+    const correo = req.user.correo;
 
-    const IMC = peso / ((estatura / 100) ** 2);
-
-    res.status(200).json({ IMC });
+    const userInfo = await User.findOne({ correo: correo }).select('-password');
+    if (!userInfo) {
+      return res.status(404).json({ message: 'El usuario no existe' });
+    }
+    return res.status(200).json(userInfo);
   } catch (error) {
-    console.error('Error al calcular el IMC:', error);
-    res.status(500).json({ message: 'Error al calcular el IMC', error: error.message });
+
   }
-};
+}
 
-
-
-export const updateUserProfile = async (req, res) => {
-  const correo = req.user.correo; // Obtener el correo del usuario autenticado
-    console.log("correo", correo);
+export const updateUser = async (req, res) => {
   try {
+    const correo = req.user.correo;
     const { nombre, apellidos, fechaNacimiento, genero, peso, estatura, objetivo, nivelExperiencia } = req.body;
-    const correo = req.user.correo; // Obtener el correo del usuario autenticado
-    console.log("correo", correo);
-    // Validar y formatear la fecha de nacimiento (si se proporciona)
+
     let formattedFechaNacimiento = null;
     if (fechaNacimiento) {
       formattedFechaNacimiento = moment(fechaNacimiento, 'YYYY-MM-DD').format('YYYY-MM-DD');
@@ -143,9 +83,8 @@ export const updateUserProfile = async (req, res) => {
         return res.status(400).json({ message: 'Fecha de nacimiento inválida, debe estar en el formato YYYY-MM-DD' });
       }
     }
-
-    const updatedUser = await User.findOneAndUpdate(
-      { correo: correo }, 
+    await User.findOneAndUpdate(
+      { correo: correo },
       {
         nombre,
         apellidos,
@@ -155,21 +94,53 @@ export const updateUserProfile = async (req, res) => {
         estatura,
         objetivo,
         nivelExperiencia,
-        profileComplete: true // Actualizar profileComplete a true
+        profileComplete: true
       },
-      { new: true } // Devuelve el documento actualizado
+      { new: true }
     );
-
-    if (!updatedUser) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
-    }
-
-    res.status(200).json({ message: 'Perfil actualizado', user: updatedUser });
+    res.status(200).json({ message: 'Perfil actualizado' });
   } catch (error) {
-    console.error('Error al actualizar datos del usuario:', error);
     res.status(500).json({
       message: 'Error al actualizar datos del usuario',
       error: error.message,
     });
   }
+}
+
+
+export const deleteUser = async (req, res) => {
+  try {
+    const correo = req.user.correo;
+    await User.findOneAndDelete({ correo: correo });
+
+    res.status(200).json({ message: 'Usuario eliminado' });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error al eliminar el usuario',
+      error: error.message,
+    });
+  }
+}
+
+
+export const getIMC = async (req, res) => {
+  try {
+    const correo = req.user.correo;
+    const userInfo = await User.findOne({ correo: correo }).select('-password');
+
+    const peso = userInfo.peso;
+    const estatura = userInfo.estatura;
+
+    console.log(peso, estatura);
+
+    const IMCP = peso / (estatura ** 2);
+    const IMC = IMCP.toFixed(2);
+
+    res.status(200).json({ IMC });
+  } catch (error) {
+    console.error('Error al calcular el IMC:', error);
+    res.status(500).json({ message: 'Error al calcular el IMC', error: error.message });
+  }
 };
+
+

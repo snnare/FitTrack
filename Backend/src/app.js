@@ -5,6 +5,7 @@ import morgan from 'morgan'
 import {connectDB} from './utils/db.js';
 
 // Usuarios
+import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
 import trainerRoutes from './routes/trainer.routes.js';
 
@@ -29,18 +30,20 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 // Usuarios normales
-app.use('/auth', userRoutes);
-// Usuarios entrenadores
+app.use('/auth', authRoutes);
+app.use('/user', userRoutes);
 app.use('/trainer', trainerRoutes);
 // Rutas protegidas
 app.use('/logs', logsRoutes);
-
 app.use('/streak', streakRoutes);
-app.use('/rutina', rutinaRoutes);
 app.use('/metrica',metricaRoutes);
-app.use('/data', dataRotues);
 
+
+app.use('/data', dataRotues);
 app.use('/reporte', reportRoutes);
+app.use('/rutina', rutinaRoutes);
+
+
 
 app.listen(port, () => {
     console.log(`Servidor escuchando en el puerto ${port}`);

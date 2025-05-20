@@ -8,6 +8,5 @@ db.user.insert({
     peso: 75,
     estatura: 1.78,
     objetivo: "Definir",
-    nivelExperiencia: "Intermedio",
-    profileComplete: true
+    nivelExperiencia: "Intermedio"
   })

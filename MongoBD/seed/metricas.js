@@ -1,4 +1,4 @@
-db.medidas.insertMany([
+db.metricas.insertMany([
     {
       userId: "angel@gmail.com",
       fecha: new Date("2025-03-10"), // Inicio del primer mes
