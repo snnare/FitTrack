@@ -12,6 +12,7 @@ export default function registerMeasuresScreen () {
         try {
             await registerMetrica(values); 
             Alert.alert('Éxito', 'Medidas registradas correctamente.');
+            router.push('/(tabs)/add')
         } catch (error: any) {
             Alert.alert('Error', error?.response?.data?.message || 'Hubo un error al registrar las medidas.');
         }

@@ -1,4 +1,4 @@
-import Medida from "../models/metrica.model.js";
+import Metrica from "../models/metrica.model.js";
 
 
 export const registerMetrica = async (req, res) => {
@@ -20,7 +20,7 @@ export const registerMetrica = async (req, res) => {
 
 
         const userId = req.user.correo;
-        const nuevaMedida = new Medida({
+        const nuevaMedida = new Metrica({
             userId,
             fecha,
             peso,
@@ -54,13 +54,10 @@ export const registerMetrica = async (req, res) => {
 
 
 
-
-
-
 export const getMetricaForUser = async (req, res) => {
     try {
         const userId = req.user.correo;
-        const medidas = await Medida.find({ userId });
+        const medidas = await Metrica.find({ userId }).sort({ fecha: 1 });
         res.status(200).json({ data: medidas });
     } catch (error) {
         console.log(error);
@@ -77,7 +74,7 @@ export const deleteMetrica = async (req, res) => {
         
         const { id } = req.params;
         const userId = req.user.correo; // O req.user._id
-        const deletedMedida = await Medida.findOneAndDelete({ _id: id, userId: userId });
+        const deletedMedida = await Metrica.findOneAndDelete({ _id: id, userId: userId });
 
         if (!deletedMedida) {
             return res.status(404).json({ message: 'Métrica no encontrada o no tienes permiso para eliminarla.' });
@@ -102,7 +99,7 @@ export const updateMetrica = async (req, res) => {
         const userId = req.user.correo;
         const updates = req.body;
 
-        const updatedMedida = await Medida.findOneAndUpdate(
+        const updatedMedida = await Metrica.findOneAndUpdate(
             { _id: id, userId: userId },
             updates,
             { new: true, runValidators: true }
@@ -124,3 +121,30 @@ export const updateMetrica = async (req, res) => {
         });
     }
 };
+
+
+export const getMonthlyMetricas = async (req, res) => { 
+    try {
+        const userId = req.user.correo;
+        const { month, year } = req.query;
+
+        if (!month || !year || isNaN(parseInt(month)) || isNaN(parseInt(year))) {
+            return res.status(400).json({ msg: 'Se requieren el mes y el año válidos.' });
+        }
+
+        const startOfMonth = new Date(parseInt(year), parseInt(month) - 1, 1);
+        const endOfMonth = new Date(parseInt(year), parseInt(month), 0);
+
+        const metricas = await Metrica.find({
+            userId,
+            fecha: {
+                $gte: startOfMonth,
+                $lte: endOfMonth
+            }
+        }).sort({ createdAt: 1 });
+        res.status(200).json(metricas);
+    } catch (error) {
+        console.log(req.user.correo)
+        res.status(500).json({ msg: 'Error del servidor al obtener métricas mensuales.' });
+    }
+}

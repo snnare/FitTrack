@@ -1,7 +1,7 @@
 db.metricas.insertMany([
     {
       userId: "angel@gmail.com",
-      fecha: new Date("2025-03-10"), // Inicio del primer mes
+      fecha: new Date("2025-03-10"), 
       peso: 75.5,
       altura: 1.78,
       cintura: 85,

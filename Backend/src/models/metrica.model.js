@@ -65,6 +65,6 @@ const metricaSchema = new Schema({
     timestamps: true,
 });
 
-const Metrica = mongoose.model('Metrica', metricaSchema);
+const Metrica = mongoose.model('Metricas', metricaSchema);
 
 export default Metrica;

@@ -13,9 +13,28 @@ export const registerMetrica = async (metricaData: any) => {
 }
 
 
-export const getMetricaForUser = async () => {
+
+
+export const getMonthlyMetricas = async (month: number, year: number) => {
     try {
-        const res = await api.get('/metrica/get');
+        const res = await api.get('/metrica/monthly', {
+            params: {
+                month,
+                year
+            }
+        });
+        return res.data;
+    } catch (error: any) {
+        throw error.response?.data || error;
+    }
+};
+
+
+
+
+export const getAllUserMetricas = async () => {
+    try {
+        const res = await api.get('/metrica');
         return res.data;
     } catch (error: any) {
         throw error.response?.data || error;
