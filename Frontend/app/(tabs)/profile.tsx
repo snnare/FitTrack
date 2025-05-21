@@ -28,7 +28,6 @@ export default function profileScreen() {
 
 
 
-    
     const handleGenerateReport = () => {
         router.push('/screens/generarReporte');
     };
