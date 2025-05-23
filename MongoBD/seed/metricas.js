@@ -118,5 +118,49 @@ db.metricas.insertMany([
       brazoFlexionado: 32.8,
       porcentajeGrasaCorporal: 19.5,
       notas: "Objetivo casi alcanzado"
+    },     {
+      userId: "angel@gmail.com",
+      fecha: new Date("2025-05-09"),
+      peso: 72.9,
+      altura: 1.78,
+      cintura: 81.5,
+      cadera: 95.0,
+      pecho: 99.0,
+      muslo: 55.3,
+      pantorrilla: 36.7,
+      brazoRelajado: 30.7,
+      brazoFlexionado: 32.7,
+      porcentajeGrasaCorporal: 19.3,
+      notas: "Manteniendo el progreso, ajustando dieta ligeramente."
+    },
+    {
+      userId: "angel@gmail.com",
+      fecha:  new Date("2025-05-16"),
+      peso: 72.7,
+      altura: 1.78,
+      cintura: 81.0,
+      cadera: 94.8,
+      pecho: 98.8,
+      muslo: 55.2,
+      pantorrilla: 36.6,
+      brazoRelajado: 30.6,
+      brazoFlexionado: 32.6,
+      porcentajeGrasaCorporal: 19.1,
+      notas: "Enfocado en la tonificación muscular."
+    },
+    {
+      userId: "angel@gmail.com",
+      fecha:  new Date("2025-05-23"),
+      peso: 72.5,
+      altura: 1.78,
+      cintura: 80.8,
+      cadera: 94.5,
+      pecho: 98.5,
+      muslo: 55.0,
+      pantorrilla: 36.5,
+      brazoRelajado: 30.5,
+      brazoFlexionado: 32.5,
+      porcentajeGrasaCorporal: 18.9,
+      notas: "¡Alcanzando nuevas metas!"
     }
   ]);

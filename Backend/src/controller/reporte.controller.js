@@ -3,6 +3,8 @@ import User from '../models/user.model.js';
 import Log from '../models/logs.model.js';
 import Metrica from '../models/metrica.model.js';
 
+
+
 export const createReporte = async (req, res) => {
     try {
         const userId = req.user.correo;
@@ -30,29 +32,35 @@ export const createReporte = async (req, res) => {
 
         // Info del usuario
         const userInfo = await User.findOne({ correo: userId }).select('-password');
-        //console.log("User Info", userInfo)
-        if (!userInfo) {
-            return res.status(404).json({ message: 'Error', error: 'Usuario no encontrado.' });
-        }
+
 
         // Obtener las medidas del usuario para el mes solicitado
-        const medidasMensuales = await Medida.find({
+        const medidasMensuales = await Metrica.find({
             userId: userId,
             fecha: { $gte: startOfMonth, $lte: endOfMonth }
         }).sort({ fecha: 1 });
-        console.log(medidasMensuales);
 
-
+        if (medidasMensuales.length  == 0 ) {
+            return res.status(404).json({ message: 'Error', error: 'Es necesario registrar por lo menos 4 medidas por mes' });
+        }
+       
         // Obtener los logs de entrenamiento del usuario para el mes solicitado
         const logsMensuales = await Log.find({
             userId: userId,
             createdAt: { $gte: startOfMonth, $lte: endOfMonth }
         }).sort({ createdAt: 1 });
 
+        if(logsMensuales.length == 0) {
+            return res.status(404).json({message: 'Error', error: 'No se encontraror logs este mes'});
+        }
+
+    
+        
         // Calcular el progreso para el resumen ejecutivo y el análisis
         const pesoInicial = medidasMensuales.length > 0 ? medidasMensuales[0].peso : null;
         const pesoFinal = medidasMensuales.length > 0 ? medidasMensuales[medidasMensuales.length - 1].peso : null;
-        const cambioPeso = pesoInicial !== null && pesoFinal !== null ? (pesoFinal - pesoInicial).toFixed(2) : null;
+        const cambioPeso = pesoInicial !== null && pesoFinal !== null ? (pesoInicial - pesoFinal).toFixed(2) : null;
+
 
         const cinturaInicial = medidasMensuales.length > 0 ? medidasMensuales[0].cintura : null;
         const cinturaFinal = medidasMensuales.length > 0 ? medidasMensuales[medidasMensuales.length - 1].cintura : null;
@@ -61,6 +69,7 @@ export const createReporte = async (req, res) => {
         const grasaInicial = medidasMensuales.length > 0 ? medidasMensuales[0].porcentajeGrasaCorporal : null;
         const grasaFinal = medidasMensuales.length > 0 ? medidasMensuales[medidasMensuales.length - 1].porcentajeGrasaCorporal : null;
         const cambioGrasa = grasaInicial !== null && grasaFinal !== null ? (grasaFinal - grasaInicial).toFixed(2) : null;
+
 
         // Calcular IMC inicial y final
         const imcInicial = pesoInicial && userInfo.estatura ? (pesoInicial / (userInfo.estatura * userInfo.estatura)).toFixed(2) : null;
@@ -72,9 +81,13 @@ export const createReporte = async (req, res) => {
             if (imc >= 25 && imc <= 29.9) return "Sobrepeso";
             return "Obesidad";
         };
+
+
         const clasificacionInicialIMC = clasificacionIMC(imcInicial);
         const clasificacionFinalIMC = clasificacionIMC(imcFinal);
 
+
+        
         // Calcular relación cintura-cadera inicial y final
         const relacionInicialCinturaCadera = cinturaInicial && medidasMensuales[0].cadera ? (cinturaInicial / medidasMensuales[0].cadera).toFixed(2) : null;
         const relacionFinalCinturaCadera = cinturaFinal && medidasMensuales[medidasMensuales.length - 1].cadera ? (cinturaFinal / medidasMensuales[medidasMensuales.length - 1].cadera).toFixed(2) : null;
@@ -95,9 +108,11 @@ export const createReporte = async (req, res) => {
         const riesgoInicialCinturaCadera = interpretarRiesgoCinturaCadera(relacionInicialCinturaCadera, userInfo.genero);
         const riesgoFinalCinturaCadera = interpretarRiesgoCinturaCadera(relacionFinalCinturaCadera, userInfo.genero);
 
+
+
         // Formatear las medidas semanales para la sección del reporte
         const datosMedidasSemanales = medidasMensuales.map(medida => ({
-            fechaMedicion: medida.fecha,
+            fechaMedicion: medida.fecha ? medida.fecha.toISOString() : null,
             peso: medida.peso,
             altura: medida.altura,
             cintura: medida.cintura,
@@ -152,7 +167,7 @@ export const createReporte = async (req, res) => {
             analisisProgresoMensual: reporteData.analisisProgresoMensual,
         });
         await nuevoReporte.save();
-
+        console.log(nuevoReporte)
         res.status(201).json({ message: 'OK', data: reporteData });
 
     } catch (error) {
@@ -161,35 +176,49 @@ export const createReporte = async (req, res) => {
     }
 };
 
+
 export const getReporte = async (req, res) => {
     try {
         const userId = req.user.correo;
         let mes, anio;
-        const anioActual = new Date().getFullYear();
-        const mesActual = new Date().getMonth() + 1;
+
+        // Obtener mes y año de los query parameters
+        const queryMes = req.query.mes;
+        const queryAnio = req.query.anio;
 
         // Determinar el mes y el año a buscar
-        if (req.query.mes && req.query.anio) {
-            mes = parseInt(req.query.mes);
-            anio = parseInt(req.query.anio);
+        if (queryMes && queryAnio) {
+            mes = parseInt(queryMes);
+            anio = parseInt(queryAnio);
+
+            // **Validación de query parameters:**
+            if (isNaN(mes) || mes < 1 || mes > 12) {
+                return res.status(400).json({ message: 'Error', error: 'El parámetro "mes" debe ser un número entre 1 y 12.' });
+            }
+            if (isNaN(anio) || anio < 2000) { // Ajusta el año mínimo según tus necesidades
+                return res.status(400).json({ message: 'Error', error: 'El parámetro "anio" debe ser un número válido (ej. 2023).' });
+            }
         } else {
-            // Si no se proporcionan mes y año, buscar el reporte más reciente
+            // Si no se proporcionan mes y año en la query, buscar el reporte más reciente
             const ultimoReporte = await Reporte.findOne({ userId }).sort({ fechaCreacion: -1 });
+
             if (ultimoReporte) {
                 anio = ultimoReporte.anioReportado;
                 mes = ultimoReporte.mesReportado;
             } else {
-                // Si no hay reportes, devolver un mensaje indicando que no hay reportes aún
-                return res.status(404).json({ message: 'OK', data: null, messageInfo: 'No se encontraron reportes para este usuario.' });
+                // Si no hay ningún reporte para el usuario, se devuelve un 404
+                return res.status(404).json({ message: 'Error', error: 'No se encontraron reportes para este usuario.' });
             }
         }
 
-        const reporteExistente = await Reporte.findOne({ userId, mesReportado: mes, anioReportado: anio });
+        // Buscar el reporte específico o el más reciente si no se especificaron mes/año
+        const reporteEncontrado = await Reporte.findOne({ userId, mesReportado: mes, anioReportado: anio });
 
-        if (reporteExistente) {
-            return res.status(200).json({ message: 'OK', data: reporteExistente });
+        if (reporteEncontrado) {
+            return res.status(200).json({ message: 'OK', data: reporteEncontrado });
         } else {
-            return res.status(404).json({ message: 'OK', data: null, messageInfo: `No se encontró un reporte para el mes ${mes} del año ${anio}.` });
+            // Si se especificó un mes/año pero no se encontró un reporte para ese periodo
+            return res.status(404).json({ message: 'Error', error: `No se encontró un reporte para ${new Date(anio, mes - 1).toLocaleString('es-MX', { month: 'long', year: 'numeric' })}.` });
         }
 
     } catch (error) {

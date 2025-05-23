@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Platform, Alert } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { useRouter } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
-import { ScrollView } from 'react-native';
-import { useTheme } from '@react-navigation/native';
-import { printToFileAsync } from 'expo-print';
-import { shareAsync } from 'expo-sharing';
-import { getReporte } from '../services/reporte';
-import { generateReportHTML } from '../utils/reporteUtils';
+import { Picker } from '@react-native-picker/picker';
+import BackButton from '../../components/utils/BackButton';
+import { createReporte, getReporte } from '../services/reporte';
+
 
 const meses = [
     { label: 'Enero', value: 1 },
@@ -26,143 +24,167 @@ const meses = [
 
 const años = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i);
 
-const GenerarReporteScreen = () => {
+export default function GenerarReporteScreen() {
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
     const [selectedMes, setSelectedMes] = useState<number | null>(new Date().getMonth() + 1);
     const [selectedAnio, setSelectedAnio] = useState<number | null>(new Date().getFullYear());
-    const [isGenerating, setIsGenerating] = useState(false);
-    const { colors } = useTheme();
 
-    const getAndGenerateReport = async () => {
-        setIsGenerating(true);
-        const reporteData2 = await getReporte(selectedMes, selectedAnio);
-        console.log(reporteData2)
-        try {
-            if (selectedMes === null || selectedAnio === null) {
-                throw new Error("Mes y Año deben ser seleccionados.");
-            }
-            const reporteData = await getReporte(selectedMes, selectedAnio);
-            console.log("Respuesta del backend:", reporteData);
-            const htmlContent = generateReportHTML(reporteData);
-            await generarYCompartirPDF(htmlContent);
-        } catch (error: any) {
-            console.error('Error al obtener y generar el reporte:', error);
-            Alert.alert('Error', `Hubo un problema al obtener el reporte: ${error.message || 'Error desconocido'}`);
-        } finally {
-            setIsGenerating(false);
+    const handleGenerarPDF = async () => {
+        if (selectedMes === null || selectedAnio === null) {
+            Alert.alert('Error', 'Por favor, selecciona un mes y un año.');
+            return;
         }
-    };
 
-    const generarYCompartirPDF = async (html: string) => {
+        setIsLoading(true);
         try {
-            const file = await printToFileAsync({ html });
-            await shareAsync(file.uri, {
-                UTI: 'com.adobe.pdf',
-                mimeType: 'application/pdf',
-            });
+            const res = await createReporte(selectedMes, selectedAnio);
+            console.log(res)
+            Alert.alert('Éxito', `Reporte para ${meses.find(m => m.value === selectedMes)?.label} ${selectedAnio} generado.`);
         } catch (error) {
-            console.error('Error al generar y compartir el PDF:', error);
-            Alert.alert('Error', 'No se pudo generar el PDF. Por favor, intenta de nuevo.');
+            console.error('Error al generar PDF:', error);
+            Alert.alert('Error', 'Hubo un problema al generar el PDF. Por favor, intenta de nuevo.');
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
-        <View style={[styles.container, { backgroundColor: colors.background }]}>
-            <ScrollView>
-                <Text style={[styles.title, { color: colors.text }]}>Generar Reporte Mensual</Text>
+        <ScrollView
+            contentContainerStyle={styles.scrollContent}
+            style={styles.scrollView}
+        >
+            <View style={styles.container}>
+                <View style={styles.header}>
+                    <BackButton to='/(tabs)/profile' />
+                    <Text style={styles.title}>Generar Reporte</Text>
+                </View>
+
 
                 <View style={styles.inputContainer}>
-                    <Text style={[styles.label, { color: colors.text }]}>Mes</Text>
-                    <View style={[styles.pickerContainer, { borderColor: colors.border }]}>
+                    <Text style={styles.label}>Mes</Text>
+                    <View style={styles.pickerContainer}>
                         <Picker
                             selectedValue={selectedMes}
-                            onValueChange={(itemValue) => setSelectedMes(itemValue)}
-                            style={[styles.picker, { color: colors.primary }]}
-                            dropdownIconColor={colors.primary}
+                            onValueChange={(itemValue: number | null) => setSelectedMes(itemValue)}
+                            style={styles.picker}
                         >
                             {meses.map((mes) => (
-                                <Picker.Item key={mes.value.toString()} label={mes.label} value={mes.value} />
+                                <Picker.Item
+                                    key={mes.value.toString()}
+                                    label={mes.label}
+                                    value={mes.value}
+                                />
                             ))}
                         </Picker>
                     </View>
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Text style={[styles.label, { color: colors.text }]}>Año</Text>
-                    <View style={[styles.pickerContainer, { borderColor: colors.border }]}>
+                    <Text style={styles.label}>Año</Text>
+                    <View style={styles.pickerContainer}>
                         <Picker
                             selectedValue={selectedAnio}
-                            onValueChange={(itemValue) => setSelectedAnio(itemValue)}
-                            style={[styles.picker, { color: colors.primary }]}
-                            dropdownIconColor={colors.primary}
+                            onValueChange={(itemValue: number | null) => setSelectedAnio(itemValue)}
+                            style={styles.picker}
                         >
                             {años.map((anio) => (
-                                <Picker.Item key={anio.toString()} label={anio.toString()} value={anio} />
+                                <Picker.Item
+                                    key={anio.toString()}
+                                    label={anio.toString()}
+                                    value={anio}
+                                />
                             ))}
                         </Picker>
                     </View>
                 </View>
 
                 <TouchableOpacity
-                    style={[styles.generarButton, { backgroundColor: colors.primary }]}
-                    onPress={getAndGenerateReport}
-                    disabled={isGenerating}
+                    style={styles.generateButton}
+                    onPress={handleGenerarPDF}
+                    disabled={isLoading}
                 >
-                    <MaterialIcons name="document" size={24} color={colors.card} />
-                    <Text style={[styles.generarButtonText, { color: colors.card }]}>
-                        {isGenerating ? 'Generando...' : 'Generar Reporte'}
-                    </Text>
+                    {isLoading ? (
+                        <ActivityIndicator color="#fff" />
+                    ) : (
+                        <>
+                            <MaterialIcons name="print" size={24} color="#fff" />
+                            <Text style={styles.buttonText}>Generar PDF</Text>
+                        </>
+                    )}
                 </TouchableOpacity>
-            </ScrollView>
-        </View>
+            </View>
+        </ScrollView>
     );
-};
-
+}
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
+    scrollView: {
+        backgroundColor: '#111827',
+    },
+    scrollContent: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
         padding: 20,
     },
+    container: {
+        width: '100%',
+        // Removed alignItems: 'center' from here to allow header to stretch
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%', // Ensure header takes full width
+        marginBottom: 30, // Adjust spacing as needed
+        paddingHorizontal: 0, // No extra padding here if container already has it
+    },
     title: {
-        fontSize: 24,
+        fontSize: 26,
         fontWeight: 'bold',
-        marginTop: 20,
-        marginBottom: 30,
-        textAlign: 'center',
+        color: '#f9fafb',
+        textAlign: 'center', // Keep title centered within the header's available space
+        flex: 1, // Allow title to take available space
     },
     inputContainer: {
         marginBottom: 20,
+        width: '100%',
     },
     label: {
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: 'bold',
-        marginBottom: 8,
+        color: '#d1d5db',
+        marginBottom: 10,
+        alignSelf: 'flex-start',
     },
     pickerContainer: {
         borderWidth: 2,
-        borderRadius: 10,
+        borderColor: '#374151',
+        borderRadius: 12,
+        backgroundColor: '#1f2937',
+        overflow: 'hidden',
         paddingHorizontal: 10,
-        backgroundColor: '#f0f4f8',
     },
     picker: {
         width: '100%',
-        height: Platform.OS === 'ios' ? 200 : 40,
+        height: 50,
     },
-    generarButton: {
-        paddingVertical: 14,
-        borderRadius: 10,
-        alignItems: 'center',
-        marginTop: 30,
+    generateButton: {
         flexDirection: 'row',
-        justifyContent: 'gap',
-        gap: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 10,
+        backgroundColor: '#22c55e',
+        paddingVertical: 14,
+        paddingHorizontal: 24,
+        borderRadius: 12,
+        marginBottom: 20,
+        width: '100%',
     },
-    generarButtonText: {
+    // Removed backButton style as it's replaced by BackButton component
+    buttonText: {
         color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
-        textTransform: 'uppercase',
     },
 });
-
-export default GenerarReporteScreen;
-
