@@ -39,7 +39,6 @@ export default function GenerarReporteScreen() {
         setIsLoading(true);
         try {
             const res = await createReporte(selectedMes, selectedAnio);
-            console.log(res)
             Alert.alert('Éxito', `Reporte para ${meses.find(m => m.value === selectedMes)?.label} ${selectedAnio} generado.`);
         } catch (error) {
             console.error('Error al generar PDF:', error);

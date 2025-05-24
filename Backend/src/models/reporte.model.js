@@ -16,7 +16,7 @@ const reporteSchema = new mongoose.Schema({
     },
 
     datosMedidasSemanales: [{
-        fechaMedicion: { type: Date, required: true },
+        fechaMedicion: { type: Date },
         peso: { type: Number },
         altura: { type: Number },
         cintura: { type: Number },

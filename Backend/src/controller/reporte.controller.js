@@ -169,7 +169,6 @@ export const createReporte = async (req, res) => {
         await nuevoReporte.save();
         console.log(nuevoReporte)
         res.status(201).json({ message: 'OK', data: reporteData });
-
     } catch (error) {
         console.error('Error al crear la información del reporte:', error);
         res.status(500).json({ message: 'Error', error: error.message });
