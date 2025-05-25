@@ -8,7 +8,7 @@ const reporteSchema = new mongoose.Schema({
     tituloReporte: { type: String, default: "Reporte Mensual de Progreso Físico" },
     nombreUsuario: { type: String, required: true },
     fechaReporte: { type: String, required: true },
-
+    objetivoUsuario: { type: String, trim: true, default: "No especificado"},
     resumenEjecutivo: {
         progresoGeneral: { type: String },
         logrosMejoras: { type: String },
@@ -43,13 +43,11 @@ const reporteSchema = new mongoose.Schema({
             pantorrilla: { inicial: Number, final: Number, cambio: Number },
             brazoRelajado: { inicial: Number, final: Number, cambio: Number },
             brazoFlexionado: { inicial: Number, final: Number, cambio: Number }
-            // Las URLs de los gráficos se generarán en el frontend
         },
         cambioGrasaCorporal: {
             porcentajeInicial: { type: Number },
             porcentajeFinal: { type: Number },
             cambioTotal: { type: Number }
-            // La URL del gráfico se generará en el frontend
         },
         calculoIMC: {
             imcInicial: { type: Number },

@@ -1,138 +1,268 @@
-// utils/reportUtils.ts
-export const generateReportHTML = (data: any) => {
-    console.log("html", data.progresoGeneral)
-    const formatearFecha = (fecha: string) => {
-        const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date(fecha).toLocaleDateString('es-ES', options);
-    };
 
-    let html = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="utf-8" />
-            <title>${data.tituloReporte}</title>
-            <style>
-                body { font-family: Arial, sans-serif; padding: 20px; }
-                h1 { color: #2e7d32; text-align: center; }
-                h2 { color: #3f51b5; margin-top: 30px; }
-                h3 { margin-top: 20px; }
-                p { line-height: 1.6; }
-                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-                th { background-color: #f0f0f0; }
-                .resumen { background-color: #e8f5e9; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
-                .cambio { font-weight: bold; color: #1a5235; }
-                .grafico { width: 100%; height: 300px; border: 1px solid #ddd; margin-top: 20px; }
-            </style>
-        </head>
-        <body>
-            <h1>${data.tituloReporte}</h1>
-            <p><strong>Nombre del Usuario:</strong> ${data.nombreUsuario}</p>
-            <p><strong>Fecha del Reporte:</strong> ${data.fechaReporte}</p>
+import { ReporteDatosCompletos } from "../types/reporteHTML";
+import { formatDate } from "./dateUtils";
+import { loadImageAsBase64 } from "../utils/imageUtils";
+import { saveChartImageLocally } from "./chartImageSave";
 
-            <h2>Resumen Ejecutivo</h2>
-            <div class="resumen">
-                <p><strong>Progreso General:</strong> ${data.resumenEjecutivo.progresoGeneral}</p>
-                <p><strong>Logros y Mejoras:</strong> ${data.resumenEjecutivo.logrosMejoras}</p>
-                <p><strong>Mensaje de Aliento:</strong> ${data.resumenEjecutivo.mensajeAliento}</p>
-            </div>
+const logoModule = require('../../assets/logo.png');
 
-            <h2>Datos de Medidas Semanales</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Fecha de Medición</th>
-                        <th>Peso (kg)</th>
-                        <th>Altura (m)</th>
-                        <th>Cintura (cm)</th>
-                        <th>Cadera (cm)</th>
-                        <th>Pecho (cm)</th>
-                        <th>Muslo (cm)</th>
-                        <th>Pantorrilla (cm)</th>
-                        <th>Brazo Relajado (cm)</th>
-                        <th>Brazo Flexionado (cm)</th>
-                        <th>% Grasa Corporal</th>
-                        <th>Notas</th>
-                    </tr>
-                </thead>
-                <tbody>
-    `;
 
-    data.datosMedidasSemanales.forEach((medida: any) => {
-        html += `
-                    <tr>
-                        <td>${formatearFecha(medida.fechaMedicion)}</td>
-                        <td>${medida.peso}</td>
-                        <td>${medida.altura}</td>
-                        <td>${medida.cintura}</td>
-                        <td>${medida.cadera}</td>
-                        <td>${medida.pecho}</td>
-                        <td>${medida.muslo}</td>
-                        <td>${medida.pantorrilla}</td>
-                        <td>${medida.brazoRelajado}</td>
-                        <td>${medida.brazoFlexionado}</td>
-                        <td>${medida.porcentajeGrasaCorporal}</td>
-                        <td>${medida.notasUsuario}</td>
-                    </tr>
-        `;
-    });
+export const generateReportHTML = async (data: ReporteDatosCompletos) => {
+    const formattedReportDate = formatDate(data.data.fechaReporte);
+    const logoSrc = await loadImageAsBase64(logoModule, 'image/png');
 
-    html += `
-                </tbody>
-            </table>
+    
+    // -------------- Seccion de generado de graficas
+    const labels: string[] = ['Inicial', 'Final'];
+    const pesos: number[] = [
+        data.data.analisisProgresoMensual.cambioPeso.pesoInicial,
+        data.data.analisisProgresoMensual.cambioPeso.pesoFinal,
+    ];
 
-            <h2>Análisis de Progreso Mensual</h2>
-            <h3>Cambio en el Peso</h3>
-            <p><strong>Peso Inicial:</strong> ${data.analisisProgresoMensual.cambioPeso.pesoInicial} kg</p>
-            <p><strong>Peso Final:</strong> ${data.analisisProgresoMensual.cambioPeso.pesoFinal} kg</p>
-            <p class="cambio"><strong>Cambio Total:</strong> ${data.analisisProgresoMensual.cambioPeso.cambioTotal} kg</p>
-            <div class="grafico">Gráfico de la tendencia del peso a lo largo del mes (Aquí iría el gráfico)</div>
-
-            <h3>Cambio en las Circunferencias</h3>
-    `;
-
-    for (const [key, value] of Object.entries(data.analisisProgresoMensual.cambioCircunferencias)) {
-        if (value && typeof value === 'object' && 'inicial' in value && 'final' in value && 'cambio' in value) {
-            html += `
-                <h4>${key.charAt(0).toUpperCase() + key.slice(1)}</h4>
-                <p><strong>Medida Inicial:</strong> ${value.inicial} cm</p>
-                <p><strong>Medida Final:</strong> ${value.final} cm</p>
-                <p class="cambio"><strong>Cambio Total:</strong> ${value.cambio} cm</p>
-                <div class="grafico">Gráfico de la tendencia de ${key} a lo largo del mes (Aquí iría el gráfico)</div>
-            `;
-        }
+    let pesoChartLocalUri: string | null = null;
+    if (pesos.length > 0) {
+        pesoChartLocalUri = await saveChartImageLocally(
+            labels,
+            [
+                {
+                    label: 'Peso (kg)',
+                    data: pesos,
+                    borderColor: '#22c55e',
+                    backgroundColor: 'rgba(34, 197, 94, 0.2)',
+                    fill: true,
+                    tension: 0.4,
+                },
+            ],
+            'Cambio de Peso',
+            'peso-cambio-chart'
+        );
     }
 
-    html += `
-            <h3>Cambio en el Porcentaje de Grasa Corporal</h3>
-            <p><strong>Porcentaje Inicial:</strong> ${data.analisisProgresoMensual.cambioGrasaCorporal.porcentajeInicial}%</p>
-            <p><strong>Porcentaje Final:</strong> ${data.analisisProgresoMensual.cambioGrasaCorporal.porcentajeFinal}%</p>
-            <p class="cambio"><strong>Cambio Total:</strong> ${data.analisisProgresoMensual.cambioTotal}%</p>
-            <div class="grafico">Gráfico de la tendencia del porcentaje de grasa corporal a lo largo del mes (Aquí iría el gráfico)</div>
 
-            <h3>Cálculo del IMC</h3>
-            <p><strong>IMC Inicial:</strong> ${data.analisisProgresoMensual.calculoIMC.imcInicial}</p>
-            <p><strong>IMC Final:</strong> ${data.analisisProgresoMensual.calculoIMC.imcFinal}</p>
-            <p><strong>Clasificación Inicial:</strong> ${data.analisisProgresoMensual.calculoIMC.clasificacionInicial}</p>
-            <p><strong>Clasificación Final:</strong> ${data.analisisProgresoMensual.calculoIMC.clasificacionFinal}</p>
+    // --- Gráfica de Cambio de Grasa Corporal (Inicial vs Final del mes) ---
+    const labelsGrasaCambio: string[] = ['Inicial', 'Final'];
+    const dataGrasaCambio: number[] = [
+        data.data.analisisProgresoMensual.cambioGrasaCorporal.porcentajeInicial,
+        data.data.analisisProgresoMensual.cambioGrasaCorporal.porcentajeFinal,
+    ];
+    let grasaCambioChartLocalUri: string | null = null;
+    if (dataGrasaCambio.length === 2) {
+        grasaCambioChartLocalUri = await saveChartImageLocally(
+            labelsGrasaCambio,
+            [
+                {
+                    label: 'Grasa Corporal (%)',
+                    data: dataGrasaCambio,
+                    borderColor: '#facc15', // Amarillo
+                    backgroundColor: 'rgba(250, 204, 21, 0.2)',
+                    fill: true,
+                    tension: 0.4,
+                },
+            ],
+            'Cambio de Grasa Corporal Mensual',
+            'grasa-cambio-chart'
+        );
+    }
 
-            <h3>Relación Cintura-Cadera</h3>
-            <p><strong>Relación Inicial:</strong> ${data.analisisProgresoMensual.relacionCinturaCadera.inicial}</p>
-            <p><strong>Relación Final:</strong> ${data.analisisProgresoMensual.relacionCinturaCadera.final}</p>
-            <p><strong>Riesgo Inicial:</strong> ${data.analisisProgresoMensual.relacionCinturaCadera.riesgoInicial}</p>
-            <p><strong>Riesgo Final:</strong> ${data.analisisProgresoMensual.relacionCinturaCadera.riesgoFinal}</p>
+    // --- Gráfica de Cambio de Cintura (Inicial vs Final del mes) ---
+    const labelsCinturaCambio: string[] = ['Inicial', 'Final'];
+    const dataCinturaCambio: number[] = [
+        data.data.analisisProgresoMensual.cambioCircunferencias.cintura.inicial,
+        data.data.analisisProgresoMensual.cambioCircunferencias.cintura.final,
+    ];
+    let cinturaCambioChartLocalUri: string | null = null;
+    if (dataCinturaCambio.length === 2) {
+        cinturaCambioChartLocalUri = await saveChartImageLocally(
+            labelsCinturaCambio,
+            [
+                {
+                    label: 'Cintura (cm)',
+                    data: dataCinturaCambio,
+                    borderColor: '#3b82f6', // Azul
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                    fill: true,
+                    tension: 0.4,
+                },
+            ],
+            'Cambio de Cintura Mensual',
+            'cintura-cambio-chart'
+        );
+    }
 
-            <h2>Recomendaciones Generales</h2>
-            <p><strong>Ajustes en la Rutina de Ejercicios:</strong> ${data.recomendacionesGenerales.ajustesEjercicio}</p>
-            <p><strong>Consejos sobre Nutrición:</strong> ${data.recomendacionesGenerales.consejosNutricion}</p>
-            <p><strong>Recordatorio sobre la Consistencia:</strong> ${data.recomendacionesGenerales.recordatorioConsistencia}</p>
-            <p><strong>Motivación para Alcanzar los Objetivos:</strong> ${data.recomendacionesGenerales.motivacionObjetivos}</p>
+   
+    const imagepeso = await loadImageAsBase64(pesoChartLocalUri, 'image/png');
+    const imagegrasa = await loadImageAsBase64(grasaCambioChartLocalUri, 'image/png');
+    const imagecintura = await loadImageAsBase64(cinturaCambioChartLocalUri, 'image/png')
 
-            <h2>Información Adicional</h2>
-            <p>${data.informacionAdicional}</p>
-        </body>
-        </html>
-    `;
+
+
+
+    const html = `
+  <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111827;
+      color: #f9fafb;
+      padding: 40px;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3 {
+      color: #22c55e;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .footer {
+      font-size: 12px;
+      text-align: center;
+      color: #9ca3af;
+      margin-top: 60px;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .data-table th, .data-table td {
+      border: 1px solid #374151;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .data-table th {
+      background-color: #1f2937;
+    }
+
+    .chart-image {
+      width: 100%;
+      margin: 20px 0;
+      border-radius: 12px;
+    }
+
+    .chart-placeholder {
+      background-color: #1f2937;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 12px;
+      text-align: center;
+      color: #9ca3af;
+    }
+
+    .card {
+      background-color: #0f172a;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid #374151;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>${data.data.tituloReporte}</h1>
+    <p><strong>Usuario:</strong> ${data.data.nombreUsuario}</p>
+    <p><strong>Fecha del Reporte:</strong> ${data.data.fechaReporte}</p>
+  </div>
+
+  <div class="section">
+    <h2>Resumen Ejecutivo</h2>
+    <p><strong>Progreso General:</strong> ${data.data.resumenEjecutivo.progresoGeneral}</p>
+    <p><strong>Logros y Mejoras:</strong> ${data.data.resumenEjecutivo.logrosMejoras}</p>
+    <p><strong>Mensaje de Aliento:</strong> ${data.data.resumenEjecutivo.mensajeAliento}</p>
+  </div>
+
+  <div class="section">
+    <h2>Medidas Corporales Semanales</h2>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Semana</th>
+          <th>Peso (kg)</th>
+          <th>% Grasa</th>
+          <th>Cintura (cm)</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${data.data}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Análisis de Progreso</h2>
+
+    <h3>Índice de Masa Corporal (IMC)</h3>
+    
+
+    <h3>Cambio de Peso</h3>
+    
+
+    <h3>Cambio de Grasa Corporal</h3>
+    
+
+    <h3>Cambio de Circunferencias</h3>
+    
+
+    <h3>Relación Cintura-Cadera</h3>
+    
+  </div>
+
+  <div class="section">
+    <h2>Gráficas de Progreso</h2>
+
+    <h3>Cambio de Peso</h3>
+    ${imagepeso ? `<img src="${imagepeso}" alt="Gráfica de Peso" class="chart-image" />` : ''}
+
+    <h3>Cambio de Grasa Corporal</h3>
+    ${imagegrasa ? `<img src="${imagegrasa}" alt="Gráfica de Grasa Corporal" class="chart-image" />` : ''}
+
+    <h3>Cambio de Cintura</h3>
+    ${imagecintura ? `<img src="${imagecintura}" alt="Gráfica de Cintura" class="chart-image" />` : ''}
+  </div>
+
+  <div class="section">
+    <h2>Gráficas Pendientes</h2>
+    <div class="chart-placeholder">Evolución de peso</div>
+    <div class="chart-placeholder">Medidas corporales</div>
+    <div class="chart-placeholder">Frecuencia de entrenamientos</div>
+  </div>
+
+  <div class="card">
+    <h2>Observaciones</h2>
+    <p>El usuario ha demostrado una disciplina ejemplar al seguir su programa de entrenamiento y alimentación. Los resultados obtenidos reflejan su esfuerzo y constancia durante el mes.</p>
+
+    <h2>Recomendaciones Finales</h2>
+    <p>El progreso real se construye día a día. Mantén tus hábitos saludables, escucha a tu cuerpo y no olvides celebrar cada pequeño logro. ¡Sigue así!</p>
+  </div>
+
+  <hr />
+  <div class="footer">
+    Este reporte ha sido generado automáticamente desde FitTrack.
+  </div>
+</body>
+</html>
+
+  `;
+
     return html;
 };
