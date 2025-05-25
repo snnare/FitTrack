@@ -5,8 +5,9 @@ import Metrica from "../models/metrica.model.js";
 
 
 const getMonthDateRange = (anio, mes) => {
-  const startOfMonth = new Date(anio, mes - 1, 1);
-  const endOfMonth = new Date(anio, mes, 0, 23, 59, 59, 999);
+  const startOfMonth = new Date(parseInt(anio), parseInt(mes) - 1, 1);
+  const endOfMonth = new Date(parseInt(anio), parseInt(mes), 0);
+
   return { startOfMonth, endOfMonth };
 };
 
@@ -38,6 +39,7 @@ export const mapWeeklyMetricsData = (medidasMensuales) => {
 
 export const fetchMonthlyMetrics = async (userId, mes, anio) => {
   const { startOfMonth, endOfMonth } = getMonthDateRange(anio, mes);
+  console.log("metrica", startOfMonth, endOfMonth);
   return await Metrica.find({
     userId,
     fecha: { $gte: startOfMonth, $lte: endOfMonth }

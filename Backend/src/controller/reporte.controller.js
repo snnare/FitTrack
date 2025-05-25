@@ -1,6 +1,14 @@
 import Reporte from '../models/reporte.model.js';
 import User from '../models/user.model.js';
-import { verifyReportCreationEligibility, calculateMonthlyProgressAnalysis, generateExecutiveSummary } from '../utils/reporte.utils.js';
+import {
+    verifyReportCreationEligibility,
+    calculateMonthlyProgressAnalysis,
+    generateExecutiveSummary,
+    fetchMonthlyMetrics,
+    fetchMonthlyLogs,
+    mapWeeklyMetricsData,
+    findReportForUser
+} from '../utils/reporte.utils.js';
 
 
 export const createReporte = async (req, res) => {
@@ -109,9 +117,9 @@ export const getReporte = async (req, res) => {
             return res.status(200).json({ message: 'OK', data: reporteEncontrado });
         } else {
             if (mes !== null && anio !== null) {
-                 return res.status(404).json({ message: 'Error', error: `No se encontró un reporte para ${new Date(anio, mes - 1).toLocaleString('es-MX', { month: 'long', year: 'numeric' })}.` });
+                return res.status(404).json({ message: 'Error', error: `No se encontró un reporte para ${new Date(anio, mes - 1).toLocaleString('es-MX', { month: 'long', year: 'numeric' })}.` });
             } else {
-                 return res.status(404).json({ message: 'Error', error: 'No se encontraron reportes para este usuario.' });
+                return res.status(404).json({ message: 'Error', error: 'No se encontraron reportes para este usuario.' });
             }
         }
 
