@@ -39,7 +39,7 @@ export const mapWeeklyMetricsData = (medidasMensuales) => {
 
 export const fetchMonthlyMetrics = async (userId, mes, anio) => {
   const { startOfMonth, endOfMonth } = getMonthDateRange(anio, mes);
-  console.log("metrica", startOfMonth, endOfMonth);
+
   return await Metrica.find({
     userId,
     fecha: { $gte: startOfMonth, $lte: endOfMonth }

@@ -47,26 +47,62 @@ export default function GenerarReporteScreen() {
     }
 
     setIsLoading(true);
+    let reporteData = null;
+
     try {
-      await createReporte(selectedMes, selectedAnio);
-      const reporteData = await getReporte(selectedMes, selectedAnio);
-      console.log(reporteData)
-      const htmlContent = await generateReportHTML(reporteData);
+      try {
+        const response = await getReporte(selectedMes, selectedAnio);
+        reporteData = response.data;
+      } catch (error: any) {
+        if (error.response && error.response.status === 404) {
+          Alert.alert(
+            'Reporte no encontrado',
+            'No existe un reporte para este mes y año. Intentando crearlo...',
+            [{ text: 'OK' }]
+          );
+          const createResponse = await createReporte(selectedMes, selectedAnio);
+          if (createResponse.message === 'OK') {
+              Alert.alert('Éxito', 'Reporte creado exitosamente. Obteniendo datos para el PDF...');
+              const getAfterCreateResponse = await getReporte(selectedMes, selectedAnio);
+              reporteData = getAfterCreateResponse.data;
+          } else {
+              throw new Error(createResponse.error || "Error desconocido al crear el reporte.");
+          }
+        } else if (error.response && error.response.status === 200 && error.response.data?.reporteExistente) {
+             Alert.alert('Reporte Existente', error.response.data.message);
+             setIsLoading(false);
+             return;
+        } else {
+          throw error;
+        }
+      }
 
+      if (reporteData) {
+        const htmlContent = await generateReportHTML(reporteData);
 
-      const file = await printToFileAsync({
-        html: htmlContent,
-        base64: false,
-      });
+        const file = await printToFileAsync({
+          html: htmlContent,
+          base64: false,
+        });
 
-      // Compartir el archivo
-      await shareAsync(file.uri, {
-        mimeType: 'application/pdf',
-        UTI: 'com.adobe.pdf',
-      });
-    } catch (error) {
-      console.error('Error al generar PDF:', error);
-      Alert.alert('Error', 'Hubo un problema al generar el PDF. Por favor, intenta de nuevo.');
+        await shareAsync(file.uri, {
+          mimeType: 'application/pdf',
+          UTI: 'com.adobe.pdf',
+        });
+      } else {
+        Alert.alert('Error', 'No se pudo obtener ni crear el reporte.');
+      }
+
+    } catch (error: any) {
+      let errorMessage = 'Hubo un problema al generar el PDF. Por favor, intenta de nuevo.';
+
+      if (error.response && error.response.data && error.response.data.error) {
+          errorMessage = error.response.data.error;
+      } else if (error.message) {
+          errorMessage = error.message;
+      }
+
+      Alert.alert('Error', errorMessage);
     } finally {
       setIsLoading(false);
     }

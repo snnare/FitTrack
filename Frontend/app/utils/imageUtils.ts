@@ -1,45 +1,46 @@
-// /utils/imageBase64.ts
+
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
 
-// Usamos un mapa para cachear las imágenes cargadas, para no leerlas varias veces
-const imageCache: Map<string, string> = new Map();
+const imageBase64Cache: Map<string, string> = new Map();
 
-/**
- * Carga un asset (imagen) de Expo y lo convierte a una cadena Base64
- * con el prefijo Data URI (e.g., 'data:image/png;base64,...').
- *
- * @param imageModule El resultado de `require('./path/to/image.png')`.
- * @param mimeType El tipo MIME de la imagen (e.g., 'image/png', 'image/jpeg').
- * @returns Una promesa que resuelve con la cadena Base64 o null si hay un error.
- */
-export const loadImageAsBase64 = async (imageModule: any, mimeType: string): Promise<string | null> => {
-  // Genera una clave única para el caché basada en el módulo de la imagen
-  const cacheKey = JSON.stringify(imageModule);
+export const loadImageAsBase64 = async (
+  imageSource: number | string,
+  mimeType: string
+): Promise<string | null> => {
+  let uriToLoad: string;
 
-  if (imageCache.has(cacheKey)) {
-    return imageCache.get(cacheKey)!; // Retorna del caché si ya existe
+  if (typeof imageSource === 'number') {
+    const asset = Asset.fromModule(imageSource);
+    await asset.downloadAsync();
+    uriToLoad = asset.localUri || asset.uri;
+  } else if (typeof imageSource === 'string') {
+    uriToLoad = imageSource; 
+  } else {
+    console.warn('Tipo de imageSource no soportado:', imageSource);
+    return null;
+  }
+
+  if (!uriToLoad) {
+      console.error('URI de imagen no disponible para cargar.');
+      return null;
+  }
+
+  if (imageBase64Cache.has(uriToLoad)) {
+    return imageBase64Cache.get(uriToLoad)!;
   }
 
   try {
-    const imageAsset = Asset.fromModule(imageModule);
-    await imageAsset.downloadAsync(); // Asegura que el asset esté descargado localmente
-
-    if (!imageAsset.localUri) {
-      console.error("Error: localUri no disponible para el asset:", imageAsset.name);
-      return null;
-    }
-
-    const base64 = await FileSystem.readAsStringAsync(imageAsset.localUri, {
+    const base64 = await FileSystem.readAsStringAsync(uriToLoad, {
       encoding: FileSystem.EncodingType.Base64,
     });
 
     const dataUri = `data:${mimeType};base64,${base64}`;
-    imageCache.set(cacheKey, dataUri); // Guarda en caché
+    imageBase64Cache.set(uriToLoad, dataUri);
     return dataUri;
 
   } catch (error) {
-    console.error(`Failed to load image as Base64 (${mimeType}):`, error);
+    console.error(`ERROR: Falló la carga de imagen a Base64 desde URI (${uriToLoad}, ${mimeType}):`, error);
     return null;
   }
 };
