@@ -3,11 +3,10 @@ export interface RegisterData {
   apellidos?: string;
   correo: string;
   password: string;
-  fechaNacimiento?: string | null; // Cambiado a string para el input
+  fechaNacimiento?: string | null; 
   genero?: 'Masculino' | 'Femenino' | null;
-  peso?: string | null; // Cambiado a string para el input
-  estatura?: string | null; // Cambiado a string para el input
+  peso?: string | null; 
+  estatura?: string | null; 
   objetivo?: 'Ganar peso' | 'Perder peso' | 'Definir' | 'Mantener' | null;
   nivelExperiencia?: 'Principiante' | 'Intermedio' | 'Avanzado';
-  profileComplete?: boolean;
   }

@@ -1,7 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import * as SecureStore from 'expo-secure-store';
 
-import { loginUser, postRegister } from "../services/auth";
+import { loginUser } from "../services/auth";
+import { register } from "../services/users";
+
 
 import { LoginData } from "../types/login";
 import { RegisterData } from "../types/register";
@@ -53,7 +55,7 @@ export const AuthProvider = ({ children }: any) => {
     // Registro de usuario
     const registerUser = async (userData: RegisterData) => {
         try {
-            const result = await postRegister(userData);
+            const result = await register(userData);
 
             if (result.error) {
                 return result;

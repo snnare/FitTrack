@@ -9,5 +9,4 @@ export interface UserData {
     estatura?: string | null; // Cambiado a string para el input
     objetivo?: 'Ganar peso' | 'Perder peso' | 'Definir' | 'Mantener' | null;
     nivelExperiencia?: 'Principiante' | 'Intermedio' | 'Avanzado';
-    profileComplete?: boolean;
     }

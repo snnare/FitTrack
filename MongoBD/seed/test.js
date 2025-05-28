@@ -11,6 +11,9 @@ db.users.insert({
     nivelExperiencia: "Intermedio"
   });
   
+
+
+  
   // Inserción de registros de entrenamiento (logs) para el usuario 'angel@gmail.com' en la colección 'logs'
   db.logs.insertMany([
       // Semana 1

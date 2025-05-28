@@ -28,8 +28,7 @@ const initialValues: RegisterData = {
   peso: '',
   estatura: '',
   objetivo: null,
-  nivelExperiencia: 'Principiante',
-  profileComplete: true,
+  nivelExperiencia: 'Principiante'
 };
 
 export default function RegisterScreen() {

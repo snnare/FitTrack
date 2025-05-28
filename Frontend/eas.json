@@ -9,6 +9,14 @@
         "buildType": "apk"
       },
       "autoIncrement": true
+    },
+    "staging": {
+      "developmentClient": false,
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "autoIncrement": true
     }
   },
   "submit": {
