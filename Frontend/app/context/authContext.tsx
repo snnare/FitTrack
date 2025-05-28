@@ -33,8 +33,6 @@ export const AuthProvider = ({ children }: any) => {
     useEffect(() => {
         const loadToken = async () => {
             const token = await SecureStore.getItemAsync(TOKEN_KEY);
-            // Debugging line
-            //console.log("Loaded token:", token);
             if (token) {
                 try {
 
@@ -60,14 +58,7 @@ export const AuthProvider = ({ children }: any) => {
             if (result.error) {
                 return result;
             }
-
-            setAuthState({
-                token: result.token,
-                authenticated: true
-            });
-
-            await SecureStore.setItemAsync(TOKEN_KEY, result.token);
-            return result;
+            return { success: true, message: result.message || 'Registro exitoso' };
         } catch (error) {
             console.error('Register error:', error);
             return { error: true, msg: (error as any).response.data.msg };
