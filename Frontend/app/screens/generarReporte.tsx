@@ -40,73 +40,91 @@ export default function GenerarReporteScreen() {
   const [selectedMes, setSelectedMes] = useState<number | null>(new Date().getMonth() + 1);
   const [selectedAnio, setSelectedAnio] = useState<number | null>(new Date().getFullYear());
 
-  const handleGenerarPDF = async () => {
-    if (selectedMes === null || selectedAnio === null) {
-      Alert.alert('Error', 'Por favor, selecciona un mes y un año.');
-      return;
-    }
+const handleGenerarPDF = async () => {
+  if (selectedMes === null || selectedAnio === null) {
+    Alert.alert('Error', 'Por favor, selecciona un mes y un año.');
+    return;
+  }
 
-    setIsLoading(true);
-    let reporteData = null;
+  console.log('Mes seleccionado:', selectedMes);
+  console.log('Año seleccionado:', selectedAnio);
 
+  setIsLoading(true);
+  let reporteData = null;
+
+  try {
     try {
-      try {
-        const response = await getReporte(selectedMes, selectedAnio);
-        reporteData = response.data;
-      } catch (error: any) {
-        if (error.response && error.response.status === 404) {
-          Alert.alert(
-            'Reporte no encontrado',
-            'No existe un reporte para este mes y año. Intentando crearlo...',
-            [{ text: 'OK' }]
-          );
-          const createResponse = await createReporte(selectedMes, selectedAnio);
-          if (createResponse.message === 'OK') {
-              Alert.alert('Éxito', 'Reporte creado exitosamente. Obteniendo datos para el PDF...');
-              const getAfterCreateResponse = await getReporte(selectedMes, selectedAnio);
-              reporteData = getAfterCreateResponse.data;
-          } else {
-              throw new Error(createResponse.error || "Error desconocido al crear el reporte.");
-          }
-        } else if (error.response && error.response.status === 200 && error.response.data?.reporteExistente) {
-             Alert.alert('Reporte Existente', error.response.data.message);
-             setIsLoading(false);
-             return;
-        } else {
-          throw error;
-        }
-      }
-
-      if (reporteData) {
-        const htmlContent = await generateReportHTML(reporteData);
-
-        const file = await printToFileAsync({
-          html: htmlContent,
-          base64: false,
-        });
-
-        await shareAsync(file.uri, {
-          mimeType: 'application/pdf',
-          UTI: 'com.adobe.pdf',
-        });
-      } else {
-        Alert.alert('Error', 'No se pudo obtener ni crear el reporte.');
-      }
-
+      const response = await getReporte(selectedMes, selectedAnio);
+      reporteData = response.data;
     } catch (error: any) {
-      let errorMessage = 'Hubo un problema al generar el PDF. Por favor, intenta de nuevo.';
+      console.log('Error al obtener reporte:', error);
 
-      if (error.response && error.response.data && error.response.data.error) {
-          errorMessage = error.response.data.error;
-      } else if (error.message) {
-          errorMessage = error.message;
+      // Si no existe el reporte, intenta crearlo
+      if (error.message === 'Error' && error.error?.includes('No se encontró un reporte')) {
+        Alert.alert(
+          'Reporte no encontrado',
+          'No existe un reporte para este mes y año. Intentando crearlo...',
+          [{ text: 'OK' }]
+        );
+
+        try {
+          const createResponse = await createReporte(selectedMes, selectedAnio);
+          console.log('Respuesta al crear reporte:', createResponse);
+
+          if (createResponse.message === 'OK') {
+            Alert.alert('Éxito', 'Reporte creado exitosamente. Obteniendo datos para el PDF...');
+            const getAfterCreateResponse = await getReporte(selectedMes, selectedAnio);
+            reporteData = getAfterCreateResponse.data;
+          } else if (createResponse.details?.reporteExistente) {
+            Alert.alert('Reporte Existente', 'El reporte ya fue generado previamente.');
+            const getAfterCreateResponse = await getReporte(selectedMes, selectedAnio);
+            reporteData = getAfterCreateResponse.data;
+          } else {
+            throw new Error(createResponse.error || 'No se pudo crear el reporte.');
+          }
+        } catch (createError: any) {
+          console.log('Error creando el reporte:', createError);
+          throw new Error(createError?.error || createError?.message || 'Error desconocido al crear el reporte.');
+        }
+      } else {
+        // Error distinto, relanza
+        throw error;
       }
-
-      Alert.alert('Error', errorMessage);
-    } finally {
-      setIsLoading(false);
     }
-  };
+
+    if (reporteData) {
+      const htmlContent = await generateReportHTML(reporteData);
+
+      const file = await printToFileAsync({
+        html: htmlContent,
+        base64: false,
+      });
+
+      await shareAsync(file.uri, {
+        mimeType: 'application/pdf',
+        UTI: 'com.adobe.pdf',
+      });
+    } else {
+      Alert.alert('Error', 'No se pudo obtener ni crear el reporte.');
+    }
+
+  } catch (error: any) {
+    console.log('Error general al generar el PDF:', error);
+
+    let errorMessage = 'Hubo un problema al generar el PDF.';
+
+    if (error.response?.data?.error) {
+      errorMessage = error.response.data.error;
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
+
+    Alert.alert('Error', errorMessage);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   return (
     <ScrollView
